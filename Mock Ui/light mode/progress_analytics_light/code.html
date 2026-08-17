@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Progress &amp; Analytics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;family=Oswald:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#d8dadc",
+                    "primary-fixed": "#c3f400",
+                    "on-tertiary-container": "#111822",
+                    "surface-bright": "#f7f9fb",
+                    "inverse-surface": "#2c3134",
+                    "surface-container-highest": "#e0e2e5",
+                    "secondary": "#5d5f5a",
+                    "on-error-container": "#410002",
+                    "on-primary-fixed": "#161e00",
+                    "tertiary-container": "#d7e3f8",
+                    "tertiary-fixed-dim": "#b9c7e0",
+                    "tertiary": "#485b74",
+                    "error-container": "#ffdad6",
+                    "surface-container": "#ecedf0",
+                    "secondary-container": "#e1e3dd",
+                    "on-secondary-fixed": "#191d16",
+                    "error": "#ba1a1a",
+                    "secondary-fixed-dim": "#c5c7c1",
+                    "primary-container": "#c3f400",
+                    "background": "#f7f9fb",
+                    "surface-tint": "#506600",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#e6e8eb",
+                    "on-primary-container": "#161e00",
+                    "on-background": "#191c1e",
+                    "primary-fixed-dim": "#abd600",
+                    "on-surface-variant": "#44483e",
+                    "outline": "#74796d",
+                    "inverse-on-surface": "#eef0f3",
+                    "surface-container-lowest": "#ffffff",
+                    "on-primary-fixed-variant": "#3c4d00",
+                    "on-tertiary-fixed": "#021830",
+                    "on-primary": "#ffffff",
+                    "surface": "#f7f9fb",
+                    "secondary-fixed": "#e1e3dd",
+                    "on-secondary-container": "#1a1c17",
+                    "surface-variant": "#e0e4d6",
+                    "on-surface": "#191c1e",
+                    "tertiary-fixed": "#d7e3f8",
+                    "primary": "#506600",
+                    "outline-variant": "#c4c8ba",
+                    "on-error": "#ffffff",
+                    "inverse-primary": "#abd600",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#30435a",
+                    "on-secondary-fixed-variant": "#454841",
+                    "surface-container-low": "#f2f4f6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "container-padding": "20px",
+                    "stack-sm": "12px",
+                    "gutter": "16px",
+                    "stack-md": "24px",
+                    "base": "8px",
+                    "stack-lg": "40px"
+            },
+            "fontFamily": {
+                    "data-label": [
+                        "JetBrains Mono"
+                    ],
+                    "headline-lg-mobile": [
+                        "Oswald"
+                    ],
+                    "headline-lg": [
+                        "Oswald"
+                    ],
+                    "body-md": [
+                        "Inter"
+                    ],
+                    "button-text": [
+                        "Oswald"
+                    ],
+                    "display-lg": [
+                        "Oswald"
+                    ]
+            },
+            "fontSize": {
+                    "data-label": [
+                        "14px",
+                        {
+                            "lineHeight": "1.4",
+                            "letterSpacing": "0.05em",
+                            "fontWeight": "500"
+                        }
+                    ],
+                    "headline-lg-mobile": [
+                        "28px",
+                        {
+                            "lineHeight": "1.2",
+                            "fontWeight": "600"
+                        }
+                    ],
+                    "headline-lg": [
+                        "32px",
+                        {
+                            "lineHeight": "1.2",
+                            "letterSpacing": "0.02em",
+                            "fontWeight": "600"
+                        }
+                    ],
+                    "body-md": [
+                        "16px",
+                        {
+                            "lineHeight": "1.6",
+                            "letterSpacing": "0px",
+                            "fontWeight": "400"
+                        }
+                    ],
+                    "button-text": [
+                        "18px",
+                        {
+                            "lineHeight": "1",
+                            "letterSpacing": "0.05em",
+                            "fontWeight": "600"
+                        }
+                    ],
+                    "display-lg": [
+                        "48px",
+                        {
+                            "lineHeight": "1.1",
+                            "letterSpacing": "-0.02em",
+                            "fontWeight": "700"
+                        }
+                    ]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .glass-card {
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid #e0e4d6;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        .electric-glow {
+            box-shadow: 0 0 15px rgba(80, 102, 0, 0.4);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen pt-16 pb-24 md:pb-0 overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-lg border-b border-surface-variant flex justify-between items-center px-container-padding h-16 transition-opacity duration-200 shadow-sm">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover border border-outline" data-alt="Close-up portrait of a fitness enthusiast in dramatic high-contrast lighting. The user profile avatar should fit into a dark mode minimalist fitness app design, with electric lime accents subtly reflected." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8fJ8pro1ccSxNaXDG6uktAoPEjsxxS9Y-d8gH_i46R3Oxlw7hjqfJVD-Y_xOv_hnZhRmJvIjBfKEIzMqOIdcQVkSKoH3PCdZHnwpt4epY74QE-3BGUhdtLMMdCW7rf0EVpmtHtnoEUQb7_OL8Dj1RLXXnTQHsAHkOOUug2i4OARfRConmuZl19dL_PGYKcu8Cx8xF7YgnbJ8yc9aTnI9rzOLG8tO4cggmMO9J_G1B_Rvd8Rq86oC_"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tighter hover:opacity-80">FITNESS HUB</h1>
+<button class="text-on-surface-variant hover:opacity-80">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">notifications</span>
+</button>
+</header>
+<!-- Main Content Grid -->
+<main class="max-w-[1200px] mx-auto px-container-padding py-stack-md flex flex-col gap-stack-md md:grid md:grid-cols-12 md:gap-gutter">
+<!-- Header Section -->
+<div class="md:col-span-12">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-display-lg md:text-display-lg text-primary uppercase tracking-wider mb-stack-sm">PERFORMANCE HUB</h2>
+<p class="text-on-surface-variant text-body-md md:text-button-text">Analyze your progress, track your consistency, and crush your goals.</p>
+</div>
+<!-- Weight Trend (Top Section) -->
+<div class="glass-card rounded-xl p-gutter md:col-span-8 flex flex-col gap-stack-sm relative overflow-hidden group">
+<div class="flex justify-between items-start z-10">
+<div>
+<h3 class="font-button-text text-button-text text-primary">WEIGHT TREND (30 DAYS)</h3>
+<div class="flex items-end gap-2 mt-2">
+<span class="font-display-lg text-display-lg text-primary">185.4</span>
+<span class="font-data-label text-data-label text-on-surface-variant mb-2">lbs</span>
+</div>
+</div>
+<div class="text-right">
+<span class="block font-data-label text-data-label text-on-surface-variant uppercase">Target</span>
+<span class="font-button-text text-button-text text-primary">180.0 lbs</span>
+</div>
+</div>
+<!-- Faux Chart Area -->
+<div class="h-48 w-full mt-stack-sm relative z-10 flex items-end">
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between border-l border-b border-surface-variant pb-2 pl-2">
+<div class="w-full border-t border-surface-variant h-0"></div>
+<div class="w-full border-t border-surface-variant h-0"></div>
+<div class="w-full border-t border-surface-variant h-0"></div>
+</div>
+<!-- Chart Line (Simulated via SVG) -->
+<svg class="absolute inset-0 w-full h-full pb-2 pl-2" preserveaspectratio="none" viewbox="0 0 100 100">
+<defs>
+<lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#506600" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#506600" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,80 L20,75 L40,60 L60,65 L80,40 L100,30 L100,100 L0,100 Z" fill="url(#chartGradient)"></path>
+<polyline class="electric-glow" fill="none" points="0,80 20,75 40,60 60,65 80,40 100,30" stroke="#506600" stroke-width="2"></polyline>
+<!-- Data Points -->
+<circle cx="20" cy="75" fill="#506600" r="3"></circle>
+<circle cx="40" cy="60" fill="#506600" r="3"></circle>
+<circle cx="60" cy="65" fill="#506600" r="3"></circle>
+<circle cx="80" cy="40" fill="#506600" r="3"></circle>
+<circle cx="100" cy="30" fill="#FFFFFF" r="4" stroke="#506600" stroke-width="2"></circle>
+</svg>
+</div>
+<!-- Background Decoration -->
+<div class="absolute -bottom-10 -right-10 w-40 h-40 bg-primary opacity-5 rounded-full blur-3xl group-hover:opacity-10 transition-opacity duration-500"></div>
+</div>
+<!-- Milestones (Right side on desktop) -->
+<div class="md:col-span-4 flex flex-col gap-stack-sm">
+<div class="glass-card rounded-xl p-gutter flex items-center gap-4 bg-surface">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center border border-primary/20">
+<span class="material-symbols-outlined text-on-primary-container text-[24px]">fitness_center</span>
+</div>
+<div>
+<h4 class="font-button-text text-button-text text-primary">NEW PR: SQUAT</h4>
+<p class="font-data-label text-data-label text-primary mt-1">315 lbs x 5</p>
+</div>
+</div>
+<div class="glass-card rounded-xl p-gutter flex items-center gap-4 bg-surface">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center border border-outline-variant">
+<span class="material-symbols-outlined text-on-secondary-container text-[24px]">workspace_premium</span>
+</div>
+<div>
+<h4 class="font-button-text text-button-text text-primary">100TH WORKOUT</h4>
+<p class="font-data-label text-data-label text-on-surface-variant mt-1">Consistency King</p>
+</div>
+</div>
+<div class="glass-card rounded-xl p-gutter flex-1 flex flex-col justify-center items-center text-center bg-surface">
+<span class="font-display-lg text-display-lg text-primary">24</span>
+<span class="font-button-text text-button-text text-on-surface-variant uppercase mt-2">Active Streak</span>
+<span class="font-data-label text-data-label text-primary mt-1">Days</span>
+</div>
+</div>
+<!-- Volume Distribution (Middle Section) -->
+<div class="glass-card rounded-xl p-gutter md:col-span-6 flex flex-col gap-stack-sm relative">
+<h3 class="font-button-text text-button-text text-primary mb-2 uppercase">Volume Distribution</h3>
+<!-- Spider/Radar Chart Simulation -->
+<div class="flex-1 flex justify-center items-center h-48 relative">
+<svg class="w-full h-full max-w-[200px]" viewbox="0 0 100 100">
+<!-- Web Lines -->
+<polygon fill="none" points="50,10 90,30 90,70 50,90 10,70 10,30" stroke="#e0e4d6" stroke-width="1"></polygon>
+<polygon fill="none" points="50,25 75,40 75,60 50,75 25,60 25,40" stroke="#e0e4d6" stroke-width="1"></polygon>
+<polygon fill="none" points="50,40 60,47 60,53 50,60 40,53 40,47" stroke="#e0e4d6" stroke-width="1"></polygon>
+<!-- Axes -->
+<line stroke="#e0e4d6" stroke-width="1" x1="50" x2="50" y1="50" y2="10"></line>
+<line stroke="#e0e4d6" stroke-width="1" x1="50" x2="90" y1="50" y2="30"></line>
+<line stroke="#e0e4d6" stroke-width="1" x1="50" x2="90" y1="50" y2="70"></line>
+<line stroke="#e0e4d6" stroke-width="1" x1="50" x2="50" y1="50" y2="90"></line>
+<line stroke="#e0e4d6" stroke-width="1" x1="50" x2="10" y1="50" y2="70"></line>
+<line stroke="#e0e4d6" stroke-width="1" x1="50" x2="10" y1="50" y2="30"></line>
+<!-- Data Polygon -->
+<polygon fill="rgba(80, 102, 0, 0.2)" points="50,20 80,35 60,60 50,85 30,55 20,40" stroke="#506600" stroke-width="2"></polygon>
+<!-- Data Points -->
+<circle cx="50" cy="20" fill="#506600" r="2"></circle>
+<circle cx="80" cy="35" fill="#506600" r="2"></circle>
+<circle cx="60" cy="60" fill="#506600" r="2"></circle>
+<circle cx="50" cy="85" fill="#506600" r="2"></circle>
+<circle cx="30" cy="55" fill="#506600" r="2"></circle>
+<circle cx="20" cy="40" fill="#506600" r="2"></circle>
+</svg>
+<!-- Labels (Absolute Positioning roughly mapping to corners) -->
+<span class="absolute top-0 left-1/2 -translate-x-1/2 font-data-label text-[10px] text-on-surface-variant uppercase">Chest</span>
+<span class="absolute top-1/4 right-0 font-data-label text-[10px] text-on-surface-variant uppercase">Back</span>
+<span class="absolute bottom-1/4 right-0 font-data-label text-[10px] text-on-surface-variant uppercase">Legs</span>
+<span class="absolute bottom-0 left-1/2 -translate-x-1/2 font-data-label text-[10px] text-on-surface-variant uppercase">Core</span>
+<span class="absolute bottom-1/4 left-0 font-data-label text-[10px] text-on-surface-variant uppercase">Arms</span>
+<span class="absolute top-1/4 left-0 font-data-label text-[10px] text-on-surface-variant uppercase">Shoulders</span>
+</div>
+</div>
+<!-- Training Consistency (Bottom Section) -->
+<div class="glass-card rounded-xl p-gutter md:col-span-6 flex flex-col gap-stack-sm">
+<div class="flex justify-between items-center mb-2">
+<h3 class="font-button-text text-button-text text-primary uppercase">Training Consistency</h3>
+<span class="font-data-label text-data-label text-on-surface-variant">Last 4 Weeks</span>
+</div>
+<!-- Heatmap Simulation -->
+<div class="grid grid-cols-7 gap-1 mt-auto">
+<!-- Days Header -->
+<div class="text-center font-data-label text-[10px] text-on-surface-variant mb-1">M</div>
+<div class="text-center font-data-label text-[10px] text-on-surface-variant mb-1">T</div>
+<div class="text-center font-data-label text-[10px] text-on-surface-variant mb-1">W</div>
+<div class="text-center font-data-label text-[10px] text-on-surface-variant mb-1">T</div>
+<div class="text-center font-data-label text-[10px] text-on-surface-variant mb-1">F</div>
+<div class="text-center font-data-label text-[10px] text-on-surface-variant mb-1">S</div>
+<div class="text-center font-data-label text-[10px] text-on-surface-variant mb-1">S</div>
+<!-- Week 1 -->
+<div class="aspect-square bg-surface-variant rounded-sm"></div>
+<div class="aspect-square bg-primary/40 rounded-sm"></div>
+<div class="aspect-square bg-surface-variant rounded-sm"></div>
+<div class="aspect-square bg-primary/80 rounded-sm"></div>
+<div class="aspect-square bg-surface-variant rounded-sm"></div>
+<div class="aspect-square bg-primary rounded-sm electric-glow"></div>
+<div class="aspect-square bg-surface-variant rounded-sm"></div>
+<!-- Week 2 -->
+<div class="aspect-square bg-primary/60 rounded-sm"></div>
+<div class="aspect-square bg-surface-variant rounded-sm"></div>
+<div class="aspect-square bg-primary/90 rounded-sm"></div>
+<div class="aspect-square bg-surface-variant rounded-sm"></div>
+<div class="aspect-square bg-primary/50 rounded-sm"></div>
+<div class="aspect-square bg-surface-variant rounded-sm"></div>
+<div class="aspect-square bg-primary/30 rounded-sm"></div>
+<!-- Week 3 -->
+<div class="aspect-square bg-surface-variant rounded-sm"></div>
+<div class="aspect-square bg-primary/70 rounded-sm"></div>
+<div class="aspect-square bg-surface-variant rounded-sm"></div>
+<div class="aspect-square bg-primary rounded-sm electric-glow"></div>
+<div class="aspect-square bg-surface-variant rounded-sm"></div>
+<div class="aspect-square bg-primary/60 rounded-sm"></div>
+<div class="aspect-square bg-surface-variant rounded-sm"></div>
+<!-- Week 4 -->
+<div class="aspect-square bg-primary/80 rounded-sm"></div>
+<div class="aspect-square bg-surface-variant rounded-sm"></div>
+<div class="aspect-square bg-primary/40 rounded-sm"></div>
+<div class="aspect-square bg-surface-variant rounded-sm"></div>
+<div class="aspect-square bg-primary/90 rounded-sm"></div>
+<div class="aspect-square bg-surface-variant rounded-sm"></div>
+<div class="aspect-square bg-surface-variant rounded-sm border border-primary"></div> <!-- Today -->
+</div>
+<div class="flex justify-end items-center gap-2 mt-2">
+<span class="font-data-label text-[10px] text-on-surface-variant">Less</span>
+<div class="flex gap-1">
+<div class="w-3 h-3 bg-surface-variant rounded-[1px]"></div>
+<div class="w-3 h-3 bg-primary/40 rounded-[1px]"></div>
+<div class="w-3 h-3 bg-primary/70 rounded-[1px]"></div>
+<div class="w-3 h-3 bg-primary rounded-[1px]"></div>
+</div>
+<span class="font-data-label text-[10px] text-on-surface-variant">More</span>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface/90 backdrop-blur-xl border-t border-surface-variant md:hidden rounded-t-3xl shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95 duration-150 group">
+<span class="material-symbols-outlined text-[24px] group-hover:opacity-100 transition-opacity">home</span>
+<span class="font-button-text text-data-label mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95 duration-150 group">
+<span class="material-symbols-outlined text-[24px] group-hover:opacity-100 transition-opacity">fitness_center</span>
+<span class="font-button-text text-data-label mt-1">Workouts</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95 duration-150 group">
+<span class="material-symbols-outlined text-[24px] group-hover:opacity-100 transition-opacity">restaurant</span>
+<span class="font-button-text text-data-label mt-1">Nutrition</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95 duration-150 group">
+<span class="material-symbols-outlined text-[24px] group-hover:opacity-100 transition-opacity">psychology</span>
+<span class="font-button-text text-data-label mt-1">AI Coach</span>
+</button>
+<button class="flex flex-col items-center justify-center text-primary scale-110 active:scale-95 transition-transform duration-150 group">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-button-text text-data-label mt-1">Profile</span>
+</button>
+</nav>
+</body></html>

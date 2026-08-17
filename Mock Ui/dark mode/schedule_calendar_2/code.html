@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Session Schedule - Fitness Hub</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;family=Oswald:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-lowest": "#010f1f",
+                        "tertiary-fixed": "#d5e3fd",
+                        "inverse-on-surface": "#233143",
+                        "tertiary": "#ffffff",
+                        "surface-dim": "#051424",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "on-secondary-container": "#bab8b7",
+                        "error": "#ffb4ab",
+                        "primary-fixed-dim": "#abd600",
+                        "surface-variant": "#273647",
+                        "outline-variant": "#444933",
+                        "primary-fixed": "#c3f400",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "on-tertiary-container": "#57657b",
+                        "on-primary": "#283500",
+                        "on-secondary-fixed-variant": "#474646",
+                        "tertiary-fixed-dim": "#b9c7e0",
+                        "secondary": "#c8c6c5",
+                        "surface-container": "#122131",
+                        "primary-container": "#c3f400",
+                        "outline": "#8e9379",
+                        "on-error-container": "#ffdad6",
+                        "inverse-primary": "#506600",
+                        "surface-container-high": "#1c2b3c",
+                        "on-secondary": "#313030",
+                        "secondary-container": "#4a4949",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-primary-container": "#556d00",
+                        "on-primary-fixed-variant": "#3c4d00",
+                        "surface-bright": "#2c3a4c",
+                        "on-surface-variant": "#c4c9ac",
+                        "inverse-surface": "#d4e4fa",
+                        "primary": "#ffffff",
+                        "surface-container-highest": "#273647",
+                        "surface-tint": "#abd600",
+                        "error-container": "#93000a",
+                        "on-surface": "#d4e4fa",
+                        "on-primary-fixed": "#161e00",
+                        "on-tertiary-fixed-variant": "#3a485c",
+                        "on-background": "#d4e4fa",
+                        "on-tertiary": "#233144",
+                        "tertiary-container": "#d5e3fd",
+                        "on-tertiary-fixed": "#0d1c2f",
+                        "surface-container-low": "#0d1c2d",
+                        "background": "#051424",
+                        "surface": "#051424"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "stack-sm": "12px",
+                        "stack-md": "24px",
+                        "gutter": "16px",
+                        "container-padding": "20px",
+                        "base": "8px",
+                        "stack-lg": "40px"
+                    },
+                    fontFamily: {
+                        "data-label": ["JetBrains Mono"],
+                        "button-text": ["Oswald"],
+                        "display-lg": ["Oswald"],
+                        "headline-lg": ["Oswald"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Oswald"]
+                    },
+                    fontSize: {
+                        "data-label": ["14px", { lineHeight: "1.4", letterSpacing: "0.05em", fontWeight: "500" }],
+                        "button-text": ["18px", { lineHeight: "1", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "display-lg": ["48px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "headline-lg": ["32px", { lineHeight: "1.2", letterSpacing: "0.02em", fontWeight: "600" }],
+                        "body-md": ["16px", { lineHeight: "1.6", letterSpacing: "0px", fontWeight: "400" }],
+                        "headline-lg-mobile": ["28px", { lineHeight: "1.2", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md text-body-md antialiased overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="bg-surface/60 backdrop-blur-lg fixed top-0 w-full border-b border-surface-variant flex justify-between items-center px-container-padding h-16 z-50 transition-opacity duration-200">
+<div class="flex items-center gap-gutter hover:opacity-80 cursor-pointer">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="A macro shot of a sleek, dark metallic texture with glowing electric lime circuitry lines, representing a high-tech user avatar in a modern fitness application. The lighting is moody and focused." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq88AIQr15O8S0JSEWYUBOhSpQ-2WGZp7u01ss14SonbeAfNG2y_I1NSf8KqNx9H7JZcvDdcnmkg23td083-iokgaL-g_GHYrpETJJJ1y6WHl-qJMtc4HeiJof9hQsjQ5b4sk-EU-tW3yRxETR6Fn7Lf1L91vQtjf0hzPjvH4j5kXnqYTM_pEj3Jqwj4uBf526lW6jzfSqe-cALp4FneRrzgxnNFp335HDEIKXtn88QGE5930EjV-Q"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tighter">FITNESS HUB</h1>
+</div>
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity duration-200 flex items-center justify-center p-2 rounded-full hover:bg-surface-variant/50">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="pt-24 pb-32 px-container-padding max-w-[1200px] mx-auto">
+<!-- Header -->
+<div class="mb-stack-md flex justify-between items-end">
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary uppercase tracking-wide">Session Schedule</h2>
+<p class="text-on-surface-variant mt-1">Week of Sep 16 - 22</p>
+</div>
+</div>
+<!-- Horizontal Weekly Date Picker -->
+<div class="flex gap-stack-sm overflow-x-auto pb-4 snap-x hide-scrollbar -mx-container-padding px-container-padding mb-stack-md">
+<!-- Day 1 -->
+<div class="snap-start flex flex-col items-center justify-center min-w-[72px] py-3 rounded-xl border border-surface-variant bg-surface-container/50 text-on-surface-variant cursor-pointer hover:border-outline transition-colors">
+<span class="text-xs uppercase font-medium tracking-wider mb-1">Mon</span>
+<span class="font-data-label text-data-label text-lg">16</span>
+</div>
+<!-- Day 2 (Active) -->
+<div class="snap-start flex flex-col items-center justify-center min-w-[72px] py-3 rounded-xl border border-primary-fixed bg-primary-fixed text-on-primary-fixed cursor-pointer shadow-[0_0_15px_rgba(195,244,0,0.2)]">
+<span class="text-xs uppercase font-medium tracking-wider mb-1 text-on-primary-fixed-variant">Tue</span>
+<span class="font-data-label text-data-label text-lg font-bold">17</span>
+</div>
+<!-- Day 3 -->
+<div class="snap-start flex flex-col items-center justify-center min-w-[72px] py-3 rounded-xl border border-surface-variant bg-surface-container/50 text-on-surface-variant cursor-pointer hover:border-outline transition-colors">
+<span class="text-xs uppercase font-medium tracking-wider mb-1">Wed</span>
+<span class="font-data-label text-data-label text-lg">18</span>
+</div>
+<!-- Day 4 -->
+<div class="snap-start flex flex-col items-center justify-center min-w-[72px] py-3 rounded-xl border border-surface-variant bg-surface-container/50 text-on-surface-variant cursor-pointer hover:border-outline transition-colors">
+<span class="text-xs uppercase font-medium tracking-wider mb-1">Thu</span>
+<span class="font-data-label text-data-label text-lg">19</span>
+</div>
+<!-- Day 5 -->
+<div class="snap-start flex flex-col items-center justify-center min-w-[72px] py-3 rounded-xl border border-surface-variant bg-surface-container/50 text-on-surface-variant cursor-pointer hover:border-outline transition-colors">
+<span class="text-xs uppercase font-medium tracking-wider mb-1">Fri</span>
+<span class="font-data-label text-data-label text-lg">20</span>
+</div>
+</div>
+<!-- Daily Log Timeline -->
+<h3 class="font-data-label text-data-label text-primary-fixed mb-stack-sm tracking-widest uppercase">Daily Log</h3>
+<div class="relative pl-8 mb-stack-lg border-l-2 border-surface-variant space-y-stack-md">
+<!-- Completed Event -->
+<div class="relative">
+<div class="absolute -left-[41px] top-4 w-5 h-5 rounded-full bg-surface-variant border-2 border-background flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] text-on-surface-variant">check</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-data-label text-data-label text-on-surface-variant">07:00 AM</span>
+<div class="bg-surface-container-low/40 border border-surface-variant/50 rounded-xl p-4 opacity-70">
+<div class="flex items-start justify-between">
+<div>
+<h4 class="font-medium text-on-surface-variant">Morning Cardio</h4>
+<p class="text-sm text-on-surface-variant/70 mt-1">LISS - 30m</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant">directions_run</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Upcoming Event -->
+<div class="relative">
+<div class="absolute -left-[39px] top-4 w-4 h-4 rounded-full bg-surface-variant border-2 border-background"></div>
+<div class="flex flex-col gap-1">
+<span class="font-data-label text-data-label text-tertiary-fixed-dim">12:00 PM</span>
+<div class="bg-surface-container/60 backdrop-blur-md border border-surface-variant rounded-xl p-4">
+<div class="flex items-start justify-between">
+<div>
+<h4 class="font-medium text-tertiary">Nutrition Window</h4>
+<p class="text-sm text-on-surface-variant mt-1">High Protein Meal</p>
+</div>
+<span class="material-symbols-outlined text-outline">restaurant</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Active/Current Event -->
+<div class="relative">
+<div class="absolute -left-[43px] top-4 w-6 h-6 rounded-full bg-primary-fixed border-4 border-background shadow-[0_0_10px_rgba(195,244,0,0.5)]"></div>
+<div class="flex flex-col gap-1">
+<span class="font-data-label text-data-label text-primary-fixed">05:30 PM <span class="text-xs ml-2 bg-primary-fixed/20 px-2 py-0.5 rounded text-primary-fixed">NOW</span></span>
+<div class="bg-surface-container-high/80 backdrop-blur-xl border border-primary-fixed/50 rounded-xl p-5 shadow-[0_4px_24px_-8px_rgba(195,244,0,0.15)]">
+<div class="flex items-start justify-between mb-4">
+<div>
+<h4 class="font-headline-lg-mobile text-headline-lg-mobile text-primary uppercase">Upper Body Power</h4>
+<p class="font-data-label text-data-label text-on-surface-variant mt-1">Hypertrophy Block • 60m</p>
+</div>
+<span class="material-symbols-outlined text-primary-fixed text-3xl">fitness_center</span>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container font-button-text text-button-text py-3 rounded-lg uppercase tracking-wider hover:bg-primary-fixed transition-colors">
+                            Start Session
+                        </button>
+</div>
+</div>
+</div>
+<!-- Scheduled Event -->
+<div class="relative">
+<div class="absolute -left-[39px] top-4 w-4 h-4 rounded-full bg-surface-variant border-2 border-background"></div>
+<div class="flex flex-col gap-1">
+<span class="font-data-label text-data-label text-tertiary-fixed-dim">08:00 PM</span>
+<div class="bg-surface-container/40 border border-surface-variant border-dashed rounded-xl p-4">
+<div class="flex items-start justify-between">
+<div>
+<h4 class="font-medium text-tertiary">Recovery &amp; Stretching</h4>
+<p class="text-sm text-on-surface-variant mt-1">Mobility Routine</p>
+</div>
+<span class="material-symbols-outlined text-outline">self_improvement</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Appointments Section -->
+<h3 class="font-data-label text-data-label text-primary-fixed mb-stack-sm tracking-widest uppercase">Appointments</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-sm mb-stack-lg">
+<!-- PT Session -->
+<div class="bg-surface-container/60 backdrop-blur-md border border-surface-variant rounded-xl p-4 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-outline">
+<img alt="Coach Sarah" class="w-full h-full object-cover" data-alt="A professional female fitness coach looking confidently at the camera in a modern, dark-themed high-performance gym. The lighting is cinematic with deep shadows and subtle electric lime neon accents in the background. She wears sleek black athletic wear. High-tech, intense, professional atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4XLWxZe2RS9oTxPUHAQwTgwvQYXQ7rQZWI79oWQSOmQLcJ9jm8eQbqpymtVLWHQ9M6Aa5TGSyCbSZmOLu-SJQ-UhjSJ0ocWYsNRJ61LcwWcPNk-XHNSdmHu4IM8KUES_RAYrJizvfbLpsTqxnj4iGC228g5JGB5RCjXddLi6pc8qOCNsHfRWjiLAAxhweFR9tjPGpCgAsHFJxzLOFclZbpKh7x5_kwdOWcgzQ88T_H71Uy3XyMVQd"/>
+</div>
+<div class="flex-1">
+<h4 class="font-medium text-tertiary">PT Session</h4>
+<p class="text-sm text-on-surface-variant">Coach Sarah • Tomorrow, 06:00 AM</p>
+</div>
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-variant text-on-surface hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<!-- Physio -->
+<div class="bg-surface-container/60 backdrop-blur-md border border-surface-variant rounded-xl p-4 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border border-outline">
+<img alt="Physio Clinic" class="w-full h-full object-cover" data-alt="A close-up shot of a modern physiotherapy clinic room with dark textured walls and sleek medical equipment. Deep charcoal tones dominate the scene, punctuated by sharp, sterile white lighting and a faint glowing electric lime accent light. Professional, high-tech sports recovery setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPLjrRPHef4y4IPUI-H8DtGXNKPj3rXvGsyjDrYmx4Nc4JpQsviZupApW_BXPTIo1Vh-oKe4wP2KeCxG-qMrYkuFJ8fTrRYSzp8D37_-13TpSTD4pyNym4xQD4Y14xJpf38_mBMOau7kvMTfVMDP8WaIBtiRF318ya2qcwt3aj27FONQc5mDLNliOW82jFb58K1zVNEbDwyWcYqWfBrZ3NYtEQy8GYh0Utp1iZ5EEymds4L20UhxIE"/>
+</div>
+<div class="flex-1">
+<h4 class="font-medium text-tertiary">Physio Review</h4>
+<p class="text-sm text-on-surface-variant">Dr. Chen • Fri 20, 04:00 PM</p>
+</div>
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-variant text-on-surface hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Fixed Action Button (Booking) -->
+<div class="fixed bottom-24 left-0 w-full px-container-padding md:hidden z-40 flex justify-end pointer-events-none">
+<button class="pointer-events-auto bg-primary-container text-on-primary-container h-14 px-6 rounded-full font-button-text text-button-text uppercase tracking-wider shadow-[0_8px_32px_rgba(195,244,0,0.2)] flex items-center gap-2 hover:scale-105 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+            Book Session
+        </button>
+</div>
+<!-- BottomNavBar -->
+<nav class="md:hidden bg-surface/80 backdrop-blur-xl border-t border-surface-variant fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe rounded-t-full">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-button-text text-[10px] uppercase">Home</span>
+</a>
+<!-- Workouts (Active) -->
+<a class="flex flex-col items-center justify-center text-primary-fixed scale-110 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+<span class="font-button-text text-[10px] uppercase">Workouts</span>
+</a>
+<!-- Nutrition -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mb-1">restaurant</span>
+<span class="font-button-text text-[10px] uppercase">Nutrition</span>
+</a>
+<!-- AI Coach -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mb-1">psychology</span>
+<span class="font-button-text text-[10px] uppercase">AI Coach</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-button-text text-[10px] uppercase">Profile</span>
+</a>
+</nav>
+</body></html>

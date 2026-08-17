@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fitness Hub - Schedule</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#0d1c2d",
+                        "inverse-primary": "#506600",
+                        "on-background": "#d4e4fa",
+                        "primary-fixed": "#c3f400",
+                        "background": "#051424",
+                        "on-error-container": "#ffdad6",
+                        "primary-fixed-dim": "#abd600",
+                        "on-secondary-container": "#bab8b7",
+                        "surface-container-highest": "#273647",
+                        "on-primary": "#283500",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "on-secondary": "#313030",
+                        "on-secondary-fixed-variant": "#474646",
+                        "inverse-on-surface": "#233143",
+                        "on-error": "#690005",
+                        "tertiary-fixed": "#d5e3fd",
+                        "on-tertiary-container": "#57657b",
+                        "surface-container-lowest": "#010f1f",
+                        "tertiary-container": "#d5e3fd",
+                        "surface-container": "#122131",
+                        "primary": "#ffffff",
+                        "surface-variant": "#273647",
+                        "tertiary-fixed-dim": "#b9c7e0",
+                        "outline": "#8e9379",
+                        "on-tertiary-fixed": "#0d1c2f",
+                        "tertiary": "#ffffff",
+                        "outline-variant": "#444933",
+                        "surface-tint": "#abd600",
+                        "on-tertiary": "#233144",
+                        "surface": "#051424",
+                        "on-surface": "#d4e4fa",
+                        "on-primary-fixed": "#161e00",
+                        "surface-dim": "#051424",
+                        "on-primary-container": "#556d00",
+                        "on-primary-fixed-variant": "#3c4d00",
+                        "surface-container-high": "#1c2b3c",
+                        "inverse-surface": "#d4e4fa",
+                        "on-tertiary-fixed-variant": "#3a485c",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "primary-container": "#c3f400",
+                        "on-surface-variant": "#c4c9ac",
+                        "error-container": "#93000a",
+                        "error": "#ffb4ab",
+                        "surface-bright": "#2c3a4c",
+                        "secondary-container": "#4a4949",
+                        "secondary": "#c8c6c5",
+                        "secondary-fixed": "#e5e2e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "stack-lg": "40px",
+                        "stack-md": "24px",
+                        "stack-sm": "12px",
+                        "container-padding": "20px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "data-label": ["JetBrains Mono"],
+                        "button-text": ["Oswald"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Oswald"],
+                        "headline-lg": ["Oswald"],
+                        "display-lg": ["Oswald"]
+                    },
+                    "fontSize": {
+                        "data-label": ["14px", { "lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "button-text": ["18px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "letterSpacing": "0px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full flex justify-between items-center px-container-padding h-16 z-50 bg-surface/60 backdrop-blur-lg border-b border-surface-variant transition-opacity duration-200">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline">
+<img class="w-full h-full object-cover" data-alt="A macro shot of a sleek, dark metallic texture with subtle electric lime green highlights, representing high-tech sports gear. The lighting is low-key, dramatic, and focused, creating a sense of precision and performance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQRXSuNW5IdKiyD2AmKFddUhyG81fNwUMcHWAIO8mnDtwT2BnCC6ggqwDQa-qGaEjb1mcf1EHtdX8grCsOcYoJRpNC5P2RU5Uf62osoqcam0KLIj5M_RQI9bqvr7ONlY6Z-h-RZ-MCx5FaHW0u-P_8_r9Kqh2jMXVIToy_W7In74mXM2WyLtEKvy7vSpqEybmPv9lZEwGJDzWVUE_yBKLZUnG26Q9NT52-GNUI-b_acvhJbGhaMnBT"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary tracking-tighter">FITNESS HUB</h1>
+</div>
+<button class="hover:opacity-80 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">notifications</span>
+</button>
+</header>
+<main class="pt-24 px-container-padding max-w-4xl mx-auto min-h-screen flex flex-col gap-stack-lg">
+<!-- Header & Week Scroll -->
+<section class="flex flex-col gap-stack-md">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary tracking-tighter">SESSION SCHEDULE</h2>
+<p class="text-on-surface-variant font-data-label text-data-label">OCTOBER 2023</p>
+</div>
+<!-- Horizontal Calendar Scroll -->
+<div class="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory hide-scrollbar">
+<!-- Inactive Day -->
+<div class="flex-none w-20 h-24 rounded-xl bg-surface-container-low border border-surface-variant flex flex-col items-center justify-center snap-center hover:border-outline transition-colors cursor-pointer">
+<span class="font-data-label text-data-label text-on-surface-variant">MON</span>
+<span class="font-headline-lg text-headline-lg text-on-surface">16</span>
+</div>
+<!-- Inactive Day -->
+<div class="flex-none w-20 h-24 rounded-xl bg-surface-container-low border border-surface-variant flex flex-col items-center justify-center snap-center hover:border-outline transition-colors cursor-pointer">
+<span class="font-data-label text-data-label text-on-surface-variant">TUE</span>
+<span class="font-headline-lg text-headline-lg text-on-surface">17</span>
+</div>
+<!-- Active Day -->
+<div class="flex-none w-20 h-24 rounded-xl bg-primary-fixed/10 border-2 border-primary-fixed flex flex-col items-center justify-center snap-center">
+<span class="font-data-label text-data-label text-primary-fixed">WED</span>
+<span class="font-headline-lg text-headline-lg text-primary">18</span>
+<div class="w-1.5 h-1.5 rounded-full bg-primary-fixed mt-1"></div>
+</div>
+<!-- Inactive Day -->
+<div class="flex-none w-20 h-24 rounded-xl bg-surface-container-low border border-surface-variant flex flex-col items-center justify-center snap-center hover:border-outline transition-colors cursor-pointer">
+<span class="font-data-label text-data-label text-on-surface-variant">THU</span>
+<span class="font-headline-lg text-headline-lg text-on-surface">19</span>
+</div>
+<!-- Inactive Day -->
+<div class="flex-none w-20 h-24 rounded-xl bg-surface-container-low border border-surface-variant flex flex-col items-center justify-center snap-center hover:border-outline transition-colors cursor-pointer">
+<span class="font-data-label text-data-label text-on-surface-variant">FRI</span>
+<span class="font-headline-lg text-headline-lg text-on-surface">20</span>
+</div>
+</div>
+</section>
+<!-- Main Content Area -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-lg">
+<!-- Timeline Section -->
+<section class="md:col-span-2 flex flex-col gap-stack-md">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tighter border-b border-surface-variant pb-2">DAILY LOG</h3>
+<div class="relative pl-8 flex flex-col gap-stack-md">
+<!-- Timeline Line -->
+<div class="absolute left-3.5 top-2 bottom-2 w-px bg-surface-variant"></div>
+<!-- Event: Completed -->
+<div class="relative bg-surface-container/60 backdrop-blur-md border border-surface-variant rounded-xl p-4 flex flex-col gap-2">
+<!-- Timeline Node -->
+<div class="absolute -left-10 top-4 w-5 h-5 rounded-full bg-background border-2 border-primary-fixed flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-[12px] text-primary-fixed font-bold">check</span>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<span class="font-data-label text-data-label text-primary-fixed">07:00 AM</span>
+<h4 class="font-button-text text-button-text text-primary mt-1">MORNING CARDIO</h4>
+</div>
+<span class="px-2 py-1 bg-surface-container-highest rounded-sm font-data-label text-[12px] text-on-surface-variant border border-outline/30">30m</span>
+</div>
+<p class="text-on-surface-variant text-sm">Zone 2 endurance run.</p>
+</div>
+<!-- Event: Info/Nutrition -->
+<div class="relative bg-surface-container/60 backdrop-blur-md border border-surface-variant rounded-xl p-4 flex flex-col gap-2">
+<!-- Timeline Node -->
+<div class="absolute -left-10 top-4 w-5 h-5 rounded-full bg-background border-2 border-outline flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-[12px] text-outline">restaurant</span>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<span class="font-data-label text-data-label text-outline">12:00 PM</span>
+<h4 class="font-button-text text-button-text text-primary mt-1">NUTRITION WINDOW</h4>
+</div>
+</div>
+<p class="text-on-surface-variant text-sm">High Protein Meal recommended.</p>
+</div>
+<!-- Event: Upcoming Session -->
+<div class="relative bg-surface-container-low/80 backdrop-blur-md border-l-4 border-l-primary-fixed border-y border-y-surface-variant border-r border-r-surface-variant rounded-r-xl rounded-l-sm p-4 flex flex-col gap-2 shadow-[0_0_15px_rgba(195,244,0,0.1)]">
+<!-- Timeline Node -->
+<div class="absolute -left-[42px] top-4 w-5 h-5 rounded-full bg-primary-fixed animate-pulse z-10 shadow-[0_0_10px_rgba(195,244,0,0.5)]">
+</div>
+<div class="flex justify-between items-start">
+<div>
+<span class="font-data-label text-data-label text-primary-fixed">05:30 PM</span>
+<h4 class="font-button-text text-button-text text-primary mt-1 text-xl">UPPER BODY POWER</h4>
+</div>
+<span class="px-2 py-1 bg-primary-fixed/20 rounded-sm font-data-label text-[12px] text-primary-fixed border border-primary-fixed/50">60m</span>
+</div>
+<p class="text-on-surface text-sm">Heavy compound movements. Bench press primary.</p>
+<button class="mt-2 w-full py-2 bg-surface-container-highest hover:bg-surface-bright border border-surface-variant rounded-lg font-button-text text-sm text-primary transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">play_arrow</span> START SESSION
+                        </button>
+</div>
+<!-- Event: Future -->
+<div class="relative bg-surface-container/30 backdrop-blur-sm border border-surface-variant/50 rounded-xl p-4 flex flex-col gap-2 opacity-70">
+<!-- Timeline Node -->
+<div class="absolute -left-10 top-4 w-5 h-5 rounded-full bg-background border-2 border-surface-variant flex items-center justify-center z-10">
+</div>
+<div class="flex justify-between items-start">
+<div>
+<span class="font-data-label text-data-label text-on-surface-variant">08:00 PM</span>
+<h4 class="font-button-text text-button-text text-on-surface mt-1">RECOVERY &amp; STRETCHING</h4>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Sidebar Section -->
+<section class="flex flex-col gap-stack-md">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tighter border-b border-surface-variant pb-2">APPOINTMENTS</h3>
+<!-- Appointment Card -->
+<div class="bg-surface-container-low border border-surface-variant rounded-xl p-4 flex flex-col gap-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-primary-fixed">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div>
+<h4 class="font-button-text text-button-text text-primary">PT SESSION</h4>
+<p class="font-data-label text-[12px] text-on-surface-variant">TOMORROW, 10:00 AM</p>
+</div>
+</div>
+<p class="text-sm text-on-surface-variant">Form check and new mesocycle planning with Coach Sarah.</p>
+</div>
+<!-- Appointment Card -->
+<div class="bg-surface-container-low border border-surface-variant rounded-xl p-4 flex flex-col gap-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-outline">
+<span class="material-symbols-outlined">medical_services</span>
+</div>
+<div>
+<h4 class="font-button-text text-button-text text-primary">PHYSIO REVIEW</h4>
+<p class="font-data-label text-[12px] text-on-surface-variant">OCT 22, 02:00 PM</p>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<button class="mt-4 w-full py-4 bg-primary-fixed text-on-primary-fixed font-button-text text-button-text rounded-lg hover:bg-primary-fixed-dim transition-colors flex items-center justify-center gap-2 uppercase tracking-wide shadow-[0_0_20px_rgba(195,244,0,0.2)]">
+<span class="material-symbols-outlined">add</span> BOOK SESSION
+                </button>
+</section>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface/80 backdrop-blur-xl border-t border-surface-variant rounded-t-full md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-button-text text-data-label mt-1 text-[10px]">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="font-button-text text-data-label mt-1 text-[10px]">Workouts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-button-text text-data-label mt-1 text-[10px]">Nutrition</span>
+</a>
+<!-- Assume AI Coach might be the schedule context, but usually it's Workouts. Highlight nothing strictly active from JSON array if it's a generic "Schedule" unless we map it. We'll map it to Workouts structurally, but leave AI Coach here. Let's just highlight Workouts as active for this example, or none. The prompt says "consistent with existing Dashboard and Workouts screens", suggesting Workouts is active. Let's map to none active to be safe, or just Home. Actually, the mandate says: "If designing a user settings page, Profile is active". I will leave Home active as fallback. -->
+<a class="flex flex-col items-center justify-center text-primary-fixed scale-110" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+<span class="font-button-text text-data-label mt-1 text-[10px]">Workouts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-button-text text-data-label mt-1 text-[10px]">Profile</span>
+</a>
+</nav>
+<style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

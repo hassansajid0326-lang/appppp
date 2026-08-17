@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Coach - Fitness Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Oswald:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-dim": "#d8dadc",
+                      "primary-fixed": "#c3f400",
+                      "on-tertiary-container": "#001f2a",
+                      "surface-bright": "#f7f9fb",
+                      "inverse-surface": "#2c3133",
+                      "surface-container-highest": "#e0e3e5",
+                      "secondary": "#5b5f63",
+                      "on-error-container": "#410002",
+                      "on-primary-fixed": "#161e00",
+                      "tertiary-container": "#bcebe5",
+                      "tertiary-fixed-dim": "#a0cfc9",
+                      "tertiary": "#396560",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#eceff1",
+                      "secondary-container": "#dfe2e7",
+                      "on-secondary-fixed": "#181c1f",
+                      "error": "#ba1a1a",
+                      "secondary-fixed-dim": "#c3c7cb",
+                      "primary-container": "#c3f400",
+                      "background": "#f7f9fb",
+                      "surface-tint": "#556d00",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-high": "#e6e8eb",
+                      "on-primary-container": "#161e00",
+                      "on-background": "#181c1d",
+                      "primary-fixed-dim": "#abd600",
+                      "on-surface-variant": "#41484d",
+                      "outline": "#72787e",
+                      "inverse-on-surface": "#edf1f3",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#3c4d00",
+                      "on-tertiary-fixed": "#00201d",
+                      "on-primary": "#ffffff",
+                      "surface": "#f7f9fb",
+                      "secondary-fixed": "#dfe2e7",
+                      "on-secondary-container": "#181c1f",
+                      "surface-variant": "#dde3e8",
+                      "on-surface": "#181c1d",
+                      "tertiary-fixed": "#bcebe5",
+                      "primary": "#415500",
+                      "outline-variant": "#c2c7ce",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#c3f400",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#1f4e49",
+                      "on-secondary-fixed-variant": "#43474b",
+                      "surface-container-low": "#f2f4f6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "stack-lg": "40px",
+                      "container-padding": "20px",
+                      "stack-sm": "12px",
+                      "base": "8px",
+                      "stack-md": "24px"
+              },
+              "fontFamily": {
+                      "data-label": [
+                              "JetBrains Mono"
+                      ],
+                      "display-lg": [
+                              "Oswald"
+                      ],
+                      "headline-lg": [
+                              "Oswald"
+                      ],
+                      "button-text": [
+                              "Oswald"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Oswald"
+                      ]
+              },
+              "fontSize": {
+                      "data-label": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "button-text": [
+                              "18px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "0px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full flex justify-between items-center px-container-padding h-16 z-50 bg-surface/80 backdrop-blur-lg border-b border-surface-variant transition-opacity duration-200">
+<div class="flex items-center gap-4">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="A small, high-contrast circular profile avatar of an athletic individual, illuminated by stark studio lighting against a dark background, matching the app's intense performance aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ-_POzBlBQAu0PB60djaInf245lZB0DrD9s9p2z_ciRt9ZUp6ycBe7hwYkPGtl00xXLxJa94-XuAKsDraJb8CUWacutCyJIY4uoAXY3_x6hETwubrmm0nXblTHyQMFOulq52zHwPNlHuP0tujP9k_gYHB5H3yoUBVTqLTTnB5Zjas6Rjc6bWirzof2W17zeQnog3p7N5Bhsg331xESCTA4c9YSAc6oYPpgaRH33i6OjQUcw9jN2OQ"/>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary tracking-tighter">FITNESS HUB</h1>
+</div>
+<div class="flex items-center gap-4 hidden md:flex">
+<nav class="flex gap-6">
+<a class="font-button-text text-data-label text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">home</span> Home
+                 </a>
+<a class="font-button-text text-data-label text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">fitness_center</span> Workouts
+                 </a>
+<a class="font-button-text text-data-label text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">restaurant</span> Nutrition
+                 </a>
+<a class="font-button-text text-data-label text-primary flex items-center gap-2 border-b-2 border-primary pb-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">psychology</span> AI Coach
+                 </a>
+<a class="font-button-text text-data-label text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">person</span> Profile
+                 </a>
+</nav>
+</div>
+<button class="text-primary hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-2xl">notifications</span>
+</button>
+</header>
+<!-- Main Canvas -->
+<main class="flex-grow pt-24 px-container-padding max-w-[1200px] mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-gutter md:gap-stack-md">
+<!-- Left Column: Coach Status & Live Protocol -->
+<div class="md:col-span-4 flex flex-col gap-stack-sm">
+<!-- Coach Status -->
+<div class="bg-surface-container-low border border-surface-variant rounded-xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden group">
+<div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative w-24 h-24 mb-4">
+<!-- Glowing Avatar Rings -->
+<div class="absolute inset-0 rounded-full border-2 border-primary/30 animate-ping"></div>
+<div class="absolute inset-2 rounded-full border-2 border-primary/50 animate-pulse"></div>
+<div class="absolute inset-4 rounded-full bg-surface border border-primary flex items-center justify-center z-10 shadow-[0_0_15px_rgba(195,244,0,0.4)]">
+<span class="material-symbols-outlined text-4xl text-primary" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</div>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary uppercase mb-1 z-10">Coach Kinetix</h2>
+<div class="flex items-center gap-2 text-primary font-data-label text-data-label z-10">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    ONLINE &amp; ANALYZING
+                </div>
+</div>
+<!-- Live Protocol Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-4">
+<div class="bg-surface-container-low border border-surface-variant rounded-lg p-4 hover:border-primary/50 transition-colors">
+<div class="flex items-center justify-between mb-2">
+<span class="font-data-label text-data-label text-on-surface-variant uppercase tracking-wider text-xs">Current Phase</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">trending_up</span>
+</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-primary">HYPERTROPHY</div>
+<div class="w-full bg-surface-variant h-1 mt-3 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[65%]"></div>
+</div>
+<div class="flex justify-between mt-1 font-data-label text-data-label text-[10px] text-on-surface-variant">
+<span>WEEK 3</span>
+<span>WEEK 8</span>
+</div>
+</div>
+<div class="bg-surface-container-low border border-surface-variant rounded-lg p-4 hover:border-primary/50 transition-colors">
+<div class="flex items-center justify-between mb-2">
+<span class="font-data-label text-data-label text-on-surface-variant uppercase tracking-wider text-xs">Metabolic Window</span>
+<span class="material-symbols-outlined text-primary text-sm">bolt</span>
+</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-primary">OPTIMAL</div>
+<p class="font-body-md text-sm text-on-surface-variant mt-2 leading-snug">Post-workout protein synthesis is peaking. Intake recommended within 45m.</p>
+</div>
+</div>
+</div>
+<!-- Center/Right Column: Insights & Chat -->
+<div class="md:col-span-8 flex flex-col gap-stack-sm h-[calc(100vh-120px)] md:h-[calc(100vh-100px)]">
+<!-- Success Metrics (Top Row of Right Col) -->
+<div class="grid grid-cols-2 gap-4 shrink-0">
+<div class="bg-surface-container-low border border-surface-variant rounded-lg p-4 flex items-center justify-between relative overflow-hidden">
+<!-- Faux Line Chart Background -->
+<div class="absolute bottom-0 left-0 w-full h-1/2 opacity-20" style="background: linear-gradient(180deg, transparent 0%, rgba(195,244,0,0.2) 100%); clip-path: polygon(0 100%, 0 50%, 20% 60%, 40% 40%, 60% 70%, 80% 30%, 100% 45%, 100% 100%);"></div>
+<svg class="absolute bottom-0 left-0 w-full h-1/2 opacity-50" preserveaspectratio="none" viewbox="0 0 100 100">
+<polyline fill="none" points="0,50 20,60 40,40 60,70 80,30 100,45" stroke="#415500" stroke-width="2"></polyline>
+</svg>
+<div class="z-10">
+<div class="font-data-label text-data-label text-on-surface-variant uppercase text-xs mb-1">Weight Trend</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-primary leading-none">184.2 <span class="text-sm text-on-surface-variant">lbs</span></div>
+</div>
+<div class="z-10 flex flex-col items-end">
+<span class="text-primary text-xs font-data-label flex items-center"><span class="material-symbols-outlined text-[14px]">arrow_downward</span> 1.2%</span>
+<span class="text-on-surface-variant text-[10px] font-data-label">7 DAYS</span>
+</div>
+</div>
+<div class="bg-surface-container-low border border-surface-variant rounded-lg p-4 flex items-center justify-between">
+<div>
+<div class="font-data-label text-data-label text-on-surface-variant uppercase text-xs mb-1">Caloric Consistency</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-primary leading-none">92<span class="text-sm text-on-surface-variant">%</span></div>
+</div>
+<!-- Faux Ring Chart -->
+<div class="relative w-12 h-12">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-variant" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"></path>
+<path class="text-primary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="92, 100" stroke-linecap="round" stroke-width="4"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Chat / Insights Area -->
+<div class="flex-grow bg-surface border border-surface-variant rounded-xl flex flex-col overflow-hidden relative">
+<!-- Messages Area -->
+<div class="flex-grow overflow-y-auto p-4 space-y-6 flex flex-col bg-surface-container-lowest">
+<!-- System Insight Message -->
+<div class="flex gap-4 max-w-[85%] self-start">
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-primary/30 flex items-center justify-center shrink-0 mt-1">
+<span class="material-symbols-outlined text-primary text-sm">auto_awesome</span>
+</div>
+<div class="flex flex-col gap-2">
+<div class="bg-surface-container-low border border-surface-variant rounded-2xl rounded-tl-sm p-4 text-sm text-on-surface leading-relaxed shadow-sm">
+<p class="mb-2">Your recovery metrics are trending slightly lower than baseline. HRV is down 4%.</p>
+<p>I recommend swapping today's Heavy Deadlift session for Active Recovery or Zone 2 Cardio to maintain the metabolic window without overtaxing the CNS.</p>
+</div>
+<span class="text-[10px] font-data-label text-on-surface-variant uppercase ml-2">Coach Kinetix • 2h ago</span>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex gap-4 max-w-[85%] self-end flex-row-reverse">
+<img class="w-8 h-8 rounded-full object-cover mt-1 border border-surface-variant shrink-0" data-alt="Small circular avatar of the user, similar to top app bar." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1rEb3SziJ6DaOXEs99PmQxUGGZLiYefN217khNw1h2oWegRRlAtcZtW6Nl8Q1-v_M8U0Ss4JvULMIPUrvsxfbz6PpcVNqnvPdpHDqM39XIL7wlVnFtV-Pg6LJplj2_z-i8c2KroW39NeQLb2BnkYeCyDIk34nYmq5mpug0_5tGM-yyVWowb66Ffgy9LIA1QTooNnayT1AzyKIJLMi6ruz4AZJJnkf1Ea0o-p85knMw0Achv4xv2ve"/>
+<div class="flex flex-col gap-2 items-end">
+<div class="bg-primary-container/20 border border-primary/30 rounded-2xl rounded-tr-sm p-4 text-sm text-on-surface leading-relaxed shadow-sm">
+<p>Got it. I'll do a 45 min row at Zone 2. Should I adjust macros today?</p>
+</div>
+<span class="text-[10px] font-data-label text-on-surface-variant uppercase mr-2">You • 1h ago</span>
+</div>
+</div>
+<!-- System Action Message -->
+<div class="flex gap-4 max-w-[85%] self-start">
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-primary/30 flex items-center justify-center shrink-0 mt-1">
+<span class="material-symbols-outlined text-primary text-sm">psychology</span>
+</div>
+<div class="flex flex-col gap-2 w-full">
+<div class="bg-surface-container-low border border-surface-variant rounded-2xl rounded-tl-sm p-4 text-sm text-on-surface shadow-sm w-full">
+<p class="mb-4">Yes. Lowering overall volume means we should taper carbs slightly to maintain caloric deficit goals for this phase.</p>
+<!-- Embedded Action Card inside chat -->
+<div class="bg-surface border border-outline/30 rounded-lg p-3 flex items-center justify-between shadow-sm">
+<div>
+<div class="font-data-label text-[10px] text-on-surface-variant uppercase">Proposed Macro Adjustment</div>
+<div class="font-headline-lg-mobile text-lg text-primary tracking-tight">-40g Carbs</div>
+</div>
+<button class="bg-primary text-on-primary font-button-text text-xs px-4 py-2 rounded uppercase hover:opacity-90 transition-opacity">
+                                        Apply
+                                    </button>
+</div>
+</div>
+<span class="text-[10px] font-data-label text-on-surface-variant uppercase ml-2">Coach Kinetix • Just now</span>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-4 bg-surface-container/80 backdrop-blur-xl border-t border-surface-variant shrink-0">
+<div class="relative flex items-center">
+<input class="w-full bg-surface-container-lowest border border-surface-variant rounded-full py-3 pl-4 pr-12 text-sm text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors font-body-md shadow-sm" placeholder="Ask Coach about your data..." type="text"/>
+<button class="absolute right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-on-primary hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-sm font-bold">arrow_upward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface/90 backdrop-blur-xl border-t border-surface-variant rounded-t-xl md:hidden shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">home</span>
+<span class="font-button-text text-data-label text-[10px] mt-1 hidden">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">fitness_center</span>
+<span class="font-button-text text-data-label text-[10px] mt-1 hidden">Workouts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">restaurant</span>
+<span class="font-button-text text-data-label text-[10px] mt-1 hidden">Nutrition</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary scale-110 hover:text-primary transition-colors active:scale-95 duration-150 relative" href="#">
+<div class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-primary animate-ping"></div>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<span class="font-button-text text-data-label text-[10px] mt-1 hidden">AI Coach</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-button-text text-data-label text-[10px] mt-1 hidden">Profile</span>
+</a>
+</nav>
+</body></html>

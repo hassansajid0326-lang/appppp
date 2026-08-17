@@ -1,0 +1,61 @@
+{
+  "expo": {
+    "name": "FitPulse",
+    "slug": "fitpulse",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/favicon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#051424"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.fitpulse.app",
+      "infoPlist": {
+        "NSHealthShareUsageDescription": "FitPulse requires access to your health data to count steps, measure distance, and display daily active minutes directly on your dashboard.",
+        "NSHealthUpdateUsageDescription": "FitPulse requires write access to log completed workouts and routines back to your health records."
+      },
+      "entitlements": {
+        "com.apple.developer.healthkit": true
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/favicon.png",
+        "backgroundColor": "#051424"
+      },
+      "package": "com.fitpulse.app",
+      "permissions": [
+        "android.permission.health.READ_STEPS",
+        "android.permission.health.READ_ACTIVE_CALORIES_BURNED",
+        "android.permission.health.READ_DISTANCE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "react-native-health",
+        {
+          "healthSharePermission": "FitPulse wants to read step data to track progress."
+        }
+      ],
+      "expo-secure-store",
+      "expo-font",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 26
+          }
+        }
+      ],
+      "expo-video",
+      "expo-asset"
+    ]
+  }
+}

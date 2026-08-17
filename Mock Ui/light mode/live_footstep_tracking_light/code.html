@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FITNESS HUB - Live Tracking</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;700&amp;family=Oswald:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "surface-dim": "#d8dadc",
+                "primary-fixed": "#c3f400",
+                "on-tertiary-container": "#181d22",
+                "surface-bright": "#f7f9fb",
+                "inverse-surface": "#2b3135",
+                "surface-container-highest": "#e0e3e5",
+                "secondary": "#585f65",
+                "on-error-container": "#410002",
+                "on-primary-fixed": "#161e00",
+                "tertiary-container": "#d6e5ef",
+                "tertiary-fixed-dim": "#bac9d3",
+                "tertiary": "#3c4850",
+                "error-container": "#ffdad6",
+                "surface-container": "#ebeeef",
+                "secondary-container": "#dce3e9",
+                "on-secondary-fixed": "#151c21",
+                "error": "#ba1a1a",
+                "secondary-fixed-dim": "#c0c7cd",
+                "primary-container": "#c3f400",
+                "background": "#f7f9fb",
+                "surface-tint": "#556d00",
+                "on-tertiary": "#ffffff",
+                "surface-container-high": "#e6e8ea",
+                "on-primary-container": "#161e00",
+                "on-background": "#191c1e",
+                "primary-fixed-dim": "#abd600",
+                "on-surface-variant": "#43474e",
+                "outline": "#74777f",
+                "inverse-on-surface": "#ecf1f4",
+                "surface-container-lowest": "#ffffff",
+                "on-primary-fixed-variant": "#3c4d00",
+                "on-tertiary-fixed": "#001f28",
+                "on-primary": "#ffffff",
+                "surface": "#f7f9fb",
+                "secondary-fixed": "#dce3e9",
+                "on-secondary-container": "#151d21",
+                "surface-variant": "#dfe2eb",
+                "on-surface": "#191c1e",
+                "tertiary-fixed": "#d6e5ef",
+                "primary": "#556d00",
+                "outline-variant": "#c4c7cf",
+                "on-error": "#ffffff",
+                "inverse-primary": "#abd600",
+                "on-secondary": "#ffffff",
+                "on-tertiary-fixed-variant": "#253139",
+                "on-secondary-fixed-variant": "#41474d",
+                "surface-container-low": "#f2f4f6"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "container-padding": "20px",
+                "stack-sm": "12px",
+                "gutter": "16px",
+                "stack-md": "24px",
+                "base": "8px",
+                "stack-lg": "40px"
+        },
+        "fontFamily": {
+                "data-label": [
+                        "JetBrains Mono"
+                ],
+                "headline-lg-mobile": [
+                        "Oswald"
+                ],
+                "headline-lg": [
+                        "Oswald"
+                ],
+                "body-md": [
+                        "Inter"
+                ],
+                "button-text": [
+                        "Oswald"
+                ],
+                "display-lg": [
+                        "Oswald"
+                ]
+        },
+        "fontSize": {
+                "data-label": [
+                        "14px",
+                        {
+                                "lineHeight": "1.4",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "28px",
+                        {
+                                "lineHeight": "1.2",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "1.2",
+                                "letterSpacing": "0.02em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "1.6",
+                                "letterSpacing": "0px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "button-text": [
+                        "18px",
+                        {
+                                "lineHeight": "1",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "1.1",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .glass-card {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(223, 226, 235, 0.6);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Hide scrollbar for cleaner UI */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        * {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md text-body-md overflow-x-hidden selection:bg-primary-fixed selection:text-on-primary-fixed pb-[100px] md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-surface/80 backdrop-blur-lg fixed top-0 w-full border-b border-outline-variant/30 flex justify-between items-center px-gutter h-16 z-50 shadow-sm">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover border border-outline-variant/30" data-alt="Close-up portrait of a determined athlete, high contrast, dramatic lighting against a dark slate background, sweating slightly, fitness app avatar style, hyper-realistic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBO5eQcij47Uy5sjSPpfZ2YqbhGm6CraY1GsJskS9y1AIu-FXn9C-HDvh7tUaywH227ZkuBTxAhM5qpEenIm1gO_x0zTH0rQBRCSrjNdNHxevTjTSnFmsbrrbsh_E_UZlYGVJ3f2futOD2rzi5huSK2n-JDwTp6CFVzHY0iTwEyZHgxFcFgvTGGvYu-GfyIu07hTT0YSa-MUVu5LWZ9kjqhKIZpFgNhoJPWo7QghdtYH_VDpZAfjumE"/>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile italic font-black text-primary">FITNESS HUB</h1>
+</div>
+<button class="text-on-surface hover:opacity-80 transition-opacity active:scale-95 duration-100 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-size: 28px;">notifications</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-[88px] px-gutter md:px-container-padding max-w-7xl mx-auto flex flex-col gap-stack-md">
+<!-- Live Status Row (Desktop Only) -->
+<div class="hidden md:flex justify-between items-center">
+<h2 class="font-headline-lg text-headline-lg text-primary uppercase">Live Tracking</h2>
+<div class="flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-full border border-outline-variant/30">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+<span class="font-data-label text-data-label text-primary">SYNCING DATA...</span>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+<!-- Hero Radial Progress (Spans 12 on mobile, 5 on desktop) -->
+<div class="md:col-span-5 glass-card rounded-xl p-6 flex flex-col items-center justify-center relative min-h-[350px]">
+<div class="absolute top-4 left-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">directions_walk</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface uppercase">Today</span>
+</div>
+<div class="relative w-64 h-64 flex items-center justify-center mt-6">
+<!-- SVG Radial -->
+<svg class="w-full h-full" viewbox="0 0 120 120">
+<!-- Background track -->
+<circle class="text-surface-container-highest stroke-current" cx="60" cy="60" fill="transparent" r="50" stroke-width="8"></circle>
+<!-- Progress stroke -->
+<circle class="text-primary-fixed stroke-current progress-ring__circle" cx="60" cy="60" fill="transparent" r="50" stroke-dasharray="314.159" stroke-dashoffset="50.265" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<!-- Center Content -->
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="font-display-lg text-display-lg text-on-surface">84%</span>
+<div class="font-data-label text-data-label text-on-surface-variant mt-1">
+<span class="text-on-surface font-bold">8,432</span> / 10,000
+                        </div>
+<span class="text-xs text-on-surface-variant uppercase tracking-widest mt-2 bg-surface-container-low px-2 py-1 rounded-sm border border-outline-variant/20 font-bold">Goal: 10k</span>
+</div>
+</div>
+<!-- Glowing effect under the radial -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-primary-fixed/20 rounded-full blur-3xl -z-10 animate-pulse-slow"></div>
+</div>
+<!-- Metrics & History Cluster (Spans 12 on mobile, 7 on desktop) -->
+<div class="md:col-span-7 flex flex-col gap-4">
+<!-- Live Metrics Grid 2x2 -->
+<div class="grid grid-cols-2 gap-4 h-full">
+<div class="glass-card rounded-xl p-4 flex flex-col justify-between group hover:border-primary-fixed transition-colors">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">route</span>
+</div>
+<div>
+<div class="font-data-label text-data-label text-on-surface-variant uppercase mb-1">Distance</div>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">6.2</span>
+<span class="text-sm text-on-surface-variant font-data-label">km</span>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col justify-between group hover:border-primary-fixed transition-colors">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">local_fire_department</span>
+</div>
+<div>
+<div class="font-data-label text-data-label text-on-surface-variant uppercase mb-1">Calories</div>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">420</span>
+<span class="text-sm text-on-surface-variant font-data-label">kcal</span>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col justify-between group hover:border-primary-fixed transition-colors">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">timer</span>
+</div>
+<div>
+<div class="font-data-label text-data-label text-on-surface-variant uppercase mb-1">Active Time</div>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">52</span>
+<span class="text-sm text-on-surface-variant font-data-label">min</span>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col justify-between group hover:border-primary-fixed transition-colors relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-fixed/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start relative z-10">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">speed</span>
+<div class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
+</div>
+<div class="relative z-10">
+<div class="font-data-label text-data-label text-on-surface-variant uppercase mb-1">Current Pace</div>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">9'45"</span>
+<span class="text-sm text-on-surface-variant font-data-label">/km</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Step History Chart & Activity Log (Full Width on Mobile, spans differently on desktop) -->
+<div class="md:col-span-8 glass-card rounded-xl p-5">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-data-label text-data-label uppercase tracking-widest text-on-surface">Weekly Trend</h3>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">bar_chart</span>
+</div>
+<!-- Minimalist Bar Chart -->
+<div class="h-32 flex items-end justify-between gap-2 px-2 border-b border-outline-variant/30 pb-2 relative">
+<!-- Horizontal Grid Line -->
+<div class="absolute top-1/2 left-0 w-full border-t border-dashed border-outline-variant/50 -z-10"></div>
+<!-- Bars -->
+<div class="w-full flex flex-col items-center gap-2 group">
+<div class="w-full bg-surface-container-highest rounded-t-sm h-[40%] group-hover:bg-surface-variant transition-colors relative"></div>
+<span class="text-[10px] text-on-surface-variant font-data-label">M</span>
+</div>
+<div class="w-full flex flex-col items-center gap-2 group">
+<div class="w-full bg-surface-container-highest rounded-t-sm h-[65%] group-hover:bg-surface-variant transition-colors"></div>
+<span class="text-[10px] text-on-surface-variant font-data-label">T</span>
+</div>
+<div class="w-full flex flex-col items-center gap-2 group">
+<div class="w-full bg-surface-container-highest rounded-t-sm h-[50%] group-hover:bg-surface-variant transition-colors"></div>
+<span class="text-[10px] text-on-surface-variant font-data-label">W</span>
+</div>
+<div class="w-full flex flex-col items-center gap-2 group">
+<div class="w-full bg-surface-container-highest rounded-t-sm h-[80%] group-hover:bg-surface-variant transition-colors"></div>
+<span class="text-[10px] text-on-surface-variant font-data-label">T</span>
+</div>
+<div class="w-full flex flex-col items-center gap-2 group">
+<div class="w-full bg-surface-container-highest rounded-t-sm h-[45%] group-hover:bg-surface-variant transition-colors"></div>
+<span class="text-[10px] text-on-surface-variant font-data-label">F</span>
+</div>
+<div class="w-full flex flex-col items-center gap-2 group">
+<div class="w-full bg-surface-container-highest rounded-t-sm h-[90%] group-hover:bg-surface-variant transition-colors"></div>
+<span class="text-[10px] text-on-surface-variant font-data-label">S</span>
+</div>
+<!-- Today -->
+<div class="w-full flex flex-col items-center gap-2">
+<div class="w-full bg-primary-fixed rounded-t-sm h-[84%] relative shadow-[0_0_10px_rgba(195,244,0,0.5)]">
+<!-- Tooltip style value -->
+<div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-inverse-surface border border-outline-variant/30 text-[10px] font-data-label px-1.5 py-0.5 rounded text-inverse-on-surface whitespace-nowrap">8.4k</div>
+</div>
+<span class="text-[10px] text-primary font-data-label font-bold">S</span>
+</div>
+</div>
+</div>
+<!-- Activity Log -->
+<div class="md:col-span-4 glass-card rounded-xl p-5 flex flex-col">
+<h3 class="font-data-label text-data-label uppercase tracking-widest text-on-surface mb-4">Activity Log</h3>
+<div class="flex flex-col gap-3 flex-1 overflow-y-auto">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-surface border border-outline-variant/30 shadow-sm">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined text-sm">directions_run</span>
+</div>
+<div class="flex-1">
+<div class="text-sm text-on-surface font-medium">Active Burst</div>
+<div class="text-xs text-on-surface-variant font-data-label mt-0.5">15 min Brisk Walk</div>
+</div>
+<div class="text-xs text-on-surface-variant font-data-label">10:30 AM</div>
+</div>
+<div class="flex items-center gap-3 p-2 rounded-lg bg-surface border border-outline-variant/30 shadow-sm">
+<div class="w-8 h-8 rounded bg-surface-container-high flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-sm">directions_walk</span>
+</div>
+<div class="flex-1">
+<div class="text-sm text-on-surface font-medium">Morning Commute</div>
+<div class="text-xs text-on-surface-variant font-data-label mt-0.5">22 min Steady Walk</div>
+</div>
+<div class="text-xs text-on-surface-variant font-data-label">08:15 AM</div>
+</div>
+</div>
+</div>
+<!-- Motivation Banner -->
+<div class="col-span-1 md:col-span-12 bg-primary-fixed text-on-primary-fixed rounded-xl p-6 flex flex-col md:flex-row items-center justify-between gap-4 relative overflow-hidden shadow-md">
+<!-- Diagonal stripes texture -->
+<div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), repeating-linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000); background-position: 0 0, 10px 10px; background-size: 20px 20px;"></div>
+<div class="flex items-center gap-3 z-10">
+<span class="material-symbols-outlined text-[32px]">local_fire_department</span>
+<p class="font-button-text text-button-text uppercase tracking-wide">
+                        You're <span class="font-black text-xl">1,568</span> steps from your daily target.
+                    </p>
+</div>
+<button class="bg-inverse-surface text-inverse-on-surface font-button-text text-button-text px-6 py-3 rounded-lg uppercase whitespace-nowrap z-10 border border-inverse-surface hover:bg-inverse-surface/90 transition-colors active:scale-95 shadow-lg">
+                    Finish Strong
+                </button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 px-2 pb-safe bg-surface/90 backdrop-blur-xl border-t border-outline-variant/30 rounded-t-xl md:hidden shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center justify-center text-primary font-bold hover:text-primary/80 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-data-label text-data-label mt-1 text-[10px]">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary/80 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="font-data-label text-data-label mt-1 text-[10px]">Workouts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary/80 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-data-label text-data-label mt-1 text-[10px]">Nutrition</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary/80 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-data-label text-data-label mt-1 text-[10px]">AI Coach</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary/80 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-data-label text-data-label mt-1 text-[10px]">Profile</span>
+</a>
+</nav>
+<!-- Desktop Navigation Cluster (TopAppBar Injection for wider screens) -->
+<script>
+        // Simple script to inject desktop nav if needed, maintaining HTML structure purity above.
+        // In a real app, this would be handled via responsive classes or a UI framework.
+    </script>
+</body></html>

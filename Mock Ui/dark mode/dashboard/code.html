@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fitness Hub - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Oswald:wght@600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-container": "#c3f400",
+                        "secondary-fixed": "#e5e2e1",
+                        "secondary-container": "#4a4949",
+                        "surface-tint": "#abd600",
+                        "primary-fixed-dim": "#abd600",
+                        "surface-container-lowest": "#010f1f",
+                        "on-tertiary-container": "#57657b",
+                        "surface-dim": "#051424",
+                        "on-tertiary-fixed": "#0d1c2f",
+                        "error-container": "#93000a",
+                        "surface-container-highest": "#273647",
+                        "tertiary": "#ffffff",
+                        "on-surface-variant": "#c4c9ac",
+                        "surface-variant": "#273647",
+                        "outline": "#8e9379",
+                        "on-secondary-fixed-variant": "#474646",
+                        "inverse-on-surface": "#233143",
+                        "inverse-surface": "#d4e4fa",
+                        "on-primary-fixed": "#161e00",
+                        "background": "#051424",
+                        "primary-fixed": "#c3f400",
+                        "tertiary-fixed-dim": "#b9c7e0",
+                        "tertiary-container": "#d5e3fd",
+                        "surface-bright": "#2c3a4c",
+                        "surface-container-low": "#0d1c2d",
+                        "on-secondary-container": "#bab8b7",
+                        "on-secondary": "#313030",
+                        "on-primary": "#283500",
+                        "inverse-primary": "#506600",
+                        "on-primary-fixed-variant": "#3c4d00",
+                        "outline-variant": "#444933",
+                        "on-primary-container": "#556d00",
+                        "on-surface": "#d4e4fa",
+                        "surface": "#051424",
+                        "secondary": "#c8c6c5",
+                        "tertiary-fixed": "#d5e3fd",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "surface-container": "#122131",
+                        "on-error": "#690005",
+                        "surface-container-high": "#1c2b3c",
+                        "primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#3a485c",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "on-background": "#d4e4fa",
+                        "error": "#ffb4ab",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary": "#233144"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "stack-lg": "40px",
+                        "stack-sm": "12px",
+                        "stack-md": "24px",
+                        "gutter": "16px",
+                        "base": "8px",
+                        "container-padding": "20px"
+                    },
+                    fontFamily: {
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Oswald"],
+                        "headline-lg-mobile": ["Oswald"],
+                        "button-text": ["Oswald"],
+                        "display-lg": ["Oswald"],
+                        "data-label": ["JetBrains Mono"]
+                    },
+                    fontSize: {
+                        "body-md": ["16px", { lineHeight: "1.6", letterSpacing: "0px", fontWeight: "400" }],
+                        "headline-lg": ["32px", { lineHeight: "1.2", letterSpacing: "0.02em", fontWeight: "600" }],
+                        "headline-lg-mobile": ["28px", { lineHeight: "1.2", fontWeight: "600" }],
+                        "button-text": ["18px", { lineHeight: "1", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "display-lg": ["48px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "data-label": ["14px", { lineHeight: "1.4", letterSpacing: "0.05em", fontWeight: "500" }]
+                    }
+                }
+            }
+        };
+    </script>
+<style>
+        /* Custom styles for progress rings and glassmorphism not fully covered by Tailwind */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid #334155;
+        }
+        
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        .glow-text {
+            text-shadow: 0 0 10px rgba(204, 255, 0, 0.5);
+        }
+        
+        /* Hide scrollbar for clean dashboard look */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  <script type="module">
+    import { reticle, SESSION_AUTO } from 'https://cdn.jsdelivr.net/npm/@reticlehq/browser@2.8.0/+esm';
+    reticle.connect({ session: SESSION_AUTO });
+  </script>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full bg-surface/60 backdrop-blur-lg border-b border-surface-variant flex justify-between items-center px-container-padding h-16 z-50 transition-opacity duration-200">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline">
+<img class="w-full h-full object-cover" data-alt="A close-up portrait of an athletic individual with short hair, sweating slightly, looking determined. Lit with moody gym lighting, deep shadows, and subtle neon green rim light. High contrast, professional fitness photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRYG-KClyim1zAEXKYTWHkRQ0UUzh7fbnDEZySCIRp9trYggsgRcHQX6h3GcLfFQiwZY_bQFgvATNlYf5Xdc5DB2xvLF-Pp6biP6CCeuhtwdafROycaHEPl171eYODnxfo7CorIdb52ctfP7ZlTgR0C9D0WNkdoMto2k_k0DwxNcx-w_gypF0pX7W37HUwDIzl_HjsBEMC8M_08HaXoKOXqpOe2o_eTu11z6hs3CC8YJ5HG9Cf0dPd"/>
+</div>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tighter">FITNESS HUB</span>
+</div>
+<button class="text-on-surface-variant hover:opacity-80 p-2">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-24 pb-32 px-container-padding max-w-[1200px] mx-auto w-full md:pt-28 md:pb-12 space-y-stack-md md:space-y-stack-lg">
+<!-- Welcome Section -->
+<section class="mb-stack-sm">
+<h1 class="font-display-lg text-display-lg text-primary uppercase tracking-tight">System Active</h1>
+<p class="font-data-label text-data-label text-on-surface-variant mt-2">TODAY'S METRICS // SYNCED</p>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Main Live Tracking Card (Footsteps) -->
+<div class="glass-panel rounded-xl p-6 md:col-span-8 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden group">
+<!-- Decorative background elements -->
+<div class="absolute -right-20 -top-20 w-64 h-64 bg-primary-fixed/10 rounded-full blur-3xl group-hover:bg-primary-fixed/20 transition-all duration-700"></div>
+<div class="relative w-48 h-48 flex-shrink-0">
+<svg class="w-full h-full" viewbox="0 0 120 120">
+<circle cx="60" cy="60" fill="none" r="54" stroke="#273647" stroke-width="8"></circle>
+<circle class="progress-ring__circle" cx="60" cy="60" fill="none" r="54" stroke="#c3f400" stroke-dasharray="339.292" stroke-dashoffset="84.823" stroke-linecap="round" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="material-symbols-outlined text-primary-fixed text-3xl mb-1" data-icon="directions_walk">directions_walk</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary glow-text leading-none">8,432</span>
+<span class="font-data-label text-data-label text-on-surface-variant text-[10px] uppercase mt-1">/ 10,000</span>
+</div>
+</div>
+<div class="flex-grow flex flex-col justify-center space-y-4 w-full">
+<div>
+<h2 class="font-button-text text-button-text text-primary uppercase mb-1">Live Tracking</h2>
+<div class="flex justify-between items-end border-b border-surface-variant pb-2">
+<span class="font-data-label text-data-label text-on-surface-variant">Distance</span>
+<span class="font-data-label text-data-label text-primary">6.2 km</span>
+</div>
+<div class="flex justify-between items-end border-b border-surface-variant py-2">
+<span class="font-data-label text-data-label text-on-surface-variant">Active Time</span>
+<span class="font-data-label text-data-label text-primary">1h 15m</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Energy & Heart Rate Stats -->
+<div class="md:col-span-4 flex flex-col gap-gutter">
+<!-- Heart Rate -->
+<div class="glass-panel rounded-xl p-5 flex items-center justify-between">
+<div>
+<p class="font-data-label text-data-label text-on-surface-variant uppercase mb-1">Avg BPM</p>
+<p class="font-headline-lg text-headline-lg text-primary">112 <span class="text-error text-sm animate-pulse material-symbols-outlined align-middle" data-icon="favorite" data-weight="fill">favorite</span></p>
+</div>
+<!-- Minimalist heartbeat sparkline simulation -->
+<div class="w-20 h-10 border-b border-surface-variant relative overflow-hidden">
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none" viewbox="0 0 100 40">
+<polyline class="opacity-80" fill="none" points="0,20 20,20 25,5 30,35 35,20 100,20" stroke="#c3f400" stroke-width="2"></polyline>
+</svg>
+</div>
+</div>
+<!-- Energy Burn -->
+<div class="glass-panel rounded-xl p-5 flex flex-col justify-between h-full relative overflow-hidden">
+<div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-primary-fixed/10 to-transparent"></div>
+<p class="font-data-label text-data-label text-on-surface-variant uppercase mb-1 relative z-10">Energy Burned</p>
+<div class="flex items-end gap-2 relative z-10">
+<span class="font-headline-lg text-headline-lg text-primary">1,240</span>
+<span class="font-data-label text-data-label text-primary-fixed pb-1">kcal</span>
+</div>
+</div>
+</div>
+<!-- Daily Routine Checklist -->
+<div class="glass-panel rounded-xl p-6 md:col-span-6 flex flex-col">
+<div class="flex justify-between items-center mb-stack-sm">
+<h2 class="font-button-text text-button-text text-primary uppercase">Daily Routine</h2>
+<span class="font-data-label text-data-label text-primary-fixed bg-primary-fixed/10 px-2 py-1 rounded">2/3</span>
+</div>
+<div class="space-y-3">
+<!-- Item 1: Done -->
+<label class="flex items-center gap-4 p-3 rounded-lg border border-surface-variant bg-surface hover:border-outline transition-colors cursor-pointer opacity-70">
+<input checked="" class="form-checkbox h-5 w-5 text-primary-fixed border-outline bg-transparent rounded focus:ring-primary-fixed focus:ring-offset-background" disabled="" type="checkbox"/>
+<span class="font-body-md text-body-md text-on-surface-variant line-through">Morning Cardio (30m)</span>
+</label>
+<!-- Item 2: Pending -->
+<label class="flex items-center gap-4 p-3 rounded-lg border border-outline bg-surface-bright hover:border-primary-fixed transition-colors cursor-pointer group">
+<input class="form-checkbox h-5 w-5 text-primary-fixed border-outline bg-transparent rounded focus:ring-primary-fixed focus:ring-offset-background group-hover:border-primary-fixed" type="checkbox"/>
+<span class="font-body-md text-body-md text-primary">Hydration (3L Goal)</span>
+</label>
+<!-- Item 3: Done -->
+<label class="flex items-center gap-4 p-3 rounded-lg border border-surface-variant bg-surface hover:border-outline transition-colors cursor-pointer opacity-70">
+<input checked="" class="form-checkbox h-5 w-5 text-primary-fixed border-outline bg-transparent rounded focus:ring-primary-fixed focus:ring-offset-background" disabled="" type="checkbox"/>
+<span class="font-body-md text-body-md text-on-surface-variant line-through">Protein Intake (150g)</span>
+</label>
+</div>
+</div>
+<!-- Quick Access: Today's Workout -->
+<div class="md:col-span-6 relative rounded-xl overflow-hidden group h-full min-h-[240px]">
+<!-- Background Image Placeholder -->
+<div class="absolute inset-0 w-full h-full z-0 transition-transform duration-700 group-hover:scale-105" data-alt="A dark, intense gym setting focused on heavy iron weights. Low key lighting with stark shadows, dramatic rim lighting highlighting the texture of knurled barbells. High contrast, gritty athletic aesthetic, predominantly black and dark grey tones." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBEiD68LZ1wnUxF7lxsfCye-6dlt8GVH9sCNOwapVfhrLfkQ6CToYyjr9UQaNGcKxsjaz0MMx1Ijklud3DPrmA7wTFzEU8buc8umO5twVNBIKhoqSEW3D6KPYm6p9fVPkAYIcW44DbiVxIAZJtD7h2JoRLLrt7PLdtK8n6OBP3zThhnKDf3gHbmKUhP4p1ac0icB-iZsUsvsHak6efeObspK-8OII_CEhtqikL3eFSTCwSq5nlisD_I')"></div>
+<!-- Gradient Overlay -->
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent z-10"></div>
+<div class="relative z-20 h-full p-6 flex flex-col justify-end">
+<span class="inline-block px-3 py-1 bg-surface-variant/80 backdrop-blur-md border border-outline rounded-sm font-data-label text-data-label text-on-surface-variant text-[10px] uppercase w-max mb-2">Today's Protocol</span>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-primary uppercase mb-2">Upper Body Power</h3>
+<div class="flex gap-4 mb-4">
+<span class="font-data-label text-data-label text-primary-fixed flex items-center gap-1 text-sm"><span class="material-symbols-outlined text-[16px]" data-icon="timer">timer</span> 45 Min</span>
+<span class="font-data-label text-data-label text-primary-fixed flex items-center gap-1 text-sm"><span class="material-symbols-outlined text-[16px]" data-icon="local_fire_department">local_fire_department</span> High Intensity</span>
+</div>
+<button class="w-full bg-primary-fixed text-on-primary-fixed font-button-text text-button-text uppercase py-3 px-4 hover:bg-surface-tint transition-colors text-center">
+                        Initiate Sequence
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface/80 backdrop-blur-xl border-t border-surface-variant rounded-t-full">
+<button class="flex flex-col items-center justify-center text-primary-fixed scale-110 active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="home" data-weight="fill">home</span>
+<span class="font-button-text text-data-label mt-1 text-[10px]">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="fitness_center">fitness_center</span>
+<span class="font-button-text text-data-label mt-1 text-[10px]">Workouts</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
+<span class="font-button-text text-data-label mt-1 text-[10px]">Nutrition</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span class="font-button-text text-data-label mt-1 text-[10px]">AI Coach</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-button-text text-data-label mt-1 text-[10px]">Profile</span>
+</button>
+</nav>
+<!-- Desktop Side Nav (Hidden on Mobile, placeholder for structural completeness if needed later, though prompt implies mobile-first dash. Adding minimal desktop nav hint) -->
+<aside class="hidden md:flex flex-col fixed left-0 top-16 bottom-0 w-20 bg-surface/80 backdrop-blur-xl border-r border-surface-variant items-center py-8 gap-8 z-40">
+<button class="text-primary-fixed scale-110"><span class="material-symbols-outlined text-3xl" data-icon="home" data-weight="fill">home</span></button>
+<button class="text-on-surface-variant hover:text-primary-fixed transition-colors"><span class="material-symbols-outlined text-3xl" data-icon="fitness_center">fitness_center</span></button>
+<button class="text-on-surface-variant hover:text-primary-fixed transition-colors"><span class="material-symbols-outlined text-3xl" data-icon="restaurant">restaurant</span></button>
+<button class="text-on-surface-variant hover:text-primary-fixed transition-colors"><span class="material-symbols-outlined text-3xl" data-icon="psychology">psychology</span></button>
+<button class="text-on-surface-variant hover:text-primary-fixed transition-colors mt-auto mb-4"><span class="material-symbols-outlined text-3xl" data-icon="person">person</span></button>
+</aside>
+</body></html>

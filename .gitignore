@@ -1,0 +1,37 @@
+# Dependency directories
+node_modules/
+jspm_packages/
+web_modules/
+
+# Local env files (contain secrets)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Expo directories
+.expo/
+dist/
+web-build/
+
+# Android build outputs and caches
+.gradle/
+build/
+android/app/build/
+android/.gradle/
+local.properties
+
+# Editor and system files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Jetro cache
+.jetro/

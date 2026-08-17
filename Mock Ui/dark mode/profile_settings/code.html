@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fitness Hub - Profile &amp; Settings</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Oswald:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary": "#313030",
+                      "on-primary": "#283500",
+                      "tertiary": "#ffffff",
+                      "primary-container": "#c3f400",
+                      "on-primary-container": "#556d00",
+                      "outline-variant": "#444933",
+                      "surface-container": "#122131",
+                      "secondary-fixed-dim": "#c8c6c5",
+                      "surface-bright": "#2c3a4c",
+                      "on-background": "#d4e4fa",
+                      "primary-fixed-dim": "#abd600",
+                      "on-secondary-container": "#bab8b7",
+                      "tertiary-fixed": "#d5e3fd",
+                      "inverse-on-surface": "#233143",
+                      "on-secondary-fixed": "#1c1b1b",
+                      "surface": "#051424",
+                      "inverse-surface": "#d4e4fa",
+                      "on-tertiary-fixed": "#0d1c2f",
+                      "surface-container-low": "#0d1c2d",
+                      "error": "#ffb4ab",
+                      "background": "#051424",
+                      "secondary-container": "#4a4949",
+                      "primary": "#ffffff",
+                      "on-tertiary": "#233144",
+                      "on-tertiary-container": "#57657b",
+                      "surface-container-highest": "#273647",
+                      "error-container": "#93000a",
+                      "secondary": "#c8c6c5",
+                      "surface-dim": "#051424",
+                      "on-surface": "#d4e4fa",
+                      "inverse-primary": "#506600",
+                      "surface-variant": "#273647",
+                      "surface-container-lowest": "#010f1f",
+                      "on-error": "#690005",
+                      "on-primary-fixed-variant": "#3c4d00",
+                      "secondary-fixed": "#e5e2e1",
+                      "surface-tint": "#abd600",
+                      "on-primary-fixed": "#161e00",
+                      "surface-container-high": "#1c2b3c",
+                      "on-surface-variant": "#c4c9ac",
+                      "tertiary-container": "#d5e3fd",
+                      "on-tertiary-fixed-variant": "#3a485c",
+                      "on-secondary-fixed-variant": "#474646",
+                      "outline": "#8e9379",
+                      "tertiary-fixed-dim": "#b9c7e0",
+                      "on-error-container": "#ffdad6",
+                      "primary-fixed": "#c3f400"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "base": "8px",
+                      "stack-sm": "12px",
+                      "gutter": "16px",
+                      "stack-md": "24px",
+                      "container-padding": "20px",
+                      "stack-lg": "40px"
+              },
+              "fontFamily": {
+                      "button-text": ["Oswald"],
+                      "body-md": ["Inter"],
+                      "data-label": ["JetBrains Mono"],
+                      "headline-lg": ["Oswald"],
+                      "headline-lg-mobile": ["Oswald"],
+                      "display-lg": ["Oswald"]
+              },
+              "fontSize": {
+                      "button-text": ["18px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                      "body-md": ["16px", { "lineHeight": "1.6", "letterSpacing": "0px", "fontWeight": "400" }],
+                      "data-label": ["14px", { "lineHeight": "1.4", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                      "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                      "headline-lg-mobile": ["28px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                      "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        /* Kinetic High-Performance specific tweaks */
+        body {
+            background-color: #051424; /* Fallback */
+            background-image: radial-gradient(circle at 50% 0%, rgba(195, 244, 0, 0.05) 0%, transparent 60%);
+            background-attachment: fixed;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(51, 65, 85, 1);
+        }
+        .kinetic-gradient {
+            background: linear-gradient(135deg, rgba(195, 244, 0, 0.1) 0%, transparent 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen pb-24 md:pb-8 pt-20">
+<!-- TopAppBar -->
+<header class="bg-surface/60 backdrop-blur-lg border-b border-surface-variant fixed top-0 w-full flex justify-between items-center px-container-padding h-16 z-50">
+<!-- Leading Avatar (Mobile/Web) -->
+<div class="flex items-center gap-base">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A highly detailed close-up portrait of a fit, athletic individual in modern high-performance workout gear. The lighting is dramatic, high-key studio style with a dark, moody background emphasizing intensity. Vibrant electric lime rim lighting outlines their silhouette, creating a high-tech, futuristic fitness aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoWNKsWKd-S_Lu3czBUPqrRz_otZ1nfsalTvmfLv7T6vEcnzxccgh5O1o7pmRTdM79nFYqtqkmDgHbLER2lZfjdJOpVRm8Uw7RqvlsQyHphvUI5gQrCaYKUOS0QU6nzfit-NNFROn5wfByXhBAnz1YdGHpb-eKWaIl3D75lSG55Kx6YMILQM7mODeOb8Yx8rdVvNmKRdnXb1OVukyuijTeLU4OBxqyyh0JtC5IPWKGx6r2v8aRUGsZ"/>
+</div>
+</div>
+<!-- Brand / Headline -->
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tighter absolute left-1/2 -translate-x-1/2">
+            FITNESS HUB
+        </div>
+<!-- Desktop Navigation Cluster (Injected per rules) -->
+<nav class="hidden md:flex gap-gutter items-center absolute left-24">
+<a class="text-on-surface-variant hover:text-primary-fixed transition-colors font-button-text text-data-label uppercase tracking-widest flex items-center gap-2" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">home</span>
+                Home
+            </a>
+<a class="text-on-surface-variant hover:text-primary-fixed transition-colors font-button-text text-data-label uppercase tracking-widest flex items-center gap-2" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">fitness_center</span>
+                Workouts
+            </a>
+<a class="text-primary-fixed hover:opacity-80 transition-colors font-button-text text-data-label uppercase tracking-widest flex items-center gap-2 border-b-2 border-primary-fixed pb-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+                Profile
+            </a>
+</nav>
+<!-- Trailing Icon -->
+<button aria-label="Notifications" class="text-primary hover:opacity-80 transition-opacity duration-200">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="max-w-4xl mx-auto px-container-padding flex flex-col gap-stack-lg relative z-10">
+<!-- Profile Header Section -->
+<section class="flex flex-col items-center text-center gap-stack-sm pt-stack-sm">
+<div class="relative">
+<div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-primary-fixed shadow-[0_0_20px_rgba(195,244,0,0.2)]">
+<img alt="Alex Sterling" class="w-full h-full object-cover" data-alt="A medium shot of an athletic person looking focused and determined, set against a dark void background. They are wearing sleek, tactical matte-black fitness apparel. Cool, clinical blue lighting fills the shadows while an intense neon yellow-green streak of light illuminates their face, representing peak performance and modern digital health." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF0NICJK2GiNMvxxdp3g8WAaK9nqoScWaGcpP0HBRJIhfSWpwUZK2U0N36DSScT3Jjf45Ndob6aXcXRuNWOLP1A0ARwOXaP5yWmt0e6jXi5-8Ib4kKNbT7vVXDXNOJkblM6akvoETJpSUk7APCKNAq8K1Zmff92gDDZk7TCFXOG-zQm3FLhD0C6_HadCdXpFhlM_sXMElpeACWKjbCpewT8rLd407Ij_Twe78eayK2aJsKbR4GTS-1"/>
+</div>
+<div class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-primary-fixed text-on-primary-fixed font-button-text text-data-label px-3 py-1 rounded-sm uppercase tracking-widest shadow-lg">
+                    PRO MEMBER
+                </div>
+</div>
+<div class="mt-4">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary uppercase tracking-wide">Alex Sterling</h1>
+<p class="font-data-label text-data-label text-on-surface-variant mt-1">alex.sterling@fitnesshub.io</p>
+</div>
+</section>
+<!-- Stats Overview (Bento Grid) -->
+<section>
+<h2 class="font-button-text text-button-text text-on-surface-variant uppercase tracking-widest mb-stack-sm border-b border-surface-variant pb-2">Lifetime Performance</h2>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-base md:gap-gutter">
+<!-- Stat Card 1 -->
+<div class="glass-panel p-4 rounded-xl kinetic-gradient flex flex-col justify-between aspect-square md:aspect-auto md:h-32">
+<div class="flex items-center gap-2 text-on-surface-variant mb-2">
+<span class="material-symbols-outlined text-sm">event_available</span>
+<span class="font-data-label text-data-label text-[11px] uppercase tracking-wider">Workouts</span>
+</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile md:font-display-lg md:text-display-lg text-primary-fixed mt-auto">
+                        342
+                    </div>
+</div>
+<!-- Stat Card 2 -->
+<div class="glass-panel p-4 rounded-xl kinetic-gradient flex flex-col justify-between aspect-square md:aspect-auto md:h-32">
+<div class="flex items-center gap-2 text-on-surface-variant mb-2">
+<span class="material-symbols-outlined text-sm">weight</span>
+<span class="font-data-label text-data-label text-[11px] uppercase tracking-wider">Vol (lbs)</span>
+</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile md:font-display-lg md:text-display-lg text-primary-fixed mt-auto">
+                        1.2M
+                    </div>
+</div>
+<!-- Stat Card 3 (Spans 2 cols on mobile, 1 on desktop) -->
+<div class="glass-panel p-4 rounded-xl kinetic-gradient flex flex-col justify-between col-span-2 md:col-span-1 md:h-32">
+<div class="flex items-center gap-2 text-on-surface-variant mb-2">
+<span class="material-symbols-outlined text-sm">local_fire_department</span>
+<span class="font-data-label text-data-label text-[11px] uppercase tracking-wider">Active Days</span>
+</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile md:font-display-lg md:text-display-lg text-primary-fixed mt-auto">
+                        847
+                    </div>
+</div>
+</div>
+</section>
+<!-- Physical Profile -->
+<section>
+<h2 class="font-button-text text-button-text text-on-surface-variant uppercase tracking-widest mb-stack-sm border-b border-surface-variant pb-2">Physical Matrix</h2>
+<div class="glass-panel rounded-xl overflow-hidden">
+<div class="grid grid-cols-3 divide-x divide-surface-variant">
+<div class="p-4 flex flex-col items-center justify-center text-center">
+<label class="font-data-label text-data-label text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Weight</label>
+<div class="font-data-label text-data-label text-primary text-lg flex items-baseline gap-1">
+                            185 <span class="text-[10px] text-on-surface-variant">lbs</span>
+</div>
+</div>
+<div class="p-4 flex flex-col items-center justify-center text-center">
+<label class="font-data-label text-data-label text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Height</label>
+<div class="font-data-label text-data-label text-primary text-lg flex items-baseline gap-1">
+                            6'1"
+                        </div>
+</div>
+<div class="p-4 flex flex-col items-center justify-center text-center">
+<label class="font-data-label text-data-label text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Body Fat</label>
+<div class="font-data-label text-data-label text-primary-fixed text-lg flex items-baseline gap-1">
+                            12 <span class="text-[10px] text-on-surface-variant">%</span>
+</div>
+</div>
+</div>
+<div class="p-4 border-t border-surface-variant bg-surface-container-lowest/50">
+<button class="w-full py-3 bg-transparent border border-outline-variant text-primary font-button-text text-button-text uppercase tracking-widest hover:border-primary-fixed hover:text-primary-fixed transition-colors rounded-sm flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">edit</span>
+                        Update Metrics
+                    </button>
+</div>
+</div>
+</section>
+<!-- Account Settings -->
+<section>
+<h2 class="font-button-text text-button-text text-on-surface-variant uppercase tracking-widest mb-stack-sm border-b border-surface-variant pb-2">System Config</h2>
+<div class="glass-panel rounded-xl flex flex-col divide-y divide-surface-variant">
+<a class="flex items-center p-4 hover:bg-surface-variant/30 transition-colors group" href="#">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary-fixed transition-colors mr-4" style="font-variation-settings: 'FILL' 0;">person</span>
+<div class="flex-1">
+<div class="font-button-text text-data-label text-primary uppercase tracking-wide">Personal Information</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+<a class="flex items-center p-4 hover:bg-surface-variant/30 transition-colors group" href="#">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary-fixed transition-colors mr-4" style="font-variation-settings: 'FILL' 0;">credit_card</span>
+<div class="flex-1">
+<div class="font-button-text text-data-label text-primary uppercase tracking-wide">Payment Methods</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+<a class="flex items-center p-4 hover:bg-surface-variant/30 transition-colors group" href="#">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary-fixed transition-colors mr-4" style="font-variation-settings: 'FILL' 0;">tune</span>
+<div class="flex-1">
+<div class="font-button-text text-data-label text-primary uppercase tracking-wide">Notification Preferences</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+</div>
+</section>
+<!-- Support & Legal -->
+<section class="mb-stack-lg">
+<h2 class="font-button-text text-button-text text-on-surface-variant uppercase tracking-widest mb-stack-sm border-b border-surface-variant pb-2">Support &amp; Ops</h2>
+<div class="glass-panel rounded-xl flex flex-col divide-y divide-surface-variant">
+<a class="flex items-center p-4 hover:bg-surface-variant/30 transition-colors group" href="#">
+<span class="material-symbols-outlined text-on-surface-variant mr-4" style="font-variation-settings: 'FILL' 0;">help</span>
+<div class="flex-1">
+<div class="font-body-md text-body-md text-primary">Help Center</div>
+</div>
+</a>
+<a class="flex items-center p-4 hover:bg-surface-variant/30 transition-colors group" href="#">
+<span class="material-symbols-outlined text-on-surface-variant mr-4" style="font-variation-settings: 'FILL' 0;">gavel</span>
+<div class="flex-1">
+<div class="font-body-md text-body-md text-primary">Privacy Policy</div>
+</div>
+</a>
+<button class="flex items-center p-4 hover:bg-error-container/20 transition-colors group w-full text-left">
+<span class="material-symbols-outlined text-error mr-4" style="font-variation-settings: 'FILL' 0;">logout</span>
+<div class="flex-1">
+<div class="font-button-text text-data-label text-error uppercase tracking-wide">Terminate Session</div>
+</div>
+</button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface/80 backdrop-blur-xl border-t border-surface-variant fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe rounded-t-full">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed transition-colors active:scale-95 duration-150 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 0;">home</span>
+<span class="font-button-text text-data-label text-[10px] uppercase">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed transition-colors active:scale-95 duration-150 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 0;">fitness_center</span>
+<span class="font-button-text text-data-label text-[10px] uppercase">Workouts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed transition-colors active:scale-95 duration-150 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 0;">restaurant</span>
+<span class="font-button-text text-data-label text-[10px] uppercase">Nutrition</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary-fixed transition-colors active:scale-95 duration-150 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 0;">psychology</span>
+<span class="font-button-text text-data-label text-[10px] uppercase">AI Coach</span>
+</a>
+<!-- Active Tab: Profile -->
+<a class="flex flex-col items-center justify-center text-primary-fixed scale-110 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-button-text text-data-label text-[10px] uppercase">Profile</span>
+</a>
+</nav>
+</body></html>
