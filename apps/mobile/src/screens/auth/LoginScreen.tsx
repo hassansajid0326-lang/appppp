@@ -19,8 +19,8 @@ import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { supabase } from '../../lib/supabase';
 import { useAuthStore } from '../../lib/store';
 
-// Define local backend API URL (using local IP for physical device debugging)
-const API_URL = 'http://192.168.100.6:3000';
+// Define local backend API URL (using live Vercel deployment URL)
+const API_URL = 'https://appppp-silk.vercel.app';
 
 export default function LoginScreen({ navigation }: any) {
   const { setSession, setProfile } = useAuthStore();
@@ -183,13 +183,11 @@ export default function LoginScreen({ navigation }: any) {
         <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
           {/* Headline and Branding */}
           <Animated.View entering={FadeInUp.delay(200).duration(800)} style={styles.header}>
-            <View style={styles.brandTitleContainer}>
-              <Image 
-                source={require('../../../assets/favicon.png')} 
-                style={styles.favicon} 
-              />
-              <Text style={styles.brandTitle}>FITPULSE</Text>
-            </View>
+            <Image 
+              source={require('../../../assets/icon.png')} 
+              style={styles.logo} 
+              resizeMode="contain"
+            />
             <Text style={styles.brandSubtitle}>KINETIC CORE // SYSTEM ACCESS</Text>
           </Animated.View>
 
@@ -284,10 +282,11 @@ export default function LoginScreen({ navigation }: any) {
           >
             <ScrollView contentContainerStyle={styles.modalScroll} keyboardShouldPersistTaps="handled">
               <View style={styles.modalContent}>
-                <View style={styles.brandTitleContainer}>
-                  <Image source={require('../../../assets/favicon.png')} style={styles.favicon} />
-                  <Text style={styles.brandTitle}>FITPULSE</Text>
-                </View>
+                <Image 
+                  source={require('../../../assets/icon.png')} 
+                  style={styles.modalLogo} 
+                  resizeMode="contain" 
+                />
                 <Text style={styles.modalTitle}>PASSWORD RECOVERY</Text>
                 
                 {forgotStep === 1 ? (
@@ -442,25 +441,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 40,
   },
-  brandTitleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 12,
+  logo: {
+    width: 180,
+    height: 180,
+    marginBottom: 4,
   },
-  favicon: {
-    width: 40,
-    height: 40,
-  },
-  brandTitle: {
-    fontFamily: 'Oswald',
-    fontSize: 42,
-    fontWeight: '700',
-    color: '#ffffff',
-    letterSpacing: 6,
-    textShadowColor: 'rgba(195, 244, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 4 },
-    textShadowRadius: 10,
+  modalLogo: {
+    width: 100,
+    height: 100,
+    marginBottom: 8,
   },
   brandSubtitle: {
     fontFamily: 'JetBrains Mono',
