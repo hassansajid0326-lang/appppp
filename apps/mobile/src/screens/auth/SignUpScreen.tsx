@@ -171,7 +171,7 @@ export default function SignUpScreen({ navigation }: any) {
               style={styles.logo} 
               resizeMode="contain"
             />
-            <Text style={styles.brandSubtitle}>NEW ATHLETE REGISTRATION</Text>
+            <Text style={styles.brandSubtitle}>CREATE YOUR FITNESS ACCOUNT</Text>
           </Animated.View>
 
           {/* Registration Card */}
@@ -309,13 +309,13 @@ export default function SignUpScreen({ navigation }: any) {
               {loading ? (
                 <ActivityIndicator color="#051424" />
               ) : (
-                <Text style={styles.signUpButtonText}>INITIALIZE ACCOUNT</Text>
+                <Text style={styles.signUpButtonText}>CREATE ACCOUNT</Text>
               )}
             </TouchableOpacity>
 
             <View style={styles.footerLinks}>
               <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                <Text style={styles.linkText}>ALREADY HAVE AN ACCOUNT? LOGIN</Text>
+                <Text style={styles.linkText}>ALREADY HAVE AN ACCOUNT? LOG IN</Text>
               </TouchableOpacity>
             </View>
           </Animated.View>

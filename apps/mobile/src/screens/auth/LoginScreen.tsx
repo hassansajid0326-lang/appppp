@@ -40,6 +40,13 @@ export default function LoginScreen({ navigation }: any) {
   const [showForgotNewPassword, setShowForgotNewPassword] = useState(false);
   const [showForgotConfirmPassword, setShowForgotConfirmPassword] = useState(false);
 
+  // Password policy flags for recovery
+  const checkForgotLength = forgotNewPassword.length >= 8;
+  const checkForgotUpper = /[A-Z]/.test(forgotNewPassword);
+  const checkForgotLower = /[a-z]/.test(forgotNewPassword);
+  const checkForgotDigit = /[0-9]/.test(forgotNewPassword);
+  const checkForgotSpecial = /[@$!%*?&]/.test(forgotNewPassword);
+
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Missing Info', 'Please enter both email and password.');
@@ -121,6 +128,11 @@ export default function LoginScreen({ navigation }: any) {
       return;
     }
 
+    if (!checkForgotLength || !checkForgotUpper || !checkForgotLower || !checkForgotDigit || !checkForgotSpecial) {
+      Alert.alert('Security Policy Error', 'Your new password does not meet the safety requirements.');
+      return;
+    }
+
     setForgotLoading(true);
     try {
       // Step 1: Verify the OTP is correct and mark it as verified in database
@@ -188,7 +200,7 @@ export default function LoginScreen({ navigation }: any) {
               style={styles.logo} 
               resizeMode="contain"
             />
-            <Text style={styles.brandSubtitle}>KINETIC CORE // SYSTEM ACCESS</Text>
+            <Text style={styles.brandSubtitle}>TRACK YOUR FITNESS GOALS</Text>
           </Animated.View>
 
           {/* Login Panel Card (Glassmorphism) */}
@@ -199,7 +211,7 @@ export default function LoginScreen({ navigation }: any) {
             <Text style={styles.cardHeader}>Log In</Text>
             
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>EMAIL ADDRESS // ID</Text>
+              <Text style={styles.label}>EMAIL ADDRESS</Text>
               <TextInput
                 style={styles.input}
                 placeholder="casey@fitpulse.com"
@@ -213,7 +225,7 @@ export default function LoginScreen({ navigation }: any) {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>PASSWORD // SECURITY KEY</Text>
+              <Text style={styles.label}>PASSWORD</Text>
               <View style={styles.passwordInputWrapper}>
                 <TextInput
                   style={styles.passwordInput}
@@ -246,16 +258,16 @@ export default function LoginScreen({ navigation }: any) {
               {loading ? (
                 <ActivityIndicator color="#051424" />
               ) : (
-                <Text style={styles.loginButtonText}>START PROTOCOL</Text>
+                <Text style={styles.loginButtonText}>LOG IN</Text>
               )}
             </TouchableOpacity>
 
             <View style={styles.footerLinks}>
               <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={{ marginBottom: 14 }}>
-                <Text style={styles.linkText}>CREATE NEW ATHLETE ACCOUNT</Text>
+                <Text style={styles.linkText}>CREATE A NEW ACCOUNT</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setShowForgotModal(true)}>
-                <Text style={[styles.linkText, { color: '#c3f400', textDecorationLine: 'none' }]}>FORGOT PASSWORD // RESET KEY</Text>
+                <Text style={[styles.linkText, { color: '#c3f400', textDecorationLine: 'none' }]}>FORGOT PASSWORD?</Text>
               </TouchableOpacity>
             </View>
           </Animated.View>
@@ -280,7 +292,11 @@ export default function LoginScreen({ navigation }: any) {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={{ flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center', padding: 24 }}
           >
-            <ScrollView contentContainerStyle={styles.modalScroll} keyboardShouldPersistTaps="handled">
+            <ScrollView 
+              style={{ width: '100%' }}
+              contentContainerStyle={styles.modalScroll} 
+              keyboardShouldPersistTaps="handled"
+            >
               <View style={styles.modalContent}>
                 <Image 
                   source={require('../../../assets/icon.png')} 
@@ -290,7 +306,7 @@ export default function LoginScreen({ navigation }: any) {
                 <Text style={styles.modalTitle}>PASSWORD RECOVERY</Text>
                 
                 {forgotStep === 1 ? (
-                  <View style={{ width: '100%' }}>
+                  <View style={{ alignSelf: 'stretch' }}>
                     <Text style={styles.modalDescription}>
                       Enter your registered email address to receive an 8-digit security verification OTP code.
                     </Text>
@@ -321,7 +337,7 @@ export default function LoginScreen({ navigation }: any) {
                     </TouchableOpacity>
                   </View>
                 ) : (
-                  <View style={{ width: '100%' }}>
+                  <View style={{ alignSelf: 'stretch' }}>
                     <Text style={styles.modalDescription}>
                       Enter the 8-digit OTP code sent to your email and set your new password.
                     </Text>
@@ -363,6 +379,60 @@ export default function LoginScreen({ navigation }: any) {
                             color="#64748B" 
                           />
                         </TouchableOpacity>
+                      </View>
+                      
+                      {/* Password policy checklist */}
+                      <View style={styles.policyList}>
+                        <View style={styles.policyItem}>
+                          <Ionicons 
+                            name={checkForgotLength ? "checkmark-circle" : "ellipse-outline"} 
+                            size={14} 
+                            color={checkForgotLength ? "#c3f400" : "#64748B"} 
+                          />
+                          <Text style={[styles.policyText, { color: checkForgotLength ? "#ffffff" : "#64748B" }]}>
+                            Minimum 8 characters
+                          </Text>
+                        </View>
+                        <View style={styles.policyItem}>
+                          <Ionicons 
+                            name={checkForgotUpper ? "checkmark-circle" : "ellipse-outline"} 
+                            size={14} 
+                            color={checkForgotUpper ? "#c3f400" : "#64748B"} 
+                          />
+                          <Text style={[styles.policyText, { color: checkForgotUpper ? "#ffffff" : "#64748B" }]}>
+                            At least one uppercase letter (A-Z)
+                          </Text>
+                        </View>
+                        <View style={styles.policyItem}>
+                          <Ionicons 
+                            name={checkForgotLower ? "checkmark-circle" : "ellipse-outline"} 
+                            size={14} 
+                            color={checkForgotLower ? "#c3f400" : "#64748B"} 
+                          />
+                          <Text style={[styles.policyText, { color: checkForgotLower ? "#ffffff" : "#64748B" }]}>
+                            At least one lowercase letter (a-z)
+                          </Text>
+                        </View>
+                        <View style={styles.policyItem}>
+                          <Ionicons 
+                            name={checkForgotDigit ? "checkmark-circle" : "ellipse-outline"} 
+                            size={14} 
+                            color={checkForgotDigit ? "#c3f400" : "#64748B"} 
+                          />
+                          <Text style={[styles.policyText, { color: checkForgotDigit ? "#ffffff" : "#64748B" }]}>
+                            At least one number (0-9)
+                          </Text>
+                        </View>
+                        <View style={styles.policyItem}>
+                          <Ionicons 
+                            name={checkForgotSpecial ? "checkmark-circle" : "ellipse-outline"} 
+                            size={14} 
+                            color={checkForgotSpecial ? "#c3f400" : "#64748B"} 
+                          />
+                          <Text style={[styles.policyText, { color: checkForgotSpecial ? "#ffffff" : "#64748B" }]}>
+                            Special character (@$!%*?&)
+                          </Text>
+                        </View>
                       </View>
                     </View>
 
@@ -486,6 +556,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: 20,
+    alignSelf: 'stretch',
   },
   label: {
     fontFamily: 'JetBrains Mono',
@@ -513,6 +584,7 @@ const styles = StyleSheet.create({
     borderColor: '#334155',
     borderRadius: 8,
     paddingRight: 12,
+    alignSelf: 'stretch',
   },
   passwordInput: {
     flex: 1,
@@ -573,15 +645,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#334155',
     borderRadius: 16,
-    padding: 28,
+    padding: 24,
     alignItems: 'center',
+    alignSelf: 'center',
   },
   modalTitle: {
     fontFamily: 'Oswald',
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '700',
     color: '#ffffff',
-    letterSpacing: 2,
+    letterSpacing: 1.5,
     marginTop: 16,
     marginBottom: 12,
     textAlign: 'center',
@@ -593,6 +666,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 18,
     marginBottom: 24,
+    paddingHorizontal: 8,
   },
   actionButton: {
     backgroundColor: '#c3f400',
@@ -600,7 +674,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     alignItems: 'center',
     marginTop: 16,
-    width: '100%',
+    alignSelf: 'stretch',
   },
   actionButtonText: {
     fontFamily: 'Oswald',
@@ -616,12 +690,29 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     alignItems: 'center',
     marginTop: 14,
-    width: '100%',
+    alignSelf: 'stretch',
   },
   closeButtonText: {
     fontFamily: 'JetBrains Mono',
     fontSize: 12,
     color: '#94A3B8',
     letterSpacing: 1,
+  },
+  policyList: {
+    marginTop: 8,
+    gap: 6,
+    alignSelf: 'flex-start',
+    width: '100%',
+    paddingHorizontal: 4,
+  },
+  policyItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  policyText: {
+    fontFamily: 'Inter',
+    fontSize: 11,
+    letterSpacing: 0.5,
   },
 });

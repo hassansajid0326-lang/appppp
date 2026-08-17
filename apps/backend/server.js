@@ -37,8 +37,8 @@ const transporter = nodemailer.createTransport({
 async function sendOTPEmail(email, otp, purpose) {
   const title = purpose === 'signup' ? 'Verify Your FitPulse Account' : 'Reset Your FitPulse Password';
   const messageText = purpose === 'signup' 
-    ? `Welcome to FitPulse! Your 8-digit verification code is: ${otp}. This code will expire in 10 minutes.`
-    : `You requested a password reset. Your 8-digit verification code is: ${otp}. This code will expire in 10 minutes.`;
+    ? `Welcome to FitPulse! Your 8-digit verification code is: ${otp}. This code will expire in 10 minutes. (If you do not see this email in your inbox, please check your Spam or Junk folder.)`
+    : `You requested a password reset. Your 8-digit verification code is: ${otp}. This code will expire in 10 minutes. (If you do not see this email in your inbox, please check your Spam or Junk folder.)`;
 
   const mailOptions = {
     from: process.env.SMTP_FROM || '"FitPulse System" <no-reply@fitpulse.com>',
@@ -54,7 +54,8 @@ async function sendOTPEmail(email, otp, purpose) {
           <span style="font-size: 36px; font-weight: bold; color: #c3f400; letter-spacing: 8px; font-family: monospace;">${otp}</span>
         </div>
         <p style="font-size: 13px; color: #64748b; line-height: 1.5; border-top: 1px solid #1e293b; padding-top: 20px;">
-          This OTP code is valid for 10 minutes. If you did not initiate this request, please ignore this email or contact support.
+          This OTP code is valid for 10 minutes. If you do not see this email in your inbox, please check your Spam or Junk folder.<br/><br/>
+          If you did not initiate this request, please ignore this email or contact support.
         </p>
       </div>
     `

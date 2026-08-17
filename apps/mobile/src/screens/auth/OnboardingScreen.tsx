@@ -30,8 +30,13 @@ export default function OnboardingScreen({ navigation }: any) {
   const [goal, setGoal] = useState<'lose' | 'maintain' | 'gain' | null>(null);
   const [activity, setActivity] = useState<'sedentary' | 'light' | 'moderate' | 'active' | null>(null);
 
+  // Unit system states
+  const [heightUnit, setHeightUnit] = useState<'cm' | 'ft'>('cm');
+  const [weightUnit, setWeightUnit] = useState<'kg' | 'lbs'>('kg');
+  const [heightFeet, setHeightFeet] = useState('');
+  const [heightInches, setHeightInches] = useState('');
+
   const nextStep = () => {
-    // Validate inputs per step
     if (step === 1) {
       if (!name.trim()) {
         Alert.alert('Invalid Input', 'Please enter your name.');
@@ -48,14 +53,24 @@ export default function OnboardingScreen({ navigation }: any) {
         return;
       }
     } else if (step === 3) {
-      const heightVal = parseFloat(height);
-      const weightVal = parseFloat(weight);
-      if (isNaN(heightVal) || heightVal <= 0) {
-        Alert.alert('Invalid Input', 'Please enter a valid height in cm.');
-        return;
+      if (heightUnit === 'cm') {
+        const heightVal = parseFloat(height);
+        if (isNaN(heightVal) || heightVal <= 0) {
+          Alert.alert('Invalid Input', 'Please enter a valid height.');
+          return;
+        }
+      } else {
+        const feetVal = parseFloat(heightFeet);
+        const inchesVal = parseFloat(heightInches);
+        if (isNaN(feetVal) || feetVal <= 0 || isNaN(inchesVal) || inchesVal < 0 || inchesVal >= 12) {
+          Alert.alert('Invalid Input', 'Please enter valid feet and inches (0-11).');
+          return;
+        }
       }
+
+      const weightVal = parseFloat(weight);
       if (isNaN(weightVal) || weightVal <= 0) {
-        Alert.alert('Invalid Input', 'Please enter a valid weight in kg.');
+        Alert.alert('Invalid Input', 'Please enter a valid weight.');
         return;
       }
     } else if (step === 4) {
@@ -72,6 +87,42 @@ export default function OnboardingScreen({ navigation }: any) {
     setStep(Math.max(1, step - 1));
   };
 
+  const handleSkip = async () => {
+    if (!session?.user) {
+      navigation.replace('Login');
+      return;
+    }
+    setLoading(true);
+    try {
+      const defaultProfile = {
+        id: session.user.id,
+        name: name.trim() || 'User',
+        age: parseInt(age) || 25,
+        sex: sex || 'other',
+        height_cm: height ? parseFloat(height) : 170.0,
+        goal_type: goal || 'maintain',
+        activity_level: activity || 'moderate',
+        daily_step_goal: 10000,
+        units: 'metric',
+        updated_at: new Date().toISOString(),
+      };
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .upsert(defaultProfile)
+        .select()
+        .single();
+
+      if (error) throw error;
+      setProfile(data);
+      navigation.replace('MainTabs');
+    } catch (e: any) {
+      navigation.replace('MainTabs');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSubmitProfile = async () => {
     if (!session?.user) {
       Alert.alert('Error', 'No authenticated session found. Please log in.');
@@ -81,21 +132,27 @@ export default function OnboardingScreen({ navigation }: any) {
 
     setLoading(true);
     
+    let finalHeightCm = parseFloat(height);
+    if (heightUnit === 'ft') {
+      const feetVal = parseFloat(heightFeet) || 0;
+      const inchesVal = parseFloat(heightInches) || 0;
+      finalHeightCm = (feetVal * 12 + inchesVal) * 2.54;
+    }
+
     const profilePayload = {
       id: session.user.id,
-      name,
+      name: name.trim(),
       age: parseInt(age),
       sex,
-      height_cm: parseFloat(height),
+      height_cm: parseFloat(finalHeightCm.toFixed(1)),
       goal_type: goal,
       activity_level: activity,
       daily_step_goal: 10000,
-      units: 'metric',
+      units: heightUnit === 'cm' && weightUnit === 'kg' ? 'metric' : 'imperial',
       updated_at: new Date().toISOString(),
     };
 
     try {
-      // Write profile to Supabase public.profiles
       const { data, error } = await supabase
         .from('profiles')
         .upsert(profilePayload)
@@ -106,15 +163,13 @@ export default function OnboardingScreen({ navigation }: any) {
 
       setProfile(data);
       
-      // Attempt to request on-device Health permissions (simulation / mock for Phase 0 validation)
       Alert.alert(
-        'Integrations Synced', 
-        'Profile created! We will now hook up your steps data.', 
+        'Profile Saved', 
+        'Your profile has been created successfully!', 
         [
           { 
-            text: 'Grant Health Permissions', 
+            text: 'OK', 
             onPress: () => {
-              // Navigation direct to main tabs
               navigation.replace('MainTabs');
             } 
           }
@@ -132,10 +187,10 @@ export default function OnboardingScreen({ navigation }: any) {
       case 1:
         return (
           <Animated.View key="step1" entering={FadeIn.duration(400)} exiting={FadeOut.duration(200)} style={styles.card}>
-            <Text style={styles.cardHeader}>BASIC PROTOCOL</Text>
+            <Text style={styles.cardHeader}>Basic Info</Text>
             
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>ATHLETE NAME</Text>
+              <Text style={styles.label}>FULL NAME</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Casey Jenkins"
@@ -147,7 +202,7 @@ export default function OnboardingScreen({ navigation }: any) {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>AGE // SOLAR YEARS</Text>
+              <Text style={styles.label}>AGE (YEARS)</Text>
               <TextInput
                 style={styles.input}
                 placeholder="28"
@@ -166,8 +221,8 @@ export default function OnboardingScreen({ navigation }: any) {
       case 2:
         return (
           <Animated.View key="step2" entering={FadeIn.duration(400)} exiting={FadeOut.duration(200)} style={styles.card}>
-            <Text style={styles.cardHeader}>BIOLOGICAL IDENTIFIER</Text>
-            <Text style={styles.description}>We use biological sex to compute accurate base energy burning metrics (BMR).</Text>
+            <Text style={styles.cardHeader}>Biological Sex</Text>
+            <Text style={styles.description}>We use biological sex to compute accurate daily calorie burn targets.</Text>
 
             <View style={styles.chipsContainer}>
               {['male', 'female', 'other'].map((option) => (
@@ -196,25 +251,82 @@ export default function OnboardingScreen({ navigation }: any) {
       case 3:
         return (
           <Animated.View key="step3" entering={FadeIn.duration(400)} exiting={FadeOut.duration(200)} style={styles.card}>
-            <Text style={styles.cardHeader}>DIMENSION MATRIX</Text>
+            <Text style={styles.cardHeader}>Height & Weight</Text>
 
+            {/* Height section with unit switcher */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>HEIGHT // CENTIMETERS</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="175"
-                placeholderTextColor="#64748B"
-                value={height}
-                onChangeText={setHeight}
-                keyboardType="numeric"
-              />
+              <View style={styles.unitSelectorHeader}>
+                <Text style={styles.label}>HEIGHT</Text>
+                <View style={styles.unitTabsRow}>
+                  <TouchableOpacity 
+                    onPress={() => setHeightUnit('cm')} 
+                    style={[styles.unitTab, heightUnit === 'cm' && styles.unitTabActive]}
+                  >
+                    <Text style={[styles.unitTabText, heightUnit === 'cm' && styles.unitTabTextActive]}>cm</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    onPress={() => setHeightUnit('ft')} 
+                    style={[styles.unitTab, heightUnit === 'ft' && styles.unitTabActive]}
+                  >
+                    <Text style={[styles.unitTabText, heightUnit === 'ft' && styles.unitTabTextActive]}>ft/in</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              {heightUnit === 'cm' ? (
+                <TextInput
+                  style={styles.input}
+                  placeholder="175"
+                  placeholderTextColor="#64748B"
+                  value={height}
+                  onChangeText={setHeight}
+                  keyboardType="numeric"
+                />
+              ) : (
+                <View style={styles.inlineInputsRow}>
+                  <TextInput
+                    style={[styles.input, { flex: 1 }]}
+                    placeholder="Feet (e.g. 5)"
+                    placeholderTextColor="#64748B"
+                    value={heightFeet}
+                    onChangeText={setHeightFeet}
+                    keyboardType="numeric"
+                  />
+                  <TextInput
+                    style={[styles.input, { flex: 1 }]}
+                    placeholder="Inches (e.g. 9)"
+                    placeholderTextColor="#64748B"
+                    value={heightInches}
+                    onChangeText={setHeightInches}
+                    keyboardType="numeric"
+                  />
+                </View>
+              )}
             </View>
 
+            {/* Weight section with unit switcher */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>CURRENT WEIGHT // KILOGRAMS</Text>
+              <View style={styles.unitSelectorHeader}>
+                <Text style={styles.label}>CURRENT WEIGHT</Text>
+                <View style={styles.unitTabsRow}>
+                  <TouchableOpacity 
+                    onPress={() => setWeightUnit('kg')} 
+                    style={[styles.unitTab, weightUnit === 'kg' && styles.unitTabActive]}
+                  >
+                    <Text style={[styles.unitTabText, weightUnit === 'kg' && styles.unitTabTextActive]}>kg</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    onPress={() => setWeightUnit('lbs')} 
+                    style={[styles.unitTab, weightUnit === 'lbs' && styles.unitTabActive]}
+                  >
+                    <Text style={[styles.unitTabText, weightUnit === 'lbs' && styles.unitTabTextActive]}>lbs</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+
               <TextInput
                 style={styles.input}
-                placeholder="74.5"
+                placeholder={weightUnit === 'kg' ? "74.5" : "164"}
                 placeholderTextColor="#64748B"
                 value={weight}
                 onChangeText={setWeight}
@@ -235,9 +347,9 @@ export default function OnboardingScreen({ navigation }: any) {
       case 4:
         return (
           <Animated.View key="step4" entering={FadeIn.duration(400)} exiting={FadeOut.duration(200)} style={styles.card}>
-            <Text style={styles.cardHeader}>TARGETS & MODIFIERS</Text>
+            <Text style={styles.cardHeader}>Goals & Activity</Text>
 
-            <Text style={styles.label}>PRIMARY TRAINING GOAL</Text>
+            <Text style={styles.label}>PRIMARY GOAL</Text>
             <View style={styles.chipsContainer}>
               {['lose', 'maintain', 'gain'].map((option) => (
                 <TouchableOpacity
@@ -275,7 +387,7 @@ export default function OnboardingScreen({ navigation }: any) {
                 {loading ? (
                   <ActivityIndicator color="#051424" />
                 ) : (
-                  <Text style={styles.actionButtonText}>SYNC STATUS</Text>
+                  <Text style={styles.actionButtonText}>SAVE PROFILE</Text>
                 )}
               </TouchableOpacity>
             </View>
@@ -298,7 +410,12 @@ export default function OnboardingScreen({ navigation }: any) {
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {/* Onboarding Steps Progress Header */}
           <View style={styles.progressHeader}>
-            <Text style={styles.progressTitle}>ATHLETE ONBOARDING</Text>
+            <View style={styles.titleAndSkipRow}>
+              <Text style={styles.progressTitle}>SET UP PROFILE</Text>
+              <TouchableOpacity onPress={handleSkip} style={styles.skipButton}>
+                <Text style={styles.skipButtonText}>SKIP</Text>
+              </TouchableOpacity>
+            </View>
             <View style={styles.barContainer}>
               {[1, 2, 3, 4].map((i) => (
                 <View 
@@ -338,13 +455,30 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 400,
   },
+  titleAndSkipRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 12,
+  },
   progressTitle: {
     fontFamily: 'Oswald',
     fontSize: 22,
     fontWeight: '700',
     color: '#ffffff',
-    letterSpacing: 2,
-    marginBottom: 12,
+    letterSpacing: 1.5,
+  },
+  skipButton: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+  },
+  skipButtonText: {
+    fontFamily: 'JetBrains Mono',
+    fontSize: 12,
+    color: '#c3f400',
+    textDecorationLine: 'underline',
+    letterSpacing: 1,
   },
   barContainer: {
     flexDirection: 'row',
@@ -388,12 +522,13 @@ const styles = StyleSheet.create({
   description: {
     fontFamily: 'Inter',
     fontSize: 14,
-    color: '#64748B',
+    color: '#94A3B8',
     lineHeight: 20,
     marginBottom: 20,
   },
   inputContainer: {
     marginBottom: 20,
+    alignSelf: 'stretch',
   },
   label: {
     fontFamily: 'JetBrains Mono',
@@ -500,5 +635,40 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#64748B',
     letterSpacing: 1.5,
+  },
+  unitSelectorHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  unitTabsRow: {
+    flexDirection: 'row',
+    gap: 6,
+  },
+  unitTab: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#334155',
+    backgroundColor: 'transparent',
+  },
+  unitTabActive: {
+    borderColor: '#c3f400',
+    backgroundColor: 'rgba(195, 244, 0, 0.1)',
+  },
+  unitTabText: {
+    fontFamily: 'JetBrains Mono',
+    fontSize: 10,
+    color: '#64748B',
+  },
+  unitTabTextActive: {
+    color: '#c3f400',
+    fontWeight: 'bold',
+  },
+  inlineInputsRow: {
+    flexDirection: 'row',
+    gap: 12,
   },
 });
