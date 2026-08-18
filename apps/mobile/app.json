@@ -16,7 +16,14 @@
       "bundleIdentifier": "com.fitpulse.app",
       "infoPlist": {
         "NSHealthShareUsageDescription": "FitPulse requires access to your health data to count steps, measure distance, and display daily active minutes directly on your dashboard.",
-        "NSHealthUpdateUsageDescription": "FitPulse requires write access to log completed workouts and routines back to your health records."
+        "NSHealthUpdateUsageDescription": "FitPulse requires write access to log completed workouts and routines back to your health records.",
+        "NSMotionUsageDescription": "FitPulse requires motion permission to detect steps and activity changes in the background.",
+        "NSLocationWhenInUseUsageDescription": "FitPulse uses location to measure speed for classifying activity states like driving/riding.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "FitPulse uses background location to measure speed for classifying activity states like driving/riding.",
+        "UIBackgroundModes": [
+          "fetch",
+          "processing"
+        ]
       },
       "entitlements": {
         "com.apple.developer.healthkit": true
@@ -31,7 +38,12 @@
       "permissions": [
         "android.permission.health.READ_STEPS",
         "android.permission.health.READ_ACTIVE_CALORIES_BURNED",
-        "android.permission.health.READ_DISTANCE"
+        "android.permission.health.READ_DISTANCE",
+        "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.ACTIVITY_RECOGNITION"
       ]
     },
     "web": {
@@ -55,7 +67,10 @@
         }
       ],
       "expo-video",
-      "expo-asset"
+      "expo-asset",
+      "expo-background-fetch",
+      "expo-task-manager",
+      "expo-notifications"
     ]
   }
 }

@@ -198,7 +198,7 @@ export default function LoginScreen({ navigation }: any) {
             <Image 
               source={require('../../../assets/icon.png')} 
               style={styles.logo} 
-              resizeMode="contain"
+              contentFit="contain"
             />
             <Text style={styles.brandSubtitle}>TRACK YOUR FITNESS GOALS</Text>
           </Animated.View>
@@ -301,7 +301,7 @@ export default function LoginScreen({ navigation }: any) {
                 <Image 
                   source={require('../../../assets/icon.png')} 
                   style={styles.modalLogo} 
-                  resizeMode="contain" 
+                  contentFit="contain" 
                 />
                 <Text style={styles.modalTitle}>PASSWORD RECOVERY</Text>
                 

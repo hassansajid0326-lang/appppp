@@ -19,6 +19,7 @@ import {
 import { View, ActivityIndicator } from 'react-native';
 
 import RootNavigator from './src/navigation/RootNavigator';
+import './src/lib/backgroundSync';
 
 const queryClient = new QueryClient({
   defaultOptions: {

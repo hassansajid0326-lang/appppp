@@ -1,5 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Feather } from '@expo/vector-icons';
 import { Platform } from 'react-native';
 
@@ -7,8 +8,28 @@ import DashboardScreen from '../screens/main/DashboardScreen';
 import WorkoutsScreen from '../screens/main/WorkoutsScreen';
 import NutritionScreen from '../screens/main/NutritionScreen';
 import ProfileScreen from '../screens/main/ProfileScreen';
+import StepsDetailScreen from '../screens/main/dashboard/StepsDetailScreen';
+import WaterTrackerScreen from '../screens/main/dashboard/WaterTrackerScreen';
+import DigitalWellbeingScreen from '../screens/main/dashboard/DigitalWellbeingScreen';
 
 const Tab = createBottomTabNavigator();
+const HomeStack = createNativeStackNavigator();
+
+function HomeStackNavigator() {
+  return (
+    <HomeStack.Navigator 
+      screenOptions={{ 
+        headerShown: false, 
+        animation: 'slide_from_right' 
+      }}
+    >
+      <HomeStack.Screen name="Dashboard" component={DashboardScreen} />
+      <HomeStack.Screen name="StepsDetail" component={StepsDetailScreen} />
+      <HomeStack.Screen name="WaterTracker" component={WaterTrackerScreen} />
+      <HomeStack.Screen name="DigitalWellbeing" component={DigitalWellbeingScreen} />
+    </HomeStack.Navigator>
+  );
+}
 
 export default function MainTabs() {
   return (
@@ -36,7 +57,7 @@ export default function MainTabs() {
     >
       <Tab.Screen
         name="Home"
-        component={DashboardScreen}
+        component={HomeStackNavigator}
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ color, size }) => (

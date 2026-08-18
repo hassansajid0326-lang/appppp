@@ -72,7 +72,7 @@ export default function SplashScreen({ navigation }: any) {
         {/* Text Logo Overlay */}
         <Animated.View entering={FadeIn.delay(800).duration(1500)} style={styles.logoContainer}>
           <Text style={styles.logoText}>FITPULSE</Text>
-          <Text style={styles.subtitle}>KINETIC CORE // MOTION SENSORS ACTIVE</Text>
+          <Text style={styles.subtitle}>TRACK YOUR FITNESS GOALS</Text>
         </Animated.View>
       </View>
     </LinearGradient>

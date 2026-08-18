@@ -161,6 +161,20 @@ export default function OnboardingScreen({ navigation }: any) {
 
       if (error) throw error;
 
+      // Save initial weight entry to weight_entries table
+      const weightVal = parseFloat(weight);
+      if (!isNaN(weightVal) && weightVal > 0) {
+        const finalWeightKg = weightUnit === 'lbs' ? weightVal * 0.45359237 : weightVal;
+        const { error: weightError } = await supabase
+          .from('weight_entries')
+          .insert({
+            user_id: session.user.id,
+            weight_kg: parseFloat(finalWeightKg.toFixed(2)),
+            logged_at: new Date().toISOString(),
+          });
+        if (weightError) console.error('Error saving onboarding weight:', weightError);
+      }
+
       setProfile(data);
       
       Alert.alert(

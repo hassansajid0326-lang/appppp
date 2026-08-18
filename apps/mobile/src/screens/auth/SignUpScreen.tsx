@@ -169,7 +169,7 @@ export default function SignUpScreen({ navigation }: any) {
             <Image 
               source={require('../../../assets/icon.png')} 
               style={styles.logo} 
-              resizeMode="contain"
+              contentFit="contain"
             />
             <Text style={styles.brandSubtitle}>CREATE YOUR FITNESS ACCOUNT</Text>
           </Animated.View>
@@ -341,7 +341,7 @@ export default function SignUpScreen({ navigation }: any) {
               <Image 
                 source={require('../../../assets/icon.png')} 
                 style={styles.modalLogo} 
-                resizeMode="contain" 
+                contentFit="contain" 
               />
               <Text style={styles.modalTitle}>EMAIL OTP VERIFICATION</Text>
               <Text style={styles.modalDescription}>
