@@ -15,17 +15,37 @@ import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import NetInfo from '@react-native-community/netinfo';
-import { supabase } from '../../../lib/supabase';
 import { useOfflineStore } from '../../../lib/offlineStore';
 import { useAuthStore } from '../../../lib/store';
+import { usePedometer } from '../../../lib/usePedometer';
+import { useAppTheme } from '../../../lib/theme';
 
 const STRIDE_STORAGE_KEY = 'fitpulse_stride_length';
 
 export default function StepsDetailScreen() {
   const navigation = useNavigation();
+  const { colors, isDark } = useAppTheme();
   const { dailySteps, latestWeightKg, updateStepsGoalOffline } = useOfflineStore();
   const { profile, setProfile } = useAuthStore();
+  const { resetSteps } = usePedometer(profile?.id);
+
+  const handleResetStepsPrompt = () => {
+    Alert.alert(
+      'Reset Steps',
+      "Are you sure you want to reset today's step count to 0? This action cannot be undone.",
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Reset', 
+          style: 'destructive',
+          onPress: () => {
+            resetSteps();
+            Alert.alert('Steps Reset', "Today's steps have been reset to 0.");
+          }
+        }
+      ]
+    );
+  };
 
   const isImperial = profile?.units === 'imperial';
   const goal = profile?.daily_step_goal || 10000;
@@ -143,8 +163,6 @@ export default function StepsDetailScreen() {
     : ((dailySteps * (currentStride / 100)) / 1000).toFixed(2); // cm to km
   const distanceUnit = isImperial ? 'miles' : 'km';
 
-  const caloriesBurned = Math.round(0.000525 * (latestWeightKg || 70) * dailySteps);
-
   // Save calibrated stride length
   const handleSaveCalibration = async () => {
     const parsed = parseFloat(strideInput);
@@ -176,7 +194,7 @@ export default function StepsDetailScreen() {
     try {
       setIsSavingGoal(true);
       
-      // 1. Save steps goal offline-first (queues update and syncs when online)
+      // 1. Save steps goal offline-first
       if (profile?.id) {
         await updateStepsGoalOffline(profile.id, parsed);
       }
@@ -206,8 +224,6 @@ export default function StepsDetailScreen() {
     }
   };
 
-  // Build weekly list data based on history state
-  // Generate the last 7 days dynamically (Today down to 6 days ago)
   const last7Days = [];
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -218,7 +234,7 @@ export default function StepsDetailScreen() {
     
     let steps = 0;
     if (i === 0) {
-      steps = dailySteps; // Real-time steps of today
+      steps = dailySteps;
     } else {
       steps = weeklyStepsHistory[dayLabel] || 0;
     }
@@ -231,21 +247,25 @@ export default function StepsDetailScreen() {
     });
   }
 
-  // Chart flows from oldest (left) to Today (right)
   const weeklyData = [...last7Days].reverse();
   const maxStepsInWeek = Math.max(...weeklyData.map(d => d.steps), goal);
 
   return (
-    <LinearGradient colors={['#051424', '#0d1c2d', '#010f1f']} style={styles.container}>
+    <LinearGradient colors={colors.backgroundGradient as [string, string, ...string[]]} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         
         {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+        <View style={[styles.header, { borderBottomColor: colors.borderSubtle }]}>
+          <TouchableOpacity 
+            onPress={() => navigation.goBack()} 
+            style={[styles.backButton, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)' }]}
+          >
+            <Ionicons name="arrow-back" size={24} color={colors.text} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Steps Analytics</Text>
-          <View style={{ width: 40 }} />
+          <Text style={[styles.headerTitle, { color: colors.text }]}>Steps Analytics</Text>
+          <TouchableOpacity onPress={handleResetStepsPrompt} style={styles.headerRightButton}>
+            <Ionicons name="refresh-outline" size={22} color="#ff4a4a" />
+          </TouchableOpacity>
         </View>
 
         <KeyboardAvoidingView
@@ -255,24 +275,24 @@ export default function StepsDetailScreen() {
           <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
             
             {/* Primary Stats Widget */}
-            <View style={styles.heroCard}>
+            <View style={[styles.heroCard, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
               <View style={styles.heroStat}>
-                <Ionicons name="footsteps-outline" size={24} color="#c3f400" />
-                <Text style={styles.heroVal}>{dailySteps.toLocaleString()}</Text>
-                <Text style={styles.heroLbl}>Steps Taken Today</Text>
+                <Ionicons name="footsteps-outline" size={24} color={isDark ? '#c3f400' : '#4d7c0f'} />
+                <Text style={[styles.heroVal, { color: colors.text }]}>{dailySteps.toLocaleString()}</Text>
+                <Text style={[styles.heroLbl, { color: colors.textMuted }]}>Steps Taken Today</Text>
               </View>
-              <View style={styles.heroDivider} />
+              <View style={[styles.heroDivider, { backgroundColor: colors.borderSubtle }]} />
               <View style={styles.heroStat}>
-                <Ionicons name="location-outline" size={24} color="#c3f400" />
-                <Text style={styles.heroVal}>{distance} {distanceUnit}</Text>
-                <Text style={styles.heroLbl}>Calibrated Distance</Text>
+                <Ionicons name="location-outline" size={24} color={isDark ? '#c3f400' : '#4d7c0f'} />
+                <Text style={[styles.heroVal, { color: colors.text }]}>{distance} {distanceUnit}</Text>
+                <Text style={[styles.heroLbl, { color: colors.textMuted }]}>Calibrated Distance</Text>
               </View>
             </View>
 
             {/* Weekly Trend Bar Chart */}
-            <View style={styles.sectionCard}>
-              <Text style={styles.sectionTitle}>Weekly Activity Trend</Text>
-              <View style={styles.chartContainer}>
+            <View style={[styles.sectionCard, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>Weekly Activity Trend</Text>
+              <View style={[styles.chartContainer, { borderBottomColor: colors.borderSubtle }]}>
                 {weeklyData.map((item, index) => {
                   const barHeight = Math.max(10, Math.round((item.steps / maxStepsInWeek) * 120));
                   const isGoalMet = item.steps >= goal;
@@ -280,7 +300,7 @@ export default function StepsDetailScreen() {
                   return (
                     <View key={index} style={styles.chartBarWrapper}>
                       <View style={styles.tooltipContainer}>
-                        <Text style={styles.barTooltip}>
+                        <Text style={[styles.barTooltip, { color: colors.textMuted }]}>
                           {item.steps >= 1000 ? `${(item.steps / 1000).toFixed(1)}k` : item.steps}
                         </Text>
                       </View>
@@ -288,10 +308,12 @@ export default function StepsDetailScreen() {
                         style={[
                           styles.chartBar, 
                           { height: barHeight },
-                          isGoalMet ? styles.barCompleted : styles.barActive
+                          isGoalMet 
+                            ? [styles.barCompleted, { backgroundColor: isDark ? '#c3f400' : '#65a30d' }] 
+                            : [styles.barActive, { backgroundColor: isDark ? '#334155' : '#cbd5e1' }]
                         ]} 
                       />
-                      <Text style={styles.barLabel}>{item.day}</Text>
+                      <Text style={[styles.barLabel, { color: colors.textMuted }]}>{item.day}</Text>
                     </View>
                   );
                 })}
@@ -300,45 +322,45 @@ export default function StepsDetailScreen() {
               {/* Chart Legend */}
               <View style={styles.legendRow}>
                 <View style={styles.legendItem}>
-                  <View style={[styles.legendColor, { backgroundColor: '#c3f400' }]} />
-                  <Text style={styles.legendText}>Goal Met ({goal.toLocaleString()}+)</Text>
+                  <View style={[styles.legendColor, { backgroundColor: isDark ? '#c3f400' : '#65a30d' }]} />
+                  <Text style={[styles.legendText, { color: colors.textMuted }]}>Goal Met ({goal.toLocaleString()}+)</Text>
                 </View>
                 <View style={styles.legendItem}>
-                  <View style={[styles.legendColor, { backgroundColor: '#334155' }]} />
-                  <Text style={styles.legendText}>Active Progress</Text>
+                  <View style={[styles.legendColor, { backgroundColor: isDark ? '#334155' : '#cbd5e1' }]} />
+                  <Text style={[styles.legendText, { color: colors.textMuted }]}>Active Progress</Text>
                 </View>
               </View>
             </View>
 
             {/* Step Goal Configuration Card */}
-            <View style={styles.sectionCard}>
+            <View style={[styles.sectionCard, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
               <View style={styles.sectionHeaderRow}>
-                <Ionicons name="trophy-outline" size={20} color="#c3f400" style={{ marginRight: 6 }} />
-                <Text style={styles.sectionTitle}>Daily Target Goal</Text>
+                <Ionicons name="trophy-outline" size={20} color={isDark ? '#c3f400' : '#4d7c0f'} style={{ marginRight: 6 }} />
+                <Text style={[styles.sectionTitle, { color: colors.text }]}>Daily Target Goal</Text>
               </View>
-              <Text style={styles.description}>
+              <Text style={[styles.description, { color: colors.textSecondary }]}>
                 Set your custom daily steps target goal. Reaching this goal triggers notifications and checklists.
               </Text>
               
               <View style={styles.inputRow}>
                 <View style={styles.inputWrapper}>
-                  <Text style={styles.inputLabel}>Step Count Goal</Text>
+                  <Text style={[styles.inputLabel, { color: colors.textMuted }]}>Step Count Goal</Text>
                   <TextInput
-                    style={styles.textInput}
+                    style={[styles.textInput, { backgroundColor: isDark ? 'rgba(15, 23, 42, 0.6)' : '#f8fafc', borderColor: colors.cardBorder, color: colors.text }]}
                     keyboardType="numeric"
                     value={goalInputVal}
                     onChangeText={setGoalInputVal}
                     placeholder="10000"
-                    placeholderTextColor="#475569"
+                    placeholderTextColor={colors.textMuted}
                   />
                 </View>
 
                 <TouchableOpacity 
-                  style={[styles.btnSave, isSavingGoal && { opacity: 0.7 }]}
+                  style={[styles.btnSave, { backgroundColor: colors.primary }, isSavingGoal && { opacity: 0.7 }]}
                   onPress={handleSaveStepGoal}
                   disabled={isSavingGoal}
                 >
-                  <Text style={styles.btnSaveText}>
+                  <Text style={[styles.btnSaveText, { color: colors.onPrimary }]}>
                     {isSavingGoal ? 'Saving...' : 'Set Goal'}
                   </Text>
                 </TouchableOpacity>
@@ -346,37 +368,37 @@ export default function StepsDetailScreen() {
             </View>
 
             {/* Fit Screen: Stride Length Calibration Card */}
-            <View style={styles.sectionCard}>
+            <View style={[styles.sectionCard, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
               <View style={styles.sectionHeaderRow}>
-                <Ionicons name="git-commit-outline" size={20} color="#c3f400" style={{ marginRight: 6 }} />
-                <Text style={styles.sectionTitle}>Fit-Screen Calibration</Text>
+                <Ionicons name="git-commit-outline" size={20} color={isDark ? '#c3f400' : '#4d7c0f'} style={{ marginRight: 6 }} />
+                <Text style={[styles.sectionTitle, { color: colors.text }]}>Fit-Screen Calibration</Text>
               </View>
-              <Text style={styles.description}>
+              <Text style={[styles.description, { color: colors.textSecondary }]}>
                 Calibrate your stride length to get hyper-realistic distance and active velocity metrics. 
                 Average walking stride length is approx. 75 cm (30 inches).
               </Text>
               
               <View style={styles.inputRow}>
                 <View style={styles.inputWrapper}>
-                  <Text style={styles.inputLabel}>
+                  <Text style={[styles.inputLabel, { color: colors.textMuted }]}>
                     Stride Length ({isImperial ? 'inches' : 'cm'})
                   </Text>
                   <TextInput
-                    style={styles.textInput}
+                    style={[styles.textInput, { backgroundColor: isDark ? 'rgba(15, 23, 42, 0.6)' : '#f8fafc', borderColor: colors.cardBorder, color: colors.text }]}
                     keyboardType="numeric"
                     value={strideInput}
                     onChangeText={setStrideInput}
                     placeholder={defaultStride.toString()}
-                    placeholderTextColor="#475569"
+                    placeholderTextColor={colors.textMuted}
                   />
                 </View>
 
                 <TouchableOpacity 
-                  style={[styles.btnSave, isCalibrating && { opacity: 0.7 }]}
+                  style={[styles.btnSave, { backgroundColor: colors.primary }, isCalibrating && { opacity: 0.7 }]}
                   onPress={handleSaveCalibration}
                   disabled={isCalibrating}
                 >
-                  <Text style={styles.btnSaveText}>
+                  <Text style={[styles.btnSaveText, { color: colors.onPrimary }]}>
                     {isCalibrating ? 'Calibrating...' : 'Apply'}
                   </Text>
                 </TouchableOpacity>
@@ -384,17 +406,17 @@ export default function StepsDetailScreen() {
             </View>
 
             {/* Historical Day-by-Day List */}
-            <View style={styles.sectionCard}>
-              <Text style={styles.sectionTitle}>Daily Performance History</Text>
+            <View style={[styles.sectionCard, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>Daily Performance History</Text>
               {last7Days.map((item, index) => (
-                <View key={index} style={styles.historyRow}>
+                <View key={index} style={[styles.historyRow, { borderBottomColor: colors.borderSubtle }]}>
                   <View style={styles.historyLeft}>
-                    <View style={[styles.statusDot, { backgroundColor: item.steps >= goal ? '#c3f400' : '#334155' }]} />
-                    <Text style={styles.historyDay}>{item.day} ({item.dateString})</Text>
+                    <View style={[styles.statusDot, { backgroundColor: item.steps >= goal ? (isDark ? '#c3f400' : '#65a30d') : (isDark ? '#334155' : '#cbd5e1') }]} />
+                    <Text style={[styles.historyDay, { color: colors.text }]}>{item.day} ({item.dateString})</Text>
                   </View>
                   <View style={styles.historyRight}>
-                    <Text style={styles.historySteps}>{item.steps.toLocaleString()} steps</Text>
-                    <Text style={styles.historyPct}>
+                    <Text style={[styles.historySteps, { color: colors.text }]}>{item.steps.toLocaleString()} steps</Text>
+                    <Text style={[styles.historyPct, { color: colors.textMuted }]}>
                       {Math.round((item.steps / goal) * 100)}% of goal
                     </Text>
                   </View>
@@ -420,13 +442,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#1e293b',
   },
   backButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -434,7 +454,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Oswald',
     fontSize: 18,
     fontWeight: '700',
-    color: '#ffffff',
     letterSpacing: 1.5,
     textTransform: 'uppercase',
   },
@@ -445,10 +464,8 @@ const styles = StyleSheet.create({
   },
   heroCard: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(30, 41, 59, 0.5)',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#334155',
     padding: 20,
     marginBottom: 20,
   },
@@ -460,26 +477,21 @@ const styles = StyleSheet.create({
     fontFamily: 'Oswald',
     fontSize: 24,
     fontWeight: '700',
-    color: '#ffffff',
     marginTop: 8,
   },
   heroLbl: {
     fontFamily: 'Inter',
     fontSize: 11,
-    color: '#64748B',
     marginTop: 4,
     textAlign: 'center',
   },
   heroDivider: {
     width: 1,
-    backgroundColor: '#1e293b',
     marginHorizontal: 10,
   },
   sectionCard: {
-    backgroundColor: 'rgba(30, 41, 59, 0.3)',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#1e293b',
     padding: 20,
     marginBottom: 20,
   },
@@ -492,14 +504,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Oswald',
     fontSize: 16,
     fontWeight: '700',
-    color: '#ffffff',
     letterSpacing: 1,
     marginBottom: 0,
   },
   description: {
     fontFamily: 'Inter',
     fontSize: 12,
-    color: '#94a3b8',
     lineHeight: 18,
     marginBottom: 16,
     marginTop: 10,
@@ -513,7 +523,6 @@ const styles = StyleSheet.create({
     paddingBottom: 4,
     paddingHorizontal: 5,
     borderBottomWidth: 1,
-    borderBottomColor: '#1e293b',
     marginBottom: 12,
     marginTop: 16,
   },
@@ -527,22 +536,16 @@ const styles = StyleSheet.create({
   barTooltip: {
     fontFamily: 'JetBrains Mono',
     fontSize: 9,
-    color: '#64748B',
   },
   chartBar: {
     width: 8,
     borderRadius: 4,
   },
-  barActive: {
-    backgroundColor: '#334155',
-  },
-  barCompleted: {
-    backgroundColor: '#c3f400',
-  },
+  barActive: {},
+  barCompleted: {},
   barLabel: {
     fontFamily: 'Inter',
     fontSize: 10,
-    color: '#64748B',
     marginTop: 8,
   },
   legendRow: {
@@ -564,7 +567,6 @@ const styles = StyleSheet.create({
   legendText: {
     fontFamily: 'Inter',
     fontSize: 11,
-    color: '#64748B',
   },
   inputRow: {
     flexDirection: 'row',
@@ -578,22 +580,17 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontFamily: 'JetBrains Mono',
     fontSize: 10,
-    color: '#64748B',
     marginBottom: 6,
   },
   textInput: {
-    backgroundColor: 'rgba(15, 23, 42, 0.6)',
     borderWidth: 1,
-    borderColor: '#334155',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    color: '#ffffff',
     fontFamily: 'JetBrains Mono',
     fontSize: 14,
   },
   btnSave: {
-    backgroundColor: '#c3f400',
     borderRadius: 8,
     paddingHorizontal: 20,
     paddingVertical: 12,
@@ -604,7 +601,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Oswald',
     fontSize: 14,
     fontWeight: '700',
-    color: '#051424',
     letterSpacing: 0.5,
   },
   historyRow: {
@@ -613,7 +609,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(30, 41, 59, 0.4)',
     marginTop: 8,
   },
   historyLeft: {
@@ -629,7 +624,6 @@ const styles = StyleSheet.create({
   historyDay: {
     fontFamily: 'Inter',
     fontSize: 13,
-    color: '#ffffff',
     fontWeight: '500',
   },
   historyRight: {
@@ -639,12 +633,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Oswald',
     fontSize: 14,
     fontWeight: '600',
-    color: '#ffffff',
   },
   historyPct: {
     fontFamily: 'Inter',
     fontSize: 10,
-    color: '#64748B',
     marginTop: 2,
+  },
+  headerRightButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 74, 74, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

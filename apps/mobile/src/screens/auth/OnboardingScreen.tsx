@@ -15,8 +15,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeIn, FadeOut, Layout } from 'react-native-reanimated';
 import { supabase } from '../../lib/supabase';
 import { useAuthStore } from '../../lib/store';
+import { useAppTheme } from '../../lib/theme';
 
 export default function OnboardingScreen({ navigation }: any) {
+  const { colors, isDark } = useAppTheme();
   const { session, setProfile } = useAuthStore();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -200,15 +202,15 @@ export default function OnboardingScreen({ navigation }: any) {
     switch (step) {
       case 1:
         return (
-          <Animated.View key="step1" entering={FadeIn.duration(400)} exiting={FadeOut.duration(200)} style={styles.card}>
-            <Text style={styles.cardHeader}>Basic Info</Text>
+          <Animated.View key="step1" entering={FadeIn.duration(400)} exiting={FadeOut.duration(200)} style={[styles.card, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
+            <Text style={[styles.cardHeader, { color: colors.text, borderBottomColor: colors.borderSubtle }]}>Basic Info</Text>
             
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>FULL NAME</Text>
+              <Text style={[styles.label, { color: colors.textMuted }]}>FULL NAME</Text>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle, color: colors.text }]}
                 placeholder="Casey Jenkins"
-                placeholderTextColor="#64748B"
+                placeholderTextColor={colors.textMuted}
                 value={name}
                 onChangeText={setName}
                 autoCorrect={false}
@@ -216,36 +218,44 @@ export default function OnboardingScreen({ navigation }: any) {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>AGE (YEARS)</Text>
+              <Text style={[styles.label, { color: colors.textMuted }]}>AGE (YEARS)</Text>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle, color: colors.text }]}
                 placeholder="28"
-                placeholderTextColor="#64748B"
+                placeholderTextColor={colors.textMuted}
                 value={age}
                 onChangeText={setAge}
                 keyboardType="numeric"
               />
             </View>
 
-            <TouchableOpacity style={styles.actionButton} onPress={nextStep}>
-              <Text style={styles.actionButtonText}>CONTINUE</Text>
+            <TouchableOpacity style={[styles.actionButton, { backgroundColor: colors.primary }]} onPress={nextStep}>
+              <Text style={[styles.actionButtonText, { color: colors.onPrimary }]}>CONTINUE</Text>
             </TouchableOpacity>
           </Animated.View>
         );
       case 2:
         return (
-          <Animated.View key="step2" entering={FadeIn.duration(400)} exiting={FadeOut.duration(200)} style={styles.card}>
-            <Text style={styles.cardHeader}>Biological Sex</Text>
-            <Text style={styles.description}>We use biological sex to compute accurate daily calorie burn targets.</Text>
+          <Animated.View key="step2" entering={FadeIn.duration(400)} exiting={FadeOut.duration(200)} style={[styles.card, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
+            <Text style={[styles.cardHeader, { color: colors.text, borderBottomColor: colors.borderSubtle }]}>Biological Sex</Text>
+            <Text style={[styles.description, { color: colors.textSecondary }]}>We use biological sex to compute accurate daily calorie burn targets.</Text>
 
             <View style={styles.chipsContainer}>
               {['male', 'female', 'other'].map((option) => (
                 <TouchableOpacity
                   key={option}
-                  style={[styles.chip, sex === option && styles.chipActive]}
+                  style={[
+                    styles.chip,
+                    { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle },
+                    sex === option && { borderColor: colors.primary, backgroundColor: isDark ? 'rgba(195, 244, 0, 0.1)' : 'rgba(22, 163, 74, 0.1)' }
+                  ]}
                   onPress={() => setSex(option as any)}
                 >
-                  <Text style={[styles.chipText, sex === option && styles.chipTextActive]}>
+                  <Text style={[
+                    styles.chipText,
+                    { color: colors.textSecondary },
+                    sex === option && { color: colors.primary, fontWeight: '700' }
+                  ]}>
                     {option.toUpperCase()}
                   </Text>
                 </TouchableOpacity>
@@ -253,45 +263,53 @@ export default function OnboardingScreen({ navigation }: any) {
             </View>
 
             <View style={styles.navigationRow}>
-              <TouchableOpacity style={styles.backButton} onPress={prevStep}>
-                <Text style={styles.backButtonText}>BACK</Text>
+              <TouchableOpacity style={[styles.backButton, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle }]} onPress={prevStep}>
+                <Text style={[styles.backButtonText, { color: colors.textSecondary }]}>BACK</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.actionButtonHalf} onPress={nextStep}>
-                <Text style={styles.actionButtonText}>CONTINUE</Text>
+              <TouchableOpacity style={[styles.actionButtonHalf, { backgroundColor: colors.primary }]} onPress={nextStep}>
+                <Text style={[styles.actionButtonText, { color: colors.onPrimary }]}>CONTINUE</Text>
               </TouchableOpacity>
             </View>
           </Animated.View>
         );
       case 3:
         return (
-          <Animated.View key="step3" entering={FadeIn.duration(400)} exiting={FadeOut.duration(200)} style={styles.card}>
-            <Text style={styles.cardHeader}>Height & Weight</Text>
+          <Animated.View key="step3" entering={FadeIn.duration(400)} exiting={FadeOut.duration(200)} style={[styles.card, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
+            <Text style={[styles.cardHeader, { color: colors.text, borderBottomColor: colors.borderSubtle }]}>Height & Weight</Text>
 
             {/* Height section with unit switcher */}
             <View style={styles.inputContainer}>
               <View style={styles.unitSelectorHeader}>
-                <Text style={styles.label}>HEIGHT</Text>
+                <Text style={[styles.label, { color: colors.textMuted }]}>HEIGHT</Text>
                 <View style={styles.unitTabsRow}>
                   <TouchableOpacity 
                     onPress={() => setHeightUnit('cm')} 
-                    style={[styles.unitTab, heightUnit === 'cm' && styles.unitTabActive]}
+                    style={[
+                      styles.unitTab,
+                      { borderColor: colors.borderSubtle },
+                      heightUnit === 'cm' && { borderColor: colors.primary, backgroundColor: isDark ? 'rgba(195, 244, 0, 0.1)' : 'rgba(22, 163, 74, 0.1)' }
+                    ]}
                   >
-                    <Text style={[styles.unitTabText, heightUnit === 'cm' && styles.unitTabTextActive]}>cm</Text>
+                    <Text style={[styles.unitTabText, { color: colors.textMuted }, heightUnit === 'cm' && { color: colors.primary, fontWeight: '700' }]}>cm</Text>
                   </TouchableOpacity>
                   <TouchableOpacity 
                     onPress={() => setHeightUnit('ft')} 
-                    style={[styles.unitTab, heightUnit === 'ft' && styles.unitTabActive]}
+                    style={[
+                      styles.unitTab,
+                      { borderColor: colors.borderSubtle },
+                      heightUnit === 'ft' && { borderColor: colors.primary, backgroundColor: isDark ? 'rgba(195, 244, 0, 0.1)' : 'rgba(22, 163, 74, 0.1)' }
+                    ]}
                   >
-                    <Text style={[styles.unitTabText, heightUnit === 'ft' && styles.unitTabTextActive]}>ft/in</Text>
+                    <Text style={[styles.unitTabText, { color: colors.textMuted }, heightUnit === 'ft' && { color: colors.primary, fontWeight: '700' }]}>ft/in</Text>
                   </TouchableOpacity>
                 </View>
               </View>
 
               {heightUnit === 'cm' ? (
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle, color: colors.text }]}
                   placeholder="175"
-                  placeholderTextColor="#64748B"
+                  placeholderTextColor={colors.textMuted}
                   value={height}
                   onChangeText={setHeight}
                   keyboardType="numeric"
@@ -299,17 +317,17 @@ export default function OnboardingScreen({ navigation }: any) {
               ) : (
                 <View style={styles.inlineInputsRow}>
                   <TextInput
-                    style={[styles.input, { flex: 1 }]}
+                    style={[styles.input, { flex: 1, backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle, color: colors.text }]}
                     placeholder="Feet (e.g. 5)"
-                    placeholderTextColor="#64748B"
+                    placeholderTextColor={colors.textMuted}
                     value={heightFeet}
                     onChangeText={setHeightFeet}
                     keyboardType="numeric"
                   />
                   <TextInput
-                    style={[styles.input, { flex: 1 }]}
+                    style={[styles.input, { flex: 1, backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle, color: colors.text }]}
                     placeholder="Inches (e.g. 9)"
-                    placeholderTextColor="#64748B"
+                    placeholderTextColor={colors.textMuted}
                     value={heightInches}
                     onChangeText={setHeightInches}
                     keyboardType="numeric"
@@ -321,27 +339,35 @@ export default function OnboardingScreen({ navigation }: any) {
             {/* Weight section with unit switcher */}
             <View style={styles.inputContainer}>
               <View style={styles.unitSelectorHeader}>
-                <Text style={styles.label}>CURRENT WEIGHT</Text>
+                <Text style={[styles.label, { color: colors.textMuted }]}>CURRENT WEIGHT</Text>
                 <View style={styles.unitTabsRow}>
                   <TouchableOpacity 
                     onPress={() => setWeightUnit('kg')} 
-                    style={[styles.unitTab, weightUnit === 'kg' && styles.unitTabActive]}
+                    style={[
+                      styles.unitTab,
+                      { borderColor: colors.borderSubtle },
+                      weightUnit === 'kg' && { borderColor: colors.primary, backgroundColor: isDark ? 'rgba(195, 244, 0, 0.1)' : 'rgba(22, 163, 74, 0.1)' }
+                    ]}
                   >
-                    <Text style={[styles.unitTabText, weightUnit === 'kg' && styles.unitTabTextActive]}>kg</Text>
+                    <Text style={[styles.unitTabText, { color: colors.textMuted }, weightUnit === 'kg' && { color: colors.primary, fontWeight: '700' }]}>kg</Text>
                   </TouchableOpacity>
                   <TouchableOpacity 
                     onPress={() => setWeightUnit('lbs')} 
-                    style={[styles.unitTab, weightUnit === 'lbs' && styles.unitTabActive]}
+                    style={[
+                      styles.unitTab,
+                      { borderColor: colors.borderSubtle },
+                      weightUnit === 'lbs' && { borderColor: colors.primary, backgroundColor: isDark ? 'rgba(195, 244, 0, 0.1)' : 'rgba(22, 163, 74, 0.1)' }
+                    ]}
                   >
-                    <Text style={[styles.unitTabText, weightUnit === 'lbs' && styles.unitTabTextActive]}>lbs</Text>
+                    <Text style={[styles.unitTabText, { color: colors.textMuted }, weightUnit === 'lbs' && { color: colors.primary, fontWeight: '700' }]}>lbs</Text>
                   </TouchableOpacity>
                 </View>
               </View>
 
               <TextInput
-                style={styles.input}
+                style={[styles.input, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle, color: colors.text }]}
                 placeholder={weightUnit === 'kg' ? "74.5" : "164"}
-                placeholderTextColor="#64748B"
+                placeholderTextColor={colors.textMuted}
                 value={weight}
                 onChangeText={setWeight}
                 keyboardType="numeric"
@@ -349,44 +375,60 @@ export default function OnboardingScreen({ navigation }: any) {
             </View>
 
             <View style={styles.navigationRow}>
-              <TouchableOpacity style={styles.backButton} onPress={prevStep}>
-                <Text style={styles.backButtonText}>BACK</Text>
+              <TouchableOpacity style={[styles.backButton, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle }]} onPress={prevStep}>
+                <Text style={[styles.backButtonText, { color: colors.textSecondary }]}>BACK</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.actionButtonHalf} onPress={nextStep}>
-                <Text style={styles.actionButtonText}>CONTINUE</Text>
+              <TouchableOpacity style={[styles.actionButtonHalf, { backgroundColor: colors.primary }]} onPress={nextStep}>
+                <Text style={[styles.actionButtonText, { color: colors.onPrimary }]}>CONTINUE</Text>
               </TouchableOpacity>
             </View>
           </Animated.View>
         );
       case 4:
         return (
-          <Animated.View key="step4" entering={FadeIn.duration(400)} exiting={FadeOut.duration(200)} style={styles.card}>
-            <Text style={styles.cardHeader}>Goals & Activity</Text>
+          <Animated.View key="step4" entering={FadeIn.duration(400)} exiting={FadeOut.duration(200)} style={[styles.card, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
+            <Text style={[styles.cardHeader, { color: colors.text, borderBottomColor: colors.borderSubtle }]}>Goals & Activity</Text>
 
-            <Text style={styles.label}>PRIMARY GOAL</Text>
+            <Text style={[styles.label, { color: colors.textMuted }]}>PRIMARY GOAL</Text>
             <View style={styles.chipsContainer}>
               {['lose', 'maintain', 'gain'].map((option) => (
                 <TouchableOpacity
                   key={option}
-                  style={[styles.chip, goal === option && styles.chipActive]}
+                  style={[
+                    styles.chip,
+                    { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle },
+                    goal === option && { borderColor: colors.primary, backgroundColor: isDark ? 'rgba(195, 244, 0, 0.1)' : 'rgba(22, 163, 74, 0.1)' }
+                  ]}
                   onPress={() => setGoal(option as any)}
                 >
-                  <Text style={[styles.chipText, goal === option && styles.chipTextActive]}>
+                  <Text style={[
+                    styles.chipText,
+                    { color: colors.textSecondary },
+                    goal === option && { color: colors.primary, fontWeight: '700' }
+                  ]}>
                     {option.toUpperCase()}
                   </Text>
                 </TouchableOpacity>
               ))}
             </View>
 
-            <Text style={[styles.label, { marginTop: 12 }]}>ACTIVITY LEVEL</Text>
+            <Text style={[styles.label, { color: colors.textMuted, marginTop: 12 }]}>ACTIVITY LEVEL</Text>
             <View style={styles.chipsContainerWrap}>
               {['sedentary', 'light', 'moderate', 'active'].map((option) => (
                 <TouchableOpacity
                   key={option}
-                  style={[styles.chipWrap, activity === option && styles.chipWrapActive]}
+                  style={[
+                    styles.chipWrap,
+                    { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle },
+                    activity === option && { borderColor: colors.primary, backgroundColor: isDark ? 'rgba(195, 244, 0, 0.1)' : 'rgba(22, 163, 74, 0.1)' }
+                  ]}
                   onPress={() => setActivity(option as any)}
                 >
-                  <Text style={[styles.chipText, activity === option && styles.chipTextActive]}>
+                  <Text style={[
+                    styles.chipText,
+                    { color: colors.textSecondary },
+                    activity === option && { color: colors.primary, fontWeight: '700' }
+                  ]}>
                     {option.toUpperCase()}
                   </Text>
                 </TouchableOpacity>
@@ -394,14 +436,14 @@ export default function OnboardingScreen({ navigation }: any) {
             </View>
 
             <View style={styles.navigationRow}>
-              <TouchableOpacity style={styles.backButton} onPress={prevStep}>
-                <Text style={styles.backButtonText}>BACK</Text>
+              <TouchableOpacity style={[styles.backButton, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle }]} onPress={prevStep}>
+                <Text style={[styles.backButtonText, { color: colors.textSecondary }]}>BACK</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.actionButtonHalf} onPress={handleSubmitProfile} disabled={loading}>
+              <TouchableOpacity style={[styles.actionButtonHalf, { backgroundColor: colors.primary }]} onPress={handleSubmitProfile} disabled={loading}>
                 {loading ? (
-                  <ActivityIndicator color="#051424" />
+                  <ActivityIndicator color={colors.onPrimary} />
                 ) : (
-                  <Text style={styles.actionButtonText}>SAVE PROFILE</Text>
+                  <Text style={[styles.actionButtonText, { color: colors.onPrimary }]}>SAVE PROFILE</Text>
                 )}
               </TouchableOpacity>
             </View>
@@ -414,7 +456,7 @@ export default function OnboardingScreen({ navigation }: any) {
 
   return (
     <LinearGradient
-      colors={['#051424', '#0d1c2d', '#010f1f']}
+      colors={colors.backgroundGradient}
       style={styles.container}
     >
       <KeyboardAvoidingView
@@ -425,9 +467,9 @@ export default function OnboardingScreen({ navigation }: any) {
           {/* Onboarding Steps Progress Header */}
           <View style={styles.progressHeader}>
             <View style={styles.titleAndSkipRow}>
-              <Text style={styles.progressTitle}>SET UP PROFILE</Text>
+              <Text style={[styles.progressTitle, { color: colors.text }]}>SET UP PROFILE</Text>
               <TouchableOpacity onPress={handleSkip} style={styles.skipButton}>
-                <Text style={styles.skipButtonText}>SKIP</Text>
+                <Text style={[styles.skipButtonText, { color: colors.primary }]}>SKIP</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.barContainer}>
@@ -435,9 +477,10 @@ export default function OnboardingScreen({ navigation }: any) {
                 <View 
                   key={i} 
                   style={[
-                    styles.progressBar, 
-                    i <= step && styles.progressBarActive,
-                    i === step && styles.progressBarCurrent
+                    styles.progressBar,
+                    { backgroundColor: colors.borderSubtle },
+                    i <= step && { backgroundColor: colors.textSecondary },
+                    i === step && { backgroundColor: colors.primary }
                   ]} 
                 />
               ))}

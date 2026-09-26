@@ -16,6 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 import { useOfflineStore } from '../../../lib/offlineStore';
 import { useAuthStore } from '../../../lib/store';
+import { useAppTheme } from '../../../lib/theme';
 
 interface WaterLog {
   id: string;
@@ -29,6 +30,7 @@ const WATER_NOTIFIED_KEY = 'fitpulse_water_notified';
 
 export default function WaterTrackerScreen() {
   const navigation = useNavigation();
+  const { colors, isDark } = useAppTheme();
   const { toggleRoutineLog, routineItems } = useOfflineStore();
   const { session } = useAuthStore();
   const userId = session?.user?.id;
@@ -40,6 +42,12 @@ export default function WaterTrackerScreen() {
   // Manual goal editing state
   const [isEditingGoal, setIsEditingGoal] = useState<boolean>(false);
   const [goalInput, setGoalInput] = useState<string>('2500');
+
+  // Custom intake logger states
+  const [customVolume, setCustomVolume] = useState<number>(250);
+  const [waterUnit, setWaterUnit] = useState<'ml' | 'oz' | 'cups'>('ml');
+  const [isManualInput, setIsManualInput] = useState(false);
+  const [manualText, setManualText] = useState('');
 
   // Load persistent logs and target goal
   const loadWaterData = async () => {
@@ -79,6 +87,27 @@ export default function WaterTrackerScreen() {
   const calculateTotal = (waterLogs: WaterLog[]) => {
     const sum = waterLogs.reduce((acc, log) => acc + log.volume, 0);
     setTotalWater(sum);
+  };
+
+  // Conversion helpers
+  const convertMlToUnit = (ml: number, targetUnit: 'ml' | 'oz' | 'cups'): number => {
+    switch (targetUnit) {
+      case 'oz': return ml / 29.5735;
+      case 'cups': return ml / 250;
+      case 'ml':
+      default:
+        return ml;
+    }
+  };
+
+  const convertUnitToMl = (value: number, sourceUnit: 'ml' | 'oz' | 'cups'): number => {
+    switch (sourceUnit) {
+      case 'oz': return value * 29.5735;
+      case 'cups': return value * 250;
+      case 'ml':
+      default:
+        return value;
+    }
   };
 
   useEffect(() => {
@@ -223,23 +252,23 @@ export default function WaterTrackerScreen() {
   ];
 
   return (
-    <LinearGradient colors={['#051424', '#0d1c2d', '#010f1f']} style={styles.container}>
+    <LinearGradient colors={colors.backgroundGradient} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         
         {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+        <View style={[styles.header, { borderBottomColor: colors.borderSubtle }]}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.backButton, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle }]}>
+            <Ionicons name="arrow-back" size={24} color={colors.text} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Hydration Tracker</Text>
+          <Text style={[styles.headerTitle, { color: colors.text }]}>Hydration Tracker</Text>
           <View style={{ width: 40 }} />
         </View>
 
         <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
           
           {/* Hydration Animation Bubble Card */}
-          <View style={styles.liquidCard}>
-            <View style={styles.bubbleOutline}>
+          <View style={[styles.liquidCard, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
+            <View style={[styles.bubbleOutline, { borderColor: isDark ? 'rgba(56, 189, 248, 0.4)' : '#38bdf8', backgroundColor: colors.cardSubtle }]}>
               {/* Animated Inner Fluid Ring */}
               <View 
                 style={[
@@ -248,10 +277,10 @@ export default function WaterTrackerScreen() {
                 ]} 
               />
               <View style={styles.bubbleTextContainer}>
-                <Ionicons name="water" size={32} color="#ffffff" style={{ marginBottom: 4 }} />
-                <Text style={styles.currentWater}>{(totalWater / 1000).toFixed(2)} Liters</Text>
-                <Text style={styles.targetWater}>Goal: {(waterGoal / 1000).toFixed(2)} L ({totalWater} ml)</Text>
-                <Text style={styles.pctText}>{targetPct}% completed</Text>
+                <Ionicons name="water" size={32} color={isDark ? "#ffffff" : "#0284c7"} style={{ marginBottom: 4 }} />
+                <Text style={[styles.currentWater, { color: colors.text }]}>{(totalWater / 1000).toFixed(2)} Liters</Text>
+                <Text style={[styles.targetWater, { color: colors.textSecondary }]}>Goal: {(waterGoal / 1000).toFixed(2)} L ({totalWater} ml)</Text>
+                <Text style={[styles.pctText, { color: isDark ? '#38bdf8' : '#0284c7' }]}>{targetPct}% completed</Text>
               </View>
             </View>
 
@@ -259,17 +288,17 @@ export default function WaterTrackerScreen() {
             {isEditingGoal ? (
               <View style={styles.goalControlRow}>
                 <TextInput
-                  style={styles.goalInput}
+                  style={[styles.goalInput, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle, color: colors.text }]}
                   value={goalInput}
                   onChangeText={setGoalInput}
                   keyboardType="number-pad"
                   maxLength={5}
                   placeholder="2500"
-                  placeholderTextColor="#475569"
+                  placeholderTextColor={colors.textMuted}
                 />
-                <Text style={styles.mlText}>ml</Text>
+                <Text style={[styles.mlText, { color: colors.textMuted }]}>ml</Text>
                 <TouchableOpacity style={styles.saveGoalBtn} onPress={handleSaveManualGoal}>
-                  <Ionicons name="checkmark-circle" size={22} color="#c3f400" />
+                  <Ionicons name="checkmark-circle" size={22} color={isDark ? "#c3f400" : "#65a30d"} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.saveGoalBtn} onPress={() => { setIsEditingGoal(false); setGoalInput(waterGoal.toString()); }}>
                   <Ionicons name="close-circle" size={22} color="#ef4444" />
@@ -285,7 +314,7 @@ export default function WaterTrackerScreen() {
                   onPress={() => setIsEditingGoal(true)}
                   activeOpacity={0.7}
                 >
-                  <Text style={styles.goalControlText}>Adjust Goal (Tap to Type)</Text>
+                  <Text style={[styles.goalControlText, { color: colors.textSecondary }]}>Adjust Goal (Tap to Type)</Text>
                   <Ionicons name="create-outline" size={12} color="#38bdf8" style={{ marginLeft: 4 }} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.goalAdjustBtn} onPress={() => adjustWaterGoal(250)}>
@@ -296,30 +325,139 @@ export default function WaterTrackerScreen() {
           </View>
 
           {/* Preset Logs Lists */}
-          <Text style={styles.sectionTitle}>Add Water presets</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Add Water presets</Text>
           <View style={styles.presetsGrid}>
-            {presets.map((preset, index) => (
+            {presets.map((preset, index) => {
+              const displayVol = convertMlToUnit(preset.volume, waterUnit);
+              return (
+                <TouchableOpacity 
+                  key={index} 
+                  style={[styles.presetButton, { backgroundColor: colors.card, borderColor: colors.cardBorder }]} 
+                  onPress={() => handleAddWater(preset.volume)}
+                  activeOpacity={0.8}
+                >
+                  <Ionicons name={preset.icon as any} size={24} color="#38bdf8" />
+                  <Text style={[presetLabelStyles.presetLabel, { color: colors.text }]}>{preset.label}</Text>
+                  <Text style={presetLabelStyles.presetVol}>+{displayVol.toFixed(1)}{waterUnit}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
+          {/* Custom Intake Logger */}
+          <View style={[styles.customLogCard, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <View style={styles.sectionHeaderLeft}>
+                <Ionicons name="create-outline" size={16} color="#38bdf8" style={{ marginRight: 6 }} />
+                <Text style={[styles.customLogTitle, { color: colors.text }]}>Log Custom Intake</Text>
+              </View>
               <TouchableOpacity 
-                key={index} 
-                style={styles.presetButton} 
-                onPress={() => handleAddWater(preset.volume)}
-                activeOpacity={0.8}
+                onPress={() => setIsManualInput(!isManualInput)} 
+                style={styles.keyboardToggle}
               >
-                <Ionicons name={preset.icon as any} size={24} color="#38bdf8" />
-                <Text style={presetLabelStyles.presetLabel}>{preset.label}</Text>
-                <Text style={presetLabelStyles.presetVol}>+{preset.volume}ml</Text>
+                <Ionicons 
+                  name={isManualInput ? "create-outline" : "keypad-outline"} 
+                  size={16} 
+                  color="#38bdf8" 
+                />
+                <Text style={[styles.keyboardToggleText, { color: colors.textSecondary }]}>
+                  {isManualInput ? 'Steppers' : 'Manual'}
+                </Text>
               </TouchableOpacity>
-            ))}
+            </View>
+
+            {/* Unit Selector */}
+            <Text style={[styles.fieldLabel, { color: colors.textMuted }]}>CHOOSE VOLUME UNIT</Text>
+            <View style={[styles.unitSelector, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle }]}>
+              {(['ml', 'oz', 'cups'] as const).map((u) => (
+                <TouchableOpacity 
+                  key={u}
+                  style={[
+                    styles.unitBtn, 
+                    waterUnit === u && [styles.unitBtnActive, { backgroundColor: isDark ? '#334155' : '#e2e8f0' }]
+                  ]}
+                  onPress={() => {
+                    const currentInMlReal = convertUnitToMl(customVolume, waterUnit);
+                    const convertedVal = convertMlToUnit(currentInMlReal, u);
+                    setCustomVolume(Number(convertedVal.toFixed(1)));
+                    setWaterUnit(u);
+                  }}
+                >
+                  <Text style={[
+                    styles.unitBtnText, 
+                    { color: colors.textMuted },
+                    waterUnit === u && { color: '#38bdf8' }
+                  ]}>
+                    {u.toUpperCase()}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <Text style={[styles.fieldLabel, { color: colors.textMuted }]}>WATER VOLUME</Text>
+            {isManualInput ? (
+              <View style={styles.manualWrapper}>
+                <TextInput
+                  style={[styles.manualInput, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle, color: colors.text }]}
+                  keyboardType="numeric"
+                  placeholder={`Enter volume in ${waterUnit}`}
+                  placeholderTextColor={colors.textMuted}
+                  value={manualText}
+                  onChangeText={setManualText}
+                />
+              </View>
+            ) : (
+              <View style={[styles.stepperContainer, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle }]}>
+                <TouchableOpacity 
+                  onPress={() => setCustomVolume(prev => Math.max(1, prev - (waterUnit === 'ml' ? 50 : 1.0)))} 
+                  style={styles.stepperBtn}
+                >
+                  <Ionicons name="remove" size={24} color="#051424" />
+                </TouchableOpacity>
+                <View style={styles.stepperValContainer}>
+                  <Text style={[styles.stepperValText, { color: colors.text }]}>{customVolume}</Text>
+                  <Text style={[styles.stepperUnitText, { color: colors.textMuted }]}>{waterUnit}</Text>
+                </View>
+                <TouchableOpacity 
+                  onPress={() => setCustomVolume(prev => prev + (waterUnit === 'ml' ? 50 : 1.0))} 
+                  style={styles.stepperBtn}
+                >
+                  <Ionicons name="add" size={24} color="#051424" />
+                </TouchableOpacity>
+              </View>
+            )}
+
+            <TouchableOpacity 
+              style={styles.btnSaveIntake}
+              onPress={async () => {
+                let volumeMl = 250;
+                if (isManualInput) {
+                  const val = parseFloat(manualText);
+                  if (isNaN(val) || val <= 0) {
+                    Alert.alert('Invalid Input', 'Please enter a valid amount.');
+                    return;
+                  }
+                  volumeMl = convertUnitToMl(val, waterUnit);
+                } else {
+                  volumeMl = convertUnitToMl(customVolume, waterUnit);
+                }
+                await handleAddWater(Math.round(volumeMl));
+                setIsManualInput(false);
+                setManualText('');
+              }}
+            >
+              <Text style={styles.btnSaveIntakeText}>LOG WATER INTAKE</Text>
+            </TouchableOpacity>
           </View>
 
           {/* Consumption logs List */}
-          <Text style={styles.sectionTitle}>Today's Hydration Log</Text>
-          <View style={styles.logListCard}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Today's Hydration Log</Text>
+          <View style={[styles.logListCard, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
             {logs.length === 0 ? (
               <View style={styles.emptyContainer}>
-                <Ionicons name="water-outline" size={36} color="#475569" />
-                <Text style={styles.emptyText}>No water logged today yet.</Text>
-                <Text style={styles.emptySubtext}>Drink water regularly to stay active!</Text>
+                <Ionicons name="water-outline" size={36} color={colors.textMuted} />
+                <Text style={[styles.emptyText, { color: colors.textSecondary }]}>No water logged today yet.</Text>
+                <Text style={[styles.emptySubtext, { color: colors.textMuted }]}>Drink water regularly to stay active!</Text>
               </View>
             ) : (
               logs.map((item, index) => {
@@ -329,14 +467,16 @@ export default function WaterTrackerScreen() {
                 });
 
                 return (
-                  <View key={item.id} style={styles.logRow}>
+                  <View key={item.id} style={[styles.logRow, { borderBottomColor: colors.borderSubtle }]}>
                     <View style={styles.logLeft}>
                       <View style={styles.waterIconCircle}>
                         <Ionicons name="water" size={16} color="#38bdf8" />
                       </View>
                       <View>
-                        <Text style={styles.logVolume}>{item.volume} ml</Text>
-                        <Text style={styles.logTime}>{timeStr}</Text>
+                        <Text style={[styles.logVolume, { color: colors.text }]}>
+                          {convertMlToUnit(item.volume, waterUnit).toFixed(1)} {waterUnit}
+                        </Text>
+                        <Text style={[styles.logTime, { color: colors.textMuted }]}>{timeStr}</Text>
                       </View>
                     </View>
 
@@ -528,7 +668,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexWrap: 'wrap',
     marginBottom: 24,
-    gap: 10,
+    rowGap: 12,
   },
   presetButton: {
     width: '48%',
@@ -598,5 +738,131 @@ const styles = StyleSheet.create({
   },
   btnDelete: {
     padding: 6,
+  },
+  customLogCard: {
+    backgroundColor: 'rgba(30, 41, 59, 0.3)',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#1e293b',
+    padding: 16,
+    marginBottom: 24,
+    gap: 12,
+  },
+  sectionHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  customLogTitle: {
+    fontFamily: 'Oswald',
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#ffffff',
+    letterSpacing: 0.5,
+  },
+  keyboardToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  keyboardToggleText: {
+    fontFamily: 'Inter',
+    fontSize: 11,
+    color: '#cbd5e1',
+  },
+  fieldLabel: {
+    fontFamily: 'JetBrains Mono',
+    fontSize: 9,
+    color: '#64748B',
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
+    marginTop: 4,
+  },
+  unitSelector: {
+    flexDirection: 'row',
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#334155',
+    padding: 2,
+    gap: 2,
+  },
+  unitBtn: {
+    flex: 1,
+    paddingVertical: 8,
+    alignItems: 'center',
+    borderRadius: 6,
+  },
+  unitBtnActive: {
+    backgroundColor: '#334155',
+  },
+  unitBtnText: {
+    fontFamily: 'Oswald',
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#64748B',
+  },
+  unitBtnTextActive: {
+    color: '#38bdf8',
+  },
+  stepperContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
+    borderWidth: 1,
+    borderColor: '#334155',
+    borderRadius: 12,
+    padding: 8,
+  },
+  stepperBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 8,
+    backgroundColor: '#38bdf8',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  stepperValContainer: {
+    alignItems: 'center',
+  },
+  stepperValText: {
+    fontFamily: 'Oswald',
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#ffffff',
+  },
+  stepperUnitText: {
+    fontFamily: 'Inter',
+    fontSize: 9,
+    color: '#64748B',
+    marginTop: -2,
+  },
+  manualWrapper: {
+    gap: 6,
+  },
+  manualInput: {
+    backgroundColor: '#051424',
+    borderWidth: 1,
+    borderColor: '#334155',
+    borderRadius: 8,
+    padding: 12,
+    color: '#ffffff',
+    fontFamily: 'Oswald',
+    fontSize: 16,
+  },
+  btnSaveIntake: {
+    backgroundColor: '#38bdf8',
+    borderRadius: 8,
+    paddingVertical: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  btnSaveIntakeText: {
+    fontFamily: 'Oswald',
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#051424',
+    letterSpacing: 0.5,
   },
 });

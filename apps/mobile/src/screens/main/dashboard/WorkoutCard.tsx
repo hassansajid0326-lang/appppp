@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useAppTheme } from '../../../lib/theme';
 
 interface WorkoutCardProps {
   workoutName?: string;
@@ -9,33 +10,39 @@ interface WorkoutCardProps {
 }
 
 export default function WorkoutCard({ workoutName = 'Strength Training', hasScheduledToday, onPressStart }: WorkoutCardProps) {
+  const { colors, isDark } = useAppTheme();
+
   return (
-    <View style={styles.card}>
-      <Text style={styles.sectionTitle}>Today's Training</Text>
+    <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
+      <Text style={[styles.sectionTitle, { color: colors.text }]}>Today's Training</Text>
 
       {hasScheduledToday ? (
         <View style={styles.contentContainer}>
           <View style={styles.infoRow}>
-            <View style={styles.iconContainer}>
-              <Ionicons name="barbell" size={22} color="#c3f400" />
+            <View style={[styles.iconContainer, { backgroundColor: isDark ? 'rgba(195, 244, 0, 0.1)' : 'rgba(101, 163, 13, 0.1)', borderColor: isDark ? 'rgba(195, 244, 0, 0.3)' : 'rgba(101, 163, 13, 0.3)' }]}>
+              <Ionicons name="barbell" size={22} color={isDark ? "#c3f400" : "#65a30d"} />
             </View>
             <View style={styles.textContainer}>
-              <Text style={styles.workoutName}>{workoutName}</Text>
-              <Text style={styles.subtext}>Duration: ~45 min • Muscle groups: Chest/Back</Text>
+              <Text style={[styles.workoutName, { color: colors.text }]}>{workoutName}</Text>
+              <Text style={[styles.subtext, { color: colors.textSecondary }]}>Duration: ~45 min • Muscle groups: Chest/Back</Text>
             </View>
           </View>
           
-          <TouchableOpacity style={styles.startButton} onPress={onPressStart}>
+          <TouchableOpacity style={styles.startButton} onPress={onPressStart} activeOpacity={0.85}>
             <Text style={styles.startButtonText}>START WORKOUT</Text>
             <Ionicons name="play-forward" size={16} color="#051424" />
           </TouchableOpacity>
         </View>
       ) : (
         <View style={styles.emptyContainer}>
-          <Ionicons name="calendar-outline" size={24} color="#64748B" style={{ marginBottom: 8 }} />
-          <Text style={styles.emptyText}>No workout planned for today.</Text>
-          <TouchableOpacity style={styles.planButton} onPress={onPressStart}>
-            <Text style={styles.planButtonText}>SCHEDULE WORKOUT</Text>
+          <Ionicons name="calendar-outline" size={24} color={colors.textMuted} style={{ marginBottom: 8 }} />
+          <Text style={[styles.emptyText, { color: colors.textMuted }]}>No workout planned for today.</Text>
+          <TouchableOpacity 
+            style={[styles.planButton, { borderColor: colors.border, backgroundColor: colors.cardSubtle }]} 
+            onPress={onPressStart}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.planButtonText, { color: colors.text }]}>SCHEDULE WORKOUT</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -45,10 +52,8 @@ export default function WorkoutCard({ workoutName = 'Strength Training', hasSche
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: 'rgba(30, 41, 59, 0.4)',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#334155',
     padding: 20,
     alignSelf: 'stretch',
     marginBottom: 20,
@@ -57,7 +62,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Oswald',
     fontSize: 16,
     fontWeight: '700',
-    color: '#ffffff',
     letterSpacing: 1,
     marginBottom: 16,
   },
@@ -74,9 +78,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: 'rgba(195, 244, 0, 0.05)',
     borderWidth: 1,
-    borderColor: 'rgba(195, 244, 0, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -88,12 +90,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Oswald',
     fontSize: 18,
     fontWeight: '700',
-    color: '#ffffff',
   },
   subtext: {
     fontFamily: 'Inter',
     fontSize: 11,
-    color: '#64748B',
     marginTop: 2,
   },
   startButton: {
@@ -120,12 +120,10 @@ const styles = StyleSheet.create({
   emptyText: {
     fontFamily: 'Inter',
     fontSize: 13,
-    color: '#64748B',
     marginBottom: 12,
   },
   planButton: {
     borderWidth: 1,
-    borderColor: '#334155',
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 16,
@@ -134,7 +132,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Oswald',
     fontSize: 12,
     fontWeight: '700',
-    color: '#cbd5e1',
     letterSpacing: 1,
   },
 });

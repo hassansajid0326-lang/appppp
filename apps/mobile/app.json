@@ -20,6 +20,8 @@
         "NSMotionUsageDescription": "FitPulse requires motion permission to detect steps and activity changes in the background.",
         "NSLocationWhenInUseUsageDescription": "FitPulse uses location to measure speed for classifying activity states like driving/riding.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "FitPulse uses background location to measure speed for classifying activity states like driving/riding.",
+        "NSMicrophoneUsageDescription": "FitPulse requires microphone access for voice-to-text AI coaching queries.",
+        "NSSpeechRecognitionUsageDescription": "FitPulse uses speech recognition to convert voice queries to AI coach text commands.",
         "UIBackgroundModes": [
           "fetch",
           "processing"
@@ -43,7 +45,8 @@
         "android.permission.FOREGROUND_SERVICE",
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.ACCESS_BACKGROUND_LOCATION",
-        "android.permission.ACTIVITY_RECOGNITION"
+        "android.permission.ACTIVITY_RECOGNITION",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {

@@ -35,10 +35,19 @@ const transporter = nodemailer.createTransport({
 });
 
 async function sendOTPEmail(email, otp, purpose) {
-  const title = purpose === 'signup' ? 'Verify Your FitPulse Account' : 'Reset Your FitPulse Password';
-  const messageText = purpose === 'signup' 
-    ? `Welcome to FitPulse! Your 8-digit verification code is: ${otp}. This code will expire in 10 minutes. (If you do not see this email in your inbox, please check your Spam or Junk folder.)`
-    : `You requested a password reset. Your 8-digit verification code is: ${otp}. This code will expire in 10 minutes. (If you do not see this email in your inbox, please check your Spam or Junk folder.)`;
+  let title = 'Verify Your FitPulse Account';
+  let bodyDesc = 'Welcome to FitPulse! Use the following 8-digit verification security key to activate your athlete account:';
+  let messageText = `Welcome to FitPulse! Your 8-digit verification code is: ${otp}. This code will expire in 10 minutes. (If you do not see this email in your inbox, please check your Spam or Junk folder.)`;
+
+  if (purpose === 'forgot_password') {
+    title = 'Reset Your FitPulse Password';
+    bodyDesc = 'A password reset request was initiated for your athlete account. Use the following 8-digit verification security key to proceed:';
+    messageText = `You requested a password reset. Your 8-digit verification code is: ${otp}. This code will expire in 10 minutes. (If you do not see this email in your inbox, please check your Spam or Junk folder.)`;
+  } else if (purpose === 'email_change') {
+    title = 'Authorize Email Change - FitPulse';
+    bodyDesc = 'An email change request was initiated for your account. Use the following 8-digit verification security key to authorize this change:';
+    messageText = `An email change was requested on your FitPulse account. Your 8-digit verification code is: ${otp}. This code will expire in 10 minutes. (If you do not see this email in your inbox, please check your Spam or Junk folder.)`;
+  }
 
   const mailOptions = {
     from: process.env.SMTP_FROM || '"FitPulse System" <no-reply@fitpulse.com>',
@@ -49,7 +58,7 @@ async function sendOTPEmail(email, otp, purpose) {
       <div style="font-family: Arial, sans-serif; background-color: #051424; color: #ffffff; padding: 40px; border-radius: 8px; max-width: 600px; margin: 0 auto; border: 1px solid #334155;">
         <h2 style="color: #c3f400; font-size: 24px; border-bottom: 1px solid #1e293b; padding-bottom: 16px; margin-top: 0; letter-spacing: 2px;">FITPULSE SECURITY PROTOCOL</h2>
         <p style="font-size: 16px; color: #cbd5e1; line-height: 1.6;">Hello,</p>
-        <p style="font-size: 16px; color: #cbd5e1; line-height: 1.6;">${purpose === 'signup' ? 'Welcome to FitPulse! Use the following 8-digit verification security key to activate your athlete account:' : 'A password reset request was initiated for your athlete account. Use the following 8-digit verification security key to proceed:'}</p>
+        <p style="font-size: 16px; color: #cbd5e1; line-height: 1.6;">${bodyDesc}</p>
         <div style="background-color: rgba(195, 244, 0, 0.05); border: 1px solid #c3f400; border-radius: 8px; padding: 20px; text-align: center; margin: 30px 0;">
           <span style="font-size: 36px; font-weight: bold; color: #c3f400; letter-spacing: 8px; font-family: monospace;">${otp}</span>
         </div>
@@ -109,6 +118,35 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
     env: process.env.NODE_ENV || 'development'
   });
+});
+
+/**
+ * GET /api/cron/keep-alive
+ * Automated Supabase Ping & Heartbeat to prevent 7-day inactivity pause on Supabase free tier.
+ */
+app.get('/api/cron/keep-alive', async (req, res) => {
+  try {
+    const startTime = Date.now();
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('id')
+      .limit(1);
+
+    if (error) throw error;
+
+    const duration = Date.now() - startTime;
+    console.log(`[SUPABASE KEEP-ALIVE] Ping successful in ${duration}ms at ${new Date().toISOString()}`);
+
+    res.json({
+      status: 'active',
+      message: 'Supabase database pinged successfully. 7-day inactivity pause prevented.',
+      latencyMs: duration,
+      timestamp: new Date().toISOString()
+    });
+  } catch (err) {
+    console.error('[SUPABASE KEEP-ALIVE FAILED]:', err);
+    res.status(500).json({ error: err.message || 'Failed to ping Supabase database' });
+  }
 });
 
 /**
@@ -520,6 +558,123 @@ app.post('/api/v1/auth/reset-password', async (req, res) => {
   } catch (err) {
     console.error('Reset password error:', err);
     res.status(500).json({ error: err.message || 'Internal server error resetting password.' });
+  }
+});
+
+/**
+ * POST /api/v1/auth/request-email-change-otp
+ * Generates an 8-digit OTP code sent to user's current email to authorize changing email address.
+ */
+app.post('/api/v1/auth/request-email-change-otp', async (req, res) => {
+  const { currentEmail, newEmail, userId } = req.body;
+
+  if (!currentEmail || !newEmail) {
+    return res.status(400).json({ error: 'Current email and new email are required.' });
+  }
+
+  if (currentEmail.toLowerCase() === newEmail.toLowerCase()) {
+    return res.status(400).json({ error: 'New email address must be different from current email.' });
+  }
+
+  try {
+    // Check if new email is already taken by another user
+    const { data: { users }, error: listError } = await supabase.auth.admin.listUsers();
+    if (listError) throw listError;
+
+    const existingNewUser = users.find(u => u.email.toLowerCase() === newEmail.toLowerCase());
+    if (existingNewUser && existingNewUser.id !== userId) {
+      return res.status(400).json({ error: 'An account with the new email address already exists.' });
+    }
+
+    // Generate 8-digit OTP
+    const otp = Math.floor(10000000 + Math.random() * 90000000).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    // Save OTP under 'email_change' purpose
+    const { error: otpError } = await supabase
+      .from('otp_verifications')
+      .insert({
+        email: currentEmail,
+        otp,
+        purpose: 'email_change',
+        expires_at: expiresAt.toISOString()
+      });
+
+    if (otpError) throw otpError;
+
+    // Send OTP to current email address
+    await sendOTPEmail(currentEmail, otp, 'email_change');
+
+    res.json({
+      status: 'otp_sent',
+      message: `Verification code sent to ${currentEmail}.`
+    });
+  } catch (err) {
+    console.error('Email change OTP error:', err);
+    res.status(500).json({ error: err.message || 'Internal server error requesting email change.' });
+  }
+});
+
+/**
+ * POST /api/v1/auth/change-email
+ * Verifies 8-digit OTP and updates user email address in Supabase Auth.
+ */
+app.post('/api/v1/auth/change-email', async (req, res) => {
+  const { currentEmail, newEmail, otp, userId } = req.body;
+
+  if (!currentEmail || !newEmail || !otp || !userId) {
+    return res.status(400).json({ error: 'Current email, new email, user ID, and OTP code are required.' });
+  }
+
+  try {
+    // Verify OTP record
+    const { data: records, error: queryError } = await supabase
+      .from('otp_verifications')
+      .select('*')
+      .eq('email', currentEmail)
+      .eq('otp', otp)
+      .eq('purpose', 'email_change')
+      .eq('verified', false)
+      .gt('expires_at', new Date().toISOString())
+      .order('created_at', { ascending: false });
+
+    if (queryError) throw queryError;
+
+    if (!records || records.length === 0) {
+      return res.status(400).json({ error: 'Invalid or expired verification code.' });
+    }
+
+    const verificationRecord = records[0];
+
+    // Mark OTP as verified & then delete it
+    await supabase
+      .from('otp_verifications')
+      .update({ verified: true })
+      .eq('id', verificationRecord.id);
+
+    // Update user's email in Supabase Auth
+    const { error: updateAuthError } = await supabase.auth.admin.updateUserById(userId, {
+      email: newEmail,
+      email_confirm: true
+    });
+
+    if (updateAuthError) throw updateAuthError;
+
+    // Delete used OTP
+    await supabase
+      .from('otp_verifications')
+      .delete()
+      .eq('email', currentEmail)
+      .eq('purpose', 'email_change');
+
+    res.json({
+      status: 'success',
+      newEmail,
+      message: 'Email address updated successfully.'
+    });
+  } catch (err) {
+    console.error('Change email error:', err);
+    res.status(500).json({ error: err.message || 'Internal server error updating email.' });
   }
 });
 

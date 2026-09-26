@@ -1,6 +1,8 @@
 package com.fitpulse.app
 
 import android.app.*
+import android.app.usage.UsageStatsManager
+import android.app.usage.UsageStats
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -77,6 +79,10 @@ class StepTrackerService : Service(), SensorEventListener {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Update notification when service is started/refreshed
+        val notification = buildNotification(getTodaySteps())
+        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.notify(NOTIFICATION_ID, notification)
         return START_STICKY
     }
 

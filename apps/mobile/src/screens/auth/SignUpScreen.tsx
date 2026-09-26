@@ -18,11 +18,13 @@ import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { supabase } from '../../lib/supabase';
 import { useAuthStore } from '../../lib/store';
+import { useAppTheme } from '../../lib/theme';
 
 // Define local backend API URL (using live Vercel deployment URL)
 const API_URL = 'https://appppp-silk.vercel.app';
 
 export default function SignUpScreen({ navigation }: any) {
+  const { colors, isDark } = useAppTheme();
   const { setSession, setProfile } = useAuthStore();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -156,7 +158,7 @@ export default function SignUpScreen({ navigation }: any) {
 
   return (
     <LinearGradient
-      colors={['#051424', '#0d1c2d', '#010f1f']}
+      colors={colors.backgroundGradient}
       style={styles.container}
     >
       <KeyboardAvoidingView
@@ -171,22 +173,22 @@ export default function SignUpScreen({ navigation }: any) {
               style={styles.logo} 
               contentFit="contain"
             />
-            <Text style={styles.brandSubtitle}>CREATE YOUR FITNESS ACCOUNT</Text>
+            <Text style={[styles.brandSubtitle, { color: colors.primary }]}>CREATE YOUR FITNESS ACCOUNT</Text>
           </Animated.View>
 
           {/* Registration Card */}
           <Animated.View 
             entering={FadeInDown.delay(400).duration(800)} 
-            style={styles.glassCard}
+            style={[styles.glassCard, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}
           >
-            <Text style={styles.cardHeader}>Sign Up</Text>
+            <Text style={[styles.cardHeader, { color: colors.text, borderBottomColor: colors.borderSubtle }]}>Sign Up</Text>
             
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>EMAIL ADDRESS</Text>
+              <Text style={[styles.label, { color: colors.textMuted }]}>EMAIL ADDRESS</Text>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle, color: colors.text }]}
                 placeholder="casey@fitpulse.com"
-                placeholderTextColor="#64748B"
+                placeholderTextColor={colors.textMuted}
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -196,12 +198,12 @@ export default function SignUpScreen({ navigation }: any) {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>PASSWORD</Text>
-              <View style={styles.passwordInputWrapper}>
+              <Text style={[styles.label, { color: colors.textMuted }]}>PASSWORD</Text>
+              <View style={[styles.passwordInputWrapper, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle }]}>
                 <TextInput
-                  style={styles.passwordInput}
+                  style={[styles.passwordInput, { color: colors.text }]}
                   placeholder="••••••••"
-                  placeholderTextColor="#64748B"
+                  placeholderTextColor={colors.textMuted}
                   value={password}
                   onChangeText={setPassword}
                   secureTextEntry={!showPassword}
@@ -215,7 +217,7 @@ export default function SignUpScreen({ navigation }: any) {
                   <Ionicons 
                     name={showPassword ? "eye-off-outline" : "eye-outline"} 
                     size={20} 
-                    color="#64748B" 
+                    color={colors.textMuted} 
                   />
                 </TouchableOpacity>
               </View>
@@ -226,9 +228,9 @@ export default function SignUpScreen({ navigation }: any) {
                   <Ionicons 
                     name={checkLength ? "checkmark-circle" : "ellipse-outline"} 
                     size={14} 
-                    color={checkLength ? "#c3f400" : "#64748B"} 
+                    color={checkLength ? colors.primary : colors.textMuted} 
                   />
-                  <Text style={[styles.policyText, { color: checkLength ? "#ffffff" : "#64748B" }]}>
+                  <Text style={[styles.policyText, { color: checkLength ? colors.text : colors.textMuted }]}>
                     Minimum 8 characters
                   </Text>
                 </View>
@@ -236,9 +238,9 @@ export default function SignUpScreen({ navigation }: any) {
                   <Ionicons 
                     name={checkUpper ? "checkmark-circle" : "ellipse-outline"} 
                     size={14} 
-                    color={checkUpper ? "#c3f400" : "#64748B"} 
+                    color={checkUpper ? colors.primary : colors.textMuted} 
                   />
-                  <Text style={[styles.policyText, { color: checkUpper ? "#ffffff" : "#64748B" }]}>
+                  <Text style={[styles.policyText, { color: checkUpper ? colors.text : colors.textMuted }]}>
                     At least one uppercase letter (A-Z)
                   </Text>
                 </View>
@@ -246,9 +248,9 @@ export default function SignUpScreen({ navigation }: any) {
                   <Ionicons 
                     name={checkLower ? "checkmark-circle" : "ellipse-outline"} 
                     size={14} 
-                    color={checkLower ? "#c3f400" : "#64748B"} 
+                    color={checkLower ? colors.primary : colors.textMuted} 
                   />
-                  <Text style={[styles.policyText, { color: checkLower ? "#ffffff" : "#64748B" }]}>
+                  <Text style={[styles.policyText, { color: checkLower ? colors.text : colors.textMuted }]}>
                     At least one lowercase letter (a-z)
                   </Text>
                 </View>
@@ -256,9 +258,9 @@ export default function SignUpScreen({ navigation }: any) {
                   <Ionicons 
                     name={checkDigit ? "checkmark-circle" : "ellipse-outline"} 
                     size={14} 
-                    color={checkDigit ? "#c3f400" : "#64748B"} 
+                    color={checkDigit ? colors.primary : colors.textMuted} 
                   />
-                  <Text style={[styles.policyText, { color: checkDigit ? "#ffffff" : "#64748B" }]}>
+                  <Text style={[styles.policyText, { color: checkDigit ? colors.text : colors.textMuted }]}>
                     At least one number (0-9)
                   </Text>
                 </View>
@@ -266,9 +268,9 @@ export default function SignUpScreen({ navigation }: any) {
                   <Ionicons 
                     name={checkSpecial ? "checkmark-circle" : "ellipse-outline"} 
                     size={14} 
-                    color={checkSpecial ? "#c3f400" : "#64748B"} 
+                    color={checkSpecial ? colors.primary : colors.textMuted} 
                   />
-                  <Text style={[styles.policyText, { color: checkSpecial ? "#ffffff" : "#64748B" }]}>
+                  <Text style={[styles.policyText, { color: checkSpecial ? colors.text : colors.textMuted }]}>
                     Special character (@$!%*?&)
                   </Text>
                 </View>
@@ -276,12 +278,12 @@ export default function SignUpScreen({ navigation }: any) {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>CONFIRM PASSWORD</Text>
-              <View style={styles.passwordInputWrapper}>
+              <Text style={[styles.label, { color: colors.textMuted }]}>CONFIRM PASSWORD</Text>
+              <View style={[styles.passwordInputWrapper, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle }]}>
                 <TextInput
-                  style={styles.passwordInput}
+                  style={[styles.passwordInput, { color: colors.text }]}
                   placeholder="••••••••"
-                  placeholderTextColor="#64748B"
+                  placeholderTextColor={colors.textMuted}
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
                   secureTextEntry={!showConfirmPassword}
@@ -295,27 +297,27 @@ export default function SignUpScreen({ navigation }: any) {
                   <Ionicons 
                     name={showConfirmPassword ? "eye-off-outline" : "eye-outline"} 
                     size={20} 
-                    color="#64748B" 
+                    color={colors.textMuted} 
                   />
                 </TouchableOpacity>
               </View>
             </View>
 
             <TouchableOpacity 
-              style={styles.signUpButton} 
+              style={[styles.signUpButton, { backgroundColor: colors.primary }]} 
               onPress={handleSignUp}
               disabled={loading}
             >
               {loading ? (
-                <ActivityIndicator color="#051424" />
+                <ActivityIndicator color={colors.onPrimary} />
               ) : (
-                <Text style={styles.signUpButtonText}>CREATE ACCOUNT</Text>
+                <Text style={[styles.signUpButtonText, { color: colors.onPrimary }]}>CREATE ACCOUNT</Text>
               )}
             </TouchableOpacity>
 
             <View style={styles.footerLinks}>
               <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                <Text style={styles.linkText}>ALREADY HAVE AN ACCOUNT? LOG IN</Text>
+                <Text style={[styles.linkText, { color: colors.textSecondary }]}>ALREADY HAVE AN ACCOUNT? LOG IN</Text>
               </TouchableOpacity>
             </View>
           </Animated.View>
@@ -330,30 +332,30 @@ export default function SignUpScreen({ navigation }: any) {
         onRequestClose={() => setShowOtpModal(false)}
       >
         <LinearGradient
-          colors={['#051424', '#0d1c2d', '#010f1f']}
+          colors={colors.backgroundGradient}
           style={styles.modalContainer}
         >
           <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={{ flex: 1, width: '100%', justifyContent: 'center', alignItems: 'center', padding: 24 }}
           >
-            <View style={styles.modalContent}>
+            <View style={[styles.modalContent, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
               <Image 
                 source={require('../../../assets/icon.png')} 
                 style={styles.modalLogo} 
                 contentFit="contain" 
               />
-              <Text style={styles.modalTitle}>EMAIL OTP VERIFICATION</Text>
-              <Text style={styles.modalDescription}>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>EMAIL OTP VERIFICATION</Text>
+              <Text style={[styles.modalDescription, { color: colors.textSecondary }]}>
                 Enter the 8-digit verification OTP code that has been logged/sent to your email: {email}
               </Text>
 
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>ENTER 8-DIGIT SECURITY KEY</Text>
+                <Text style={[styles.label, { color: colors.textMuted }]}>ENTER 8-DIGIT SECURITY KEY</Text>
                 <TextInput
-                  style={[styles.input, { letterSpacing: 8, fontSize: 24, textAlign: 'center', width: 280, fontWeight: '700' }]}
+                  style={[styles.input, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle, color: colors.text, letterSpacing: 8, fontSize: 24, textAlign: 'center', width: 280, fontWeight: '700' }]}
                   placeholder="12345678"
-                  placeholderTextColor="#334155"
+                  placeholderTextColor={colors.textMuted}
                   value={otpCode}
                   onChangeText={setOtpCode}
                   keyboardType="number-pad"
@@ -364,22 +366,22 @@ export default function SignUpScreen({ navigation }: any) {
               </View>
 
               <TouchableOpacity 
-                style={styles.verifyButton} 
+                style={[styles.verifyButton, { backgroundColor: colors.primary }]} 
                 onPress={handleVerifyOTP}
                 disabled={otpLoading}
               >
                 {otpLoading ? (
-                  <ActivityIndicator color="#051424" />
+                  <ActivityIndicator color={colors.onPrimary} />
                 ) : (
-                  <Text style={styles.verifyButtonText}>VERIFY CODE</Text>
+                  <Text style={[styles.verifyButtonText, { color: colors.onPrimary }]}>VERIFY CODE</Text>
                 )}
               </TouchableOpacity>
 
               <TouchableOpacity 
-                style={styles.closeButton} 
+                style={[styles.closeButton, { borderColor: colors.borderSubtle }]} 
                 onPress={() => setShowOtpModal(false)}
               >
-                <Text style={styles.closeButtonText}>CANCEL</Text>
+                <Text style={[styles.closeButtonText, { color: colors.textMuted }]}>CANCEL</Text>
               </TouchableOpacity>
             </View>
           </KeyboardAvoidingView>

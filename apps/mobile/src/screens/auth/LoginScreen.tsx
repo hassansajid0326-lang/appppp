@@ -18,11 +18,13 @@ import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { supabase } from '../../lib/supabase';
 import { useAuthStore } from '../../lib/store';
+import { useAppTheme } from '../../lib/theme';
 
 // Define local backend API URL (using live Vercel deployment URL)
 const API_URL = 'https://appppp-silk.vercel.app';
 
 export default function LoginScreen({ navigation }: any) {
+  const { colors, isDark } = useAppTheme();
   const { setSession, setProfile } = useAuthStore();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -185,7 +187,7 @@ export default function LoginScreen({ navigation }: any) {
 
   return (
     <LinearGradient
-      colors={['#051424', '#0d1c2d', '#010f1f']}
+      colors={colors.backgroundGradient}
       style={styles.container}
     >
       <KeyboardAvoidingView
@@ -200,22 +202,22 @@ export default function LoginScreen({ navigation }: any) {
               style={styles.logo} 
               contentFit="contain"
             />
-            <Text style={styles.brandSubtitle}>TRACK YOUR FITNESS GOALS</Text>
+            <Text style={[styles.brandSubtitle, { color: colors.primary }]}>TRACK YOUR FITNESS GOALS</Text>
           </Animated.View>
 
           {/* Login Panel Card (Glassmorphism) */}
           <Animated.View 
             entering={FadeInDown.delay(400).duration(800)} 
-            style={styles.glassCard}
+            style={[styles.glassCard, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}
           >
-            <Text style={styles.cardHeader}>Log In</Text>
+            <Text style={[styles.cardHeader, { color: colors.text, borderBottomColor: colors.borderSubtle }]}>Log In</Text>
             
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>EMAIL ADDRESS</Text>
+              <Text style={[styles.label, { color: colors.textMuted }]}>EMAIL ADDRESS</Text>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle, color: colors.text }]}
                 placeholder="casey@fitpulse.com"
-                placeholderTextColor="#64748B"
+                placeholderTextColor={colors.textMuted}
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -225,12 +227,12 @@ export default function LoginScreen({ navigation }: any) {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>PASSWORD</Text>
-              <View style={styles.passwordInputWrapper}>
+              <Text style={[styles.label, { color: colors.textMuted }]}>PASSWORD</Text>
+              <View style={[styles.passwordInputWrapper, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle }]}>
                 <TextInput
-                  style={styles.passwordInput}
+                  style={[styles.passwordInput, { color: colors.text }]}
                   placeholder="••••••••"
-                  placeholderTextColor="#64748B"
+                  placeholderTextColor={colors.textMuted}
                   value={password}
                   onChangeText={setPassword}
                   secureTextEntry={!showPassword}
@@ -244,30 +246,30 @@ export default function LoginScreen({ navigation }: any) {
                   <Ionicons 
                     name={showPassword ? "eye-off-outline" : "eye-outline"} 
                     size={20} 
-                    color="#64748B" 
+                    color={colors.textMuted} 
                   />
                 </TouchableOpacity>
               </View>
             </View>
 
             <TouchableOpacity 
-              style={styles.loginButton} 
+              style={[styles.loginButton, { backgroundColor: colors.primary }]} 
               onPress={handleLogin}
               disabled={loading}
             >
               {loading ? (
-                <ActivityIndicator color="#051424" />
+                <ActivityIndicator color={colors.onPrimary} />
               ) : (
-                <Text style={styles.loginButtonText}>LOG IN</Text>
+                <Text style={[styles.loginButtonText, { color: colors.onPrimary }]}>LOG IN</Text>
               )}
             </TouchableOpacity>
 
             <View style={styles.footerLinks}>
               <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={{ marginBottom: 14 }}>
-                <Text style={styles.linkText}>CREATE A NEW ACCOUNT</Text>
+                <Text style={[styles.linkText, { color: colors.textSecondary }]}>CREATE A NEW ACCOUNT</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setShowForgotModal(true)}>
-                <Text style={[styles.linkText, { color: '#c3f400', textDecorationLine: 'none' }]}>FORGOT PASSWORD?</Text>
+                <Text style={[styles.linkText, { color: colors.primary, textDecorationLine: 'none' }]}>FORGOT PASSWORD?</Text>
               </TouchableOpacity>
             </View>
           </Animated.View>
@@ -285,7 +287,7 @@ export default function LoginScreen({ navigation }: any) {
         }}
       >
         <LinearGradient
-          colors={['#051424', '#0d1c2d', '#010f1f']}
+          colors={colors.backgroundGradient}
           style={styles.modalContainer}
         >
           <KeyboardAvoidingView
@@ -297,25 +299,25 @@ export default function LoginScreen({ navigation }: any) {
               contentContainerStyle={styles.modalScroll} 
               keyboardShouldPersistTaps="handled"
             >
-              <View style={styles.modalContent}>
+              <View style={[styles.modalContent, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
                 <Image 
                   source={require('../../../assets/icon.png')} 
                   style={styles.modalLogo} 
                   contentFit="contain" 
                 />
-                <Text style={styles.modalTitle}>PASSWORD RECOVERY</Text>
+                <Text style={[styles.modalTitle, { color: colors.text }]}>PASSWORD RECOVERY</Text>
                 
                 {forgotStep === 1 ? (
                   <View style={{ alignSelf: 'stretch' }}>
-                    <Text style={styles.modalDescription}>
+                    <Text style={[styles.modalDescription, { color: colors.textSecondary }]}>
                       Enter your registered email address to receive an 8-digit security verification OTP code.
                     </Text>
                     <View style={styles.inputContainer}>
-                      <Text style={styles.label}>EMAIL ADDRESS</Text>
+                      <Text style={[styles.label, { color: colors.textMuted }]}>EMAIL ADDRESS</Text>
                       <TextInput
-                        style={styles.input}
+                        style={[styles.input, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle, color: colors.text }]}
                         placeholder="casey@fitpulse.com"
-                        placeholderTextColor="#64748B"
+                        placeholderTextColor={colors.textMuted}
                         value={forgotEmail}
                         onChangeText={setForgotEmail}
                         keyboardType="email-address"
@@ -325,28 +327,28 @@ export default function LoginScreen({ navigation }: any) {
                     </View>
                     
                     <TouchableOpacity 
-                      style={styles.actionButton} 
+                      style={[styles.actionButton, { backgroundColor: colors.primary }]} 
                       onPress={handleRequestResetOTP}
                       disabled={forgotLoading}
                     >
                       {forgotLoading ? (
-                        <ActivityIndicator color="#051424" />
+                        <ActivityIndicator color={colors.onPrimary} />
                       ) : (
-                        <Text style={styles.actionButtonText}>SEND RESET OTP</Text>
+                        <Text style={[styles.actionButtonText, { color: colors.onPrimary }]}>SEND RESET OTP</Text>
                       )}
                     </TouchableOpacity>
                   </View>
                 ) : (
                   <View style={{ alignSelf: 'stretch' }}>
-                    <Text style={styles.modalDescription}>
+                    <Text style={[styles.modalDescription, { color: colors.textSecondary }]}>
                       Enter the 8-digit OTP code sent to your email and set your new password.
                     </Text>
                     <View style={styles.inputContainer}>
-                      <Text style={styles.label}>8-DIGIT SECURITY OTP</Text>
+                      <Text style={[styles.label, { color: colors.textMuted }]}>8-DIGIT SECURITY OTP</Text>
                       <TextInput
-                        style={styles.input}
+                        style={[styles.input, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle, color: colors.text }]}
                         placeholder="12345678"
-                        placeholderTextColor="#64748B"
+                        placeholderTextColor={colors.textMuted}
                         value={forgotOtp}
                         onChangeText={setForgotOtp}
                         keyboardType="number-pad"
@@ -357,12 +359,12 @@ export default function LoginScreen({ navigation }: any) {
                     </View>
 
                     <View style={styles.inputContainer}>
-                      <Text style={styles.label}>NEW PASSWORD</Text>
-                      <View style={styles.passwordInputWrapper}>
+                      <Text style={[styles.label, { color: colors.textMuted }]}>NEW PASSWORD</Text>
+                      <View style={[styles.passwordInputWrapper, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle }]}>
                         <TextInput
-                          style={styles.passwordInput}
+                          style={[styles.passwordInput, { color: colors.text }]}
                           placeholder="••••••••"
-                          placeholderTextColor="#64748B"
+                          placeholderTextColor={colors.textMuted}
                           value={forgotNewPassword}
                           onChangeText={setForgotNewPassword}
                           secureTextEntry={!showForgotNewPassword}
@@ -376,7 +378,7 @@ export default function LoginScreen({ navigation }: any) {
                           <Ionicons 
                             name={showForgotNewPassword ? "eye-off-outline" : "eye-outline"} 
                             size={20} 
-                            color="#64748B" 
+                            color={colors.textMuted} 
                           />
                         </TouchableOpacity>
                       </View>
@@ -387,9 +389,9 @@ export default function LoginScreen({ navigation }: any) {
                           <Ionicons 
                             name={checkForgotLength ? "checkmark-circle" : "ellipse-outline"} 
                             size={14} 
-                            color={checkForgotLength ? "#c3f400" : "#64748B"} 
+                            color={checkForgotLength ? colors.primary : colors.textMuted} 
                           />
-                          <Text style={[styles.policyText, { color: checkForgotLength ? "#ffffff" : "#64748B" }]}>
+                          <Text style={[styles.policyText, { color: checkForgotLength ? colors.text : colors.textMuted }]}>
                             Minimum 8 characters
                           </Text>
                         </View>
@@ -397,9 +399,9 @@ export default function LoginScreen({ navigation }: any) {
                           <Ionicons 
                             name={checkForgotUpper ? "checkmark-circle" : "ellipse-outline"} 
                             size={14} 
-                            color={checkForgotUpper ? "#c3f400" : "#64748B"} 
+                            color={checkForgotUpper ? colors.primary : colors.textMuted} 
                           />
-                          <Text style={[styles.policyText, { color: checkForgotUpper ? "#ffffff" : "#64748B" }]}>
+                          <Text style={[styles.policyText, { color: checkForgotUpper ? colors.text : colors.textMuted }]}>
                             At least one uppercase letter (A-Z)
                           </Text>
                         </View>
@@ -407,9 +409,9 @@ export default function LoginScreen({ navigation }: any) {
                           <Ionicons 
                             name={checkForgotLower ? "checkmark-circle" : "ellipse-outline"} 
                             size={14} 
-                            color={checkForgotLower ? "#c3f400" : "#64748B"} 
+                            color={checkForgotLower ? colors.primary : colors.textMuted} 
                           />
-                          <Text style={[styles.policyText, { color: checkForgotLower ? "#ffffff" : "#64748B" }]}>
+                          <Text style={[styles.policyText, { color: checkForgotLower ? colors.text : colors.textMuted }]}>
                             At least one lowercase letter (a-z)
                           </Text>
                         </View>
@@ -417,9 +419,9 @@ export default function LoginScreen({ navigation }: any) {
                           <Ionicons 
                             name={checkForgotDigit ? "checkmark-circle" : "ellipse-outline"} 
                             size={14} 
-                            color={checkForgotDigit ? "#c3f400" : "#64748B"} 
+                            color={checkForgotDigit ? colors.primary : colors.textMuted} 
                           />
-                          <Text style={[styles.policyText, { color: checkForgotDigit ? "#ffffff" : "#64748B" }]}>
+                          <Text style={[styles.policyText, { color: checkForgotDigit ? colors.text : colors.textMuted }]}>
                             At least one number (0-9)
                           </Text>
                         </View>
@@ -427,9 +429,9 @@ export default function LoginScreen({ navigation }: any) {
                           <Ionicons 
                             name={checkForgotSpecial ? "checkmark-circle" : "ellipse-outline"} 
                             size={14} 
-                            color={checkForgotSpecial ? "#c3f400" : "#64748B"} 
+                            color={checkForgotSpecial ? colors.primary : colors.textMuted} 
                           />
-                          <Text style={[styles.policyText, { color: checkForgotSpecial ? "#ffffff" : "#64748B" }]}>
+                          <Text style={[styles.policyText, { color: checkForgotSpecial ? colors.text : colors.textMuted }]}>
                             Special character (@$!%*?&)
                           </Text>
                         </View>
@@ -437,12 +439,12 @@ export default function LoginScreen({ navigation }: any) {
                     </View>
 
                     <View style={styles.inputContainer}>
-                      <Text style={styles.label}>CONFIRM NEW PASSWORD</Text>
-                      <View style={styles.passwordInputWrapper}>
+                      <Text style={[styles.label, { color: colors.textMuted }]}>CONFIRM NEW PASSWORD</Text>
+                      <View style={[styles.passwordInputWrapper, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle }]}>
                         <TextInput
-                          style={styles.passwordInput}
+                          style={[styles.passwordInput, { color: colors.text }]}
                           placeholder="••••••••"
-                          placeholderTextColor="#64748B"
+                          placeholderTextColor={colors.textMuted}
                           value={forgotConfirmPassword}
                           onChangeText={setForgotConfirmPassword}
                           secureTextEntry={!showForgotConfirmPassword}
@@ -456,34 +458,34 @@ export default function LoginScreen({ navigation }: any) {
                           <Ionicons 
                             name={showForgotConfirmPassword ? "eye-off-outline" : "eye-outline"} 
                             size={20} 
-                            color="#64748B" 
+                            color={colors.textMuted} 
                           />
                         </TouchableOpacity>
                       </View>
                     </View>
 
                     <TouchableOpacity 
-                      style={styles.actionButton} 
+                      style={[styles.actionButton, { backgroundColor: colors.primary }]} 
                       onPress={handleResetPassword}
                       disabled={forgotLoading}
                     >
                       {forgotLoading ? (
-                        <ActivityIndicator color="#051424" />
+                        <ActivityIndicator color={colors.onPrimary} />
                       ) : (
-                        <Text style={styles.actionButtonText}>RESET PASSWORD</Text>
+                        <Text style={[styles.actionButtonText, { color: colors.onPrimary }]}>RESET PASSWORD</Text>
                       )}
                     </TouchableOpacity>
                   </View>
                 )}
 
                 <TouchableOpacity 
-                  style={styles.closeButton} 
+                  style={[styles.closeButton, { borderColor: colors.borderSubtle }]} 
                   onPress={() => {
                     setShowForgotModal(false);
                     setForgotStep(1);
                   }}
                 >
-                  <Text style={styles.closeButtonText}>CANCEL</Text>
+                  <Text style={[styles.closeButtonText, { color: colors.textMuted }]}>CANCEL</Text>
                 </TouchableOpacity>
               </View>
             </ScrollView>

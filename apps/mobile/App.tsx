@@ -19,6 +19,8 @@ import {
 import { View, ActivityIndicator } from 'react-native';
 
 import RootNavigator from './src/navigation/RootNavigator';
+import BiometricGuard from './src/components/BiometricGuard';
+import { useAuthStore } from './src/lib/store';
 import './src/lib/backgroundSync';
 
 const queryClient = new QueryClient({
@@ -31,6 +33,8 @@ const queryClient = new QueryClient({
 });
 
 export default function App() {
+  const theme = useAuthStore((s) => s.theme);
+
   // Load custom athletic design fonts
   const [fontsLoaded] = useFonts({
     Oswald: Oswald_600SemiBold,
@@ -52,10 +56,12 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
-        <NavigationContainer>
-          <RootNavigator />
-          <StatusBar style="light" />
-        </NavigationContainer>
+        <BiometricGuard>
+          <NavigationContainer>
+            <RootNavigator />
+            <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
+          </NavigationContainer>
+        </BiometricGuard>
       </SafeAreaProvider>
     </QueryClientProvider>
   );

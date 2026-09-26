@@ -2,20 +2,25 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { UserProfile } from '../../../lib/store';
+import { useAppTheme } from '../../../lib/theme';
 
 interface EnergySummaryProps {
   profile: UserProfile | null;
   steps: number;
   weightKg: number;
   caloriesGained: number;
+  workoutCalories?: number;
 }
 
 export default function EnergySummary({ 
   profile, 
   steps, 
   weightKg, 
-  caloriesGained 
+  caloriesGained,
+  workoutCalories = 0
 }: EnergySummaryProps) {
+  const { colors, isDark } = useAppTheme();
+
   // 1. Calculate Resting BMR (Mifflin-St Jeor)
   let bmr = 1600; // Default average fallback
   
@@ -39,62 +44,87 @@ export default function EnergySummary({
 
   // 2. Calculate Active Calories from Steps (MET formula: 0.000525 * weightKg * steps)
   const activeCalories = Math.round(0.000525 * weightKg * steps);
-  const totalBurned = Math.round(bmrBurnedSoFar + activeCalories);
+  const totalBurned = Math.round(bmrBurnedSoFar + activeCalories + workoutCalories);
   
   // 3. Energy Balance
   const netBalance = Math.round(caloriesGained - totalBurned);
   const isSurplus = netBalance >= 0;
 
   return (
-    <View style={styles.card}>
-      <Text style={styles.sectionTitle}>Energy Balance</Text>
+    <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
+      <Text style={[styles.sectionTitle, { color: colors.text }]}>Energy Balance</Text>
       
-      <View style={styles.burnContainer}>
+      <View style={[styles.burnContainer, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle }]}>
         <View style={styles.burnTextContainer}>
-          <Text style={styles.burnValue}>{totalBurned.toLocaleString()} kcal</Text>
-          <Text style={styles.burnLabel}>Total Burn Today</Text>
+          <Text style={[styles.burnValue, { color: colors.text }]}>{totalBurned.toLocaleString()} kcal</Text>
+          <Text style={[styles.burnLabel, { color: colors.textSecondary }]}>Total Burn Today</Text>
         </View>
         <Ionicons name="flame" size={32} color="#ff4a4a" />
       </View>
 
       <View style={styles.breakdownRow}>
         <View style={styles.breakdownItem}>
-          <Text style={styles.subValue}>{bmrBurnedSoFar} kcal</Text>
-          <Text style={styles.subLabel}>Resting BMR (So Far)</Text>
-          <Text style={styles.dailyBmrSublabel}>
-            Daily baseline: {Math.round(bmr)} kcal
+          <Text style={[styles.subValue, { color: colors.text }]}>{bmrBurnedSoFar} kcal</Text>
+          <Text style={[styles.subLabel, { color: colors.textSecondary }]}>Resting BMR</Text>
+          <Text style={[styles.dailyBmrSublabel, { color: colors.textMuted }]}>
+            Daily: {Math.round(bmr)} kcal
           </Text>
         </View>
-        <View style={styles.divider} />
+        <View style={[styles.divider, { backgroundColor: colors.borderSubtle }]} />
         <View style={styles.breakdownItem}>
-          <Text style={styles.subValue}>{activeCalories} kcal</Text>
-          <Text style={styles.subLabel}>Active Steps</Text>
-          <Text style={styles.dailyBmrSublabel}>
-            MET: {(activeCalories / Math.max(1, steps)).toFixed(4)} kcal/step
+          <Text style={[styles.subValue, { color: colors.text }]}>{activeCalories} kcal</Text>
+          <Text style={[styles.subLabel, { color: colors.textSecondary }]}>Active Steps</Text>
+          <Text style={[styles.dailyBmrSublabel, { color: colors.textMuted }]}>
+            {steps.toLocaleString()} steps
           </Text>
         </View>
+        {workoutCalories > 0 && (
+          <>
+            <View style={[styles.divider, { backgroundColor: colors.borderSubtle }]} />
+            <View style={styles.breakdownItem}>
+              <Text style={[styles.subValue, { color: colors.text }]}>{workoutCalories} kcal</Text>
+              <Text style={[styles.subLabel, { color: colors.textSecondary }]}>Active Workouts</Text>
+              <Text style={[styles.dailyBmrSublabel, { color: colors.textMuted }]}>
+                Stopwatch logs
+              </Text>
+            </View>
+          </>
+        )}
       </View>
 
       {/* Energy Balance (Surplus/Deficit) Display */}
-      <View style={styles.balanceContainer}>
+      <View style={[styles.balanceContainer, { backgroundColor: colors.cardSubtle, borderColor: colors.borderSubtle }]}>
         <View style={styles.balanceRow}>
           <View style={styles.balanceSub}>
-            <Text style={styles.balanceLabel}>GAINED</Text>
-            <Text style={[styles.balanceSubValue, { color: '#c3f400' }]}>
+            <Text style={[styles.balanceLabel, { color: colors.textMuted }]}>GAINED</Text>
+            <Text style={[styles.balanceSubValue, { color: isDark ? '#c3f400' : '#65a30d' }]}>
               +{Math.round(caloriesGained)} kcal
             </Text>
           </View>
-          <View style={styles.verticalDivider} />
+          <View style={[styles.verticalDivider, { backgroundColor: colors.borderSubtle }]} />
           <View style={styles.balanceSub}>
-            <Text style={styles.balanceLabel}>BURNED</Text>
+            <Text style={[styles.balanceLabel, { color: colors.textMuted }]}>BURNED</Text>
             <Text style={[styles.balanceSubValue, { color: '#ff4a4a' }]}>
               -{totalBurned} kcal
             </Text>
           </View>
         </View>
 
-        <View style={[styles.netPill, { backgroundColor: isSurplus ? 'rgba(195, 244, 0, 0.15)' : 'rgba(255, 74, 74, 0.15)', borderColor: isSurplus ? '#c3f400' : '#ff4a4a' }]}>
-          <Text style={[styles.netText, { color: isSurplus ? '#c3f400' : '#ff4a4a' }]}>
+        <View style={[
+          styles.netPill, 
+          { 
+            backgroundColor: isSurplus 
+              ? (isDark ? 'rgba(195, 244, 0, 0.15)' : 'rgba(101, 163, 13, 0.12)') 
+              : 'rgba(255, 74, 74, 0.12)', 
+            borderColor: isSurplus 
+              ? (isDark ? '#c3f400' : '#65a30d') 
+              : '#ff4a4a' 
+          }
+        ]}>
+          <Text style={[
+            styles.netText, 
+            { color: isSurplus ? (isDark ? '#c3f400' : '#65a30d') : '#ff4a4a' }
+          ]}>
             NET BALANCE: {isSurplus ? '+' : ''}{netBalance} kcal ({isSurplus ? 'SURPLUS' : 'DEFICIT'})
           </Text>
         </View>
@@ -105,10 +135,8 @@ export default function EnergySummary({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: 'rgba(30, 41, 59, 0.4)',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#334155',
     padding: 20,
     alignSelf: 'stretch',
     marginBottom: 16,
@@ -117,7 +145,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Oswald',
     fontSize: 16,
     fontWeight: '700',
-    color: '#ffffff',
     letterSpacing: 1,
     marginBottom: 16,
   },
@@ -126,10 +153,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
-    backgroundColor: 'rgba(5, 20, 36, 0.4)',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#1e293b',
     paddingHorizontal: 16,
     paddingVertical: 14,
   },
@@ -140,12 +165,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Oswald',
     fontSize: 22,
     fontWeight: '700',
-    color: '#ffffff',
   },
   burnLabel: {
     fontFamily: 'Inter',
     fontSize: 11,
-    color: '#64748B',
     marginTop: 2,
   },
   breakdownRow: {
@@ -162,31 +185,25 @@ const styles = StyleSheet.create({
     fontFamily: 'Oswald',
     fontSize: 16,
     fontWeight: '700',
-    color: '#ffffff',
   },
   subLabel: {
     fontFamily: 'Inter',
     fontSize: 11,
-    color: '#64748B',
     marginTop: 4,
   },
   dailyBmrSublabel: {
     fontSize: 9,
-    color: '#64748B',
     fontFamily: 'JetBrains Mono',
     marginTop: 2,
   },
   divider: {
     height: 36,
     width: 1,
-    backgroundColor: '#1e293b',
   },
   balanceContainer: {
-    backgroundColor: 'rgba(5, 20, 36, 0.3)',
     borderRadius: 12,
     padding: 14,
     borderWidth: 1,
-    borderColor: '#1e293b',
     marginTop: 8,
   },
   balanceRow: {
@@ -202,7 +219,6 @@ const styles = StyleSheet.create({
   balanceLabel: {
     fontFamily: 'JetBrains Mono',
     fontSize: 9,
-    color: '#64748B',
     fontWeight: 'bold',
     letterSpacing: 1,
   },
@@ -215,7 +231,6 @@ const styles = StyleSheet.create({
   verticalDivider: {
     width: 1,
     height: 24,
-    backgroundColor: '#1e293b',
   },
   netPill: {
     borderWidth: 1,

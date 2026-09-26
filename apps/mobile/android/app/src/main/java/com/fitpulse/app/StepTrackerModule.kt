@@ -61,6 +61,27 @@ class StepTrackerModule(reactContext: ReactApplicationContext) : ReactContextBas
     }
 
     @ReactMethod
+    fun resetSteps() {
+        val prefs = reactApplicationContext.getSharedPreferences("StepTrackerPrefs", Context.MODE_PRIVATE)
+        prefs.edit()
+            .putInt("today_steps", 0)
+            .apply()
+
+        // Restart/Refresh the service to show 0 steps in the ongoing notification
+        val context = reactApplicationContext
+        val intent = Intent(context, StepTrackerService::class.java)
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent)
+            } else {
+                context.startService(intent)
+            }
+        } catch (e: Exception) {
+            System.err.println("Failed to refresh StepTrackerService after reset: " + e.message)
+        }
+    }
+
+    @ReactMethod
     fun setStepGoal(goal: Int) {
         val prefs = reactApplicationContext.getSharedPreferences("StepTrackerPrefs", Context.MODE_PRIVATE)
         prefs.edit().putInt("daily_step_goal", goal).apply()

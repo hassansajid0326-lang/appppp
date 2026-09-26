@@ -35,3 +35,12 @@ Thumbs.db
 
 # Jetro cache
 .jetro/
+
+# Temp image inspection directories
+apps/mobile/final_food_images/
+apps/mobile/food_inspect/
+apps/mobile/food_verify/
+apps/mobile/test_photos/
+apps/mobile/android/app/build/
+apps/mobile/android/.gradle/
+apps/mobile/android/build/

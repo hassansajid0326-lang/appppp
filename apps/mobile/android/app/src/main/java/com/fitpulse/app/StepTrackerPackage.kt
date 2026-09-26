@@ -10,6 +10,7 @@ class StepTrackerPackage : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
         val modules = ArrayList<NativeModule>()
         modules.add(StepTrackerModule(reactContext))
+        modules.add(PPGHeartRateModule(reactContext))
         return modules
     }
 

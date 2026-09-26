@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useAppTheme } from '../../../lib/theme';
 
 interface StepRingProps {
   steps: number;
@@ -17,6 +18,7 @@ export default function StepRing({
   onSimulatePress, 
   units = 'metric' 
 }: StepRingProps) {
+  const { colors, isDark } = useAppTheme();
   const percentage = Math.min(100, Math.round((steps / goal) * 100));
   
   // Dynamic unit conversions
@@ -30,9 +32,9 @@ export default function StepRing({
   const activeMinutes = Math.round(steps * 0.008); // approx 120 steps per minute
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
       <View style={styles.headerRow}>
-        <Text style={styles.sectionTitle}>Daily Steps</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Daily Steps</Text>
         {(isSimulated || __DEV__) && (
           <View style={styles.simBadge}>
             <Ionicons name="construct-outline" size={10} color="#051424" />
@@ -43,12 +45,12 @@ export default function StepRing({
       
       <View style={styles.ringContainer}>
         {/* Visual Step Indicator Ring */}
-        <View style={styles.outerRing}>
-          <View style={styles.innerRing}>
-            <Ionicons name="footsteps" size={28} color="#c3f400" style={{ marginBottom: 6 }} />
-            <Text style={styles.stepsCount}>{steps.toLocaleString()}</Text>
-            <Text style={styles.stepsGoal}>/ {goal.toLocaleString()} steps</Text>
-            <Text style={styles.pctText}>{percentage}% done</Text>
+        <View style={[styles.outerRing, { borderColor: isDark ? '#1e293b' : '#e2e8f0' }]}>
+          <View style={[styles.innerRing, { backgroundColor: isDark ? 'rgba(5, 20, 36, 0.6)' : '#f8fafc' }]}>
+            <Ionicons name="footsteps" size={28} color={isDark ? "#c3f400" : "#556d00"} style={{ marginBottom: 6 }} />
+            <Text style={[styles.stepsCount, { color: colors.text }]}>{steps.toLocaleString()}</Text>
+            <Text style={[styles.stepsGoal, { color: colors.textSecondary }]}>/ {goal.toLocaleString()} steps</Text>
+            <Text style={[styles.pctText, { color: isDark ? '#c3f400' : '#556d00' }]}>{percentage}% done</Text>
           </View>
         </View>
       </View>
@@ -63,18 +65,18 @@ export default function StepRing({
 
       <View style={styles.statsRow}>
         <View style={styles.statBox}>
-          <Ionicons name="map-outline" size={18} color="#64748B" />
+          <Ionicons name="map-outline" size={18} color={colors.textMuted} />
           <View style={styles.statTexts}>
-            <Text style={styles.statValue}>{distance} {distanceUnit}</Text>
-            <Text style={styles.statLabel}>Distance</Text>
+            <Text style={[styles.statValue, { color: colors.text }]}>{distance} {distanceUnit}</Text>
+            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Distance</Text>
           </View>
         </View>
-        <View style={styles.divider} />
+        <View style={[styles.divider, { backgroundColor: colors.borderSubtle }]} />
         <View style={styles.statBox}>
-          <Ionicons name="time-outline" size={18} color="#64748B" />
+          <Ionicons name="time-outline" size={18} color={colors.textMuted} />
           <View style={styles.statTexts}>
-            <Text style={styles.statValue}>{activeMinutes} mins</Text>
-            <Text style={styles.statLabel}>Active Time</Text>
+            <Text style={[styles.statValue, { color: colors.text }]}>{activeMinutes} mins</Text>
+            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>Active Time</Text>
           </View>
         </View>
       </View>

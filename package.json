@@ -1,0 +1,13 @@
+{
+  "name": "fitpulse-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm --prefix apps/mobile run start",
+    "android": "npm --prefix apps/mobile run android",
+    "ios": "npm --prefix apps/mobile run ios",
+    "mobile": "npm --prefix apps/mobile run start",
+    "backend": "npm --prefix apps/backend run dev",
+    "ts:check": "npm --prefix apps/mobile run ts:check"
+  }
+}

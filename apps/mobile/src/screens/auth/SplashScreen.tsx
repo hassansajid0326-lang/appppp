@@ -5,12 +5,14 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { supabase } from '../../lib/supabase';
 import { useAuthStore } from '../../lib/store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { THEME_STORAGE_KEY } from '../../lib/theme';
 
 // Load primary branding logo
 const splashLogo = require('../../../assets/icon.png');
 
 export default function SplashScreen({ navigation }: any) {
-  const { setSession, setProfile, setAppReady } = useAuthStore();
+  const { setSession, setProfile, setAppReady, setTheme } = useAuthStore();
 
   useEffect(() => {
     // Auth Gating Lifecycle
@@ -19,6 +21,12 @@ export default function SplashScreen({ navigation }: any) {
       let nextScreen = 'Login';
 
       try {
+        // Restore Theme preference
+        const savedTheme = await AsyncStorage.getItem(THEME_STORAGE_KEY);
+        if (savedTheme === 'light' || savedTheme === 'dark') {
+          setTheme(savedTheme);
+        }
+
         const { data } = await supabase.auth.getSession();
         if (data?.session) {
           setSession(data.session);

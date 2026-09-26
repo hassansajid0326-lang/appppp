@@ -154,11 +154,19 @@ export function usePedometer(userId: string | undefined) {
     }
   };
 
+  const resetSteps = () => {
+    if (Platform.OS === 'android' && StepTrackerModule) {
+      StepTrackerModule.resetSteps();
+    }
+    setDailySteps(0);
+  };
+
   return {
     isPedometerAvailable,
     permissionStatus,
     isSimulated,
     simulateSteps,
+    resetSteps,
     refreshSteps: updateSteps,
   };
 }

@@ -1,0 +1,23 @@
+name: Supabase Inactivity Keep-Alive
+
+on:
+  schedule:
+    # Runs at 06:00 UTC every 2 days (Mon, Wed, Fri, Sun)
+    - cron: '0 6 */2 * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  ping-database:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase Keep-Alive Endpoint
+        run: |
+          echo "Sending automated heartbeat ping to Supabase keep-alive endpoint..."
+          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" "https://appppp-silk.vercel.app/api/cron/keep-alive")
+          echo "Response: $RESPONSE"
+          STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d':' -f2)
+          if [ "$STATUS" -eq 200 ]; then
+            echo "✅ Supabase database is active! 7-day pause prevented."
+          else
+            echo "⚠️ Warning: Ping returned status $STATUS"
+          fi
